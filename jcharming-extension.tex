@@ -5,12 +5,15 @@
 \usepackage{moreverb}
 \usepackage{multirow}
 \usepackage{cite}
+\usepackage{color}
 \usepackage{algorithm2e}
 
 \usepackage[colorlinks,bookmarksopen,bookmarksnumbered,citecolor=red,urlcolor=red]{hyperref}
 
 \newcommand\BibTeX{{\rmfamily B\kern-.05em \textsc{i\kern-.025em b}\kern-.08em
 T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
 
 \def\volumeyear{2015}
 
@@ -100,7 +103,7 @@ provide hints on potential causes. While these techniques are
 efficient in improving our comprehension of the bugs, they are
 not designed with the purpose of reproducing them.
 
-In this paper, we propose an approach, called JCHARMING
+\red{In previous work \cite{Nayrolles2015} we proposed an hybrid approach called JCHARMING
 (Java CrasH Automatic Reproduction by directed Model
 checkING) that uses a combination of crash traces and model
 checking to automatically reproduce bugs that caused field
@@ -109,7 +112,7 @@ require instrumentation of the code. It does not need access to
 the content of the heap either. Instead, JCHARMING uses a
 list of functions output when an uncaught exception in Java
 occurs (i.e., the crash trace) to guide a model checking engine
-to uncover the statements that caused the crash.
+to uncover the statements that caused the crash.}
 
 Model checking (also known as property checking) is a formal
 technique for automatically verifying a set of properties of
@@ -122,17 +125,33 @@ the state explosion problem \cite{Baier2008}. To address this challenge and
 apply model checking on large programs, we direct the model
 checking engine towards the crash using program slicing and
 the content of the crash trace, and hence, reduce the search
-space. As we will show in the case study, this directed model
-checking approach is capable of achieving 85\% accuracy
+space.
+
+\red{In our previous work \cite{Nayrolles2015}, we assessed the effectiveness of using model checking engine directed by stack traces. Indeed, we were capable of of achieving 85\% accuracy
 when applied to reproducing bugs from seven different open
-source systems.
+source systems.}
+
+\red{In this extension to our previous work, we improve the performances of our approach by further reducing the number of states to explore and apply  JCHARMING to a total of 10 systems (+3), namely Ant, ArgoUML, dnsjava, jfreechart, Log4j, MCT, pdfbox, Mahout, Hadoop and Axis2  and 30 bugs (+10) with an accuracy of 91\%.}
+
+
+\red{\\In summary, our contributions from \cite{Nayrolles2015} include:}
+
+\begin{itemize}
+	\item  \red{A first approach, JCHARMING, for reproducing bug using crash traces and directed model checking.}
+	\item \red{A directed model checking engine, based on \cite{Visser2004}, that reduces the number of states to explore in order to reproduce a bug.}
+	\item \red{A validation on 7 systems and 20 bugs with an accuracy of 85\%.}
+\end{itemize}
+
+
+
+\red{\\This paper extends our previous work \cite{Nayrolles2015}, with the following contributions: an extensive validation of JCHARMING on larger scale systems, {\it i.e}, Mahout, Hadoop and, Axis2 with 10 more bugs. We further reduce the space search required to reproduce bugs, therefore improving the performances, and improve the accuracy of JCHARMING from 85\% to 91\%. Furthermore, we provide a more elaborated and up-to-date related work.}
 
 The remainder of this paper is organized as follows: In Section
-\ref{sec:rel-work}, we present related work on crash reproduction. In SectionIII, we provide some background information on model
-checking. JCHARMING is the topic of Section IV. Section V
+\ref{sec:rel-work}, we present related work on crash reproduction. In Section \ref{sec:prelimenaries}, we provide some background information on model
+checking. JCHARMING is the topic of Section \ref{fig:jcarming-approach}. Section \ref{sec:cases}
 is dedicated to the case study, followed by threats to validity.
 We conclude the paper and sketch future directions in Section
-VII.
+\ref{sec:conclusion}.
 
 \section{Related Works\label{sec:rel-work}}
 
@@ -179,7 +198,7 @@ Finally, Zamfir et al. \cite{Parnin2011} proposed ESD, an execution synthesis ap
 
 Except for STAR, approaches targeting the reproduction of field crashes require the instrumentation of the code or the running platform in order to save the stack call or the objects to successfully reproduce bugs. As we discussed earlier, instrumentation can cause a massive overhead (1\% to 1066\%) while running the system. In addition, data generated at run-time using instrumentation may contain sensitive information.
 
-\section{Preliminaries}
+\section{Preliminaries\label{sec:prelimenaries}}
 
 Model checking (also known as property checking) will, given a system (that could be software \cite{Visser2003} or hardware based \cite{kropf1999introduction}), check if the system meets a specification Spec by testing exhaustively all the states of the system under test (SUT), which can be represented by a Kripke \cite{Kripke1963} structure:
 
@@ -232,7 +251,7 @@ Software testing depends on how well the tester understands the SUT in order to 
 
 Model checking, on the other hand, explores each and every state of the program (Figure \ref{fig:checking-toy}), which makes it complete, but impractical for real-world and large systems. To overcome the state explosion problem of model checking, directed (or guided) model checking has been introduced \cite{Rungta2009}. Directed model checking use insights—generally heuristics—about the SUT in order to reduce the number of states that need to be examined. Figure \ref{fig:dchecking-toy} explores only the states that may lead to a specific location, in our case, the location of the fault. The challenge, however, is to design techniques that can guide the model checking engine. As we will describe in the next section, we use crash traces and program slicing to overcome this challenge.
 
-\section{The JCHARMING Approach}
+\section{The JCHARMING Approach\label{sec:jcharming}}
 
 Figure \ref{fig:jcarming-approach} shows an overview of JCHARMING. The first step
 consists of collecting crash traces, which contain raw lines
@@ -521,7 +540,7 @@ performs too many operations modifying the property of a
 given object. In such case, we serialize the last state of the
 object.
 
-\section{Case studies}
+\section{Case studies\label{sec:cases}}
 
 In this section, we show the effectiveness of JCHARMING to
 reproduce bugs in seven open source systems\footnote{The bug reports used in this study and the result of the model checker are
@@ -607,7 +626,7 @@ containing the word ``exception'' and where the description of
 the bug contains a match a regular expression designed to find the pattern of a
 Java exception.
 
-\section{Results}
+\section{Results\label{sec:results}}
 
 Table \ref{tab:jcharming-results} shows the results of JCHARMING in terms of Bug
 \#ID, reproduction status, and execution time (in minutes) of
@@ -851,7 +870,7 @@ reproduced the crash, if it was applied to the original bug. \\
 
 While JCHARMING is effective at reproducing on-field failures in lab environment, we want to reduce their number in the coming year. To do so, we built {\tt RESSEMBLE} and {\tt BIANCA} that we present in the next two sections.
 
-\section{Threats to Validity}
+\section{Threats to Validity\label{sec:threats}}
 
 The selection of SUTs is one of the common threats to validity
 for approaches aiming to improve the understanding of
@@ -900,7 +919,7 @@ minimized by choosing a relatively large set of different
 systems and using input data that can be found in other
 programming languages.
 
-\section{Conclusion and Future Work}
+\section{Conclusion and Future Work\label{sec:conclusion}}
 
 We presented JCHARMING (Java CrasH Automatic
 Reproduction by directed Model checking), an automatic bug
