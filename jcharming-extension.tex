@@ -5,6 +5,7 @@
 \usepackage{moreverb}
 \usepackage{multirow}
 \usepackage{cite}
+\usepackage{listings}
 \usepackage{color}
 \usepackage{algorithm2e}
 
@@ -131,7 +132,7 @@ space.
 when applied to reproducing bugs from seven different open
 source systems.}
 
-\red{In this extension to our previous work, we improve the performances of our approach by further reducing the number of states to explore and apply  JCHARMING to a total of 10 systems (+3), namely Ant, ArgoUML, dnsjava, jfreechart, Log4j, MCT, pdfbox, Mahout, Hadoop and Axis2  and 30 bugs (+10) with an accuracy of 91\%.}
+\red{In this extension to our previous work, we improve the performances of our approach by further reducing the number of states to explore and apply  JCHARMING to a total of 10 systems (+3), namely Ant, ArgoUML, dnsjava, jfreechart, Log4j, MCT, pdfbox, Mahout, Hadoop and ActiveMQ  and 30 bugs (+10) with an accuracy of 91\%.}
 
 
 \red{\\In summary, our contributions from \cite{Nayrolles2015} include:}
@@ -144,7 +145,7 @@ source systems.}
 
 
 
-\red{\\This paper extends our previous work \cite{Nayrolles2015}, with the following contributions: an extensive validation of JCHARMING on larger scale systems, {\it i.e}, Mahout, Hadoop and, Axis2 with 10 more bugs. We further reduce the space search required to reproduce bugs, therefore improving the performances, and improve the accuracy of JCHARMING from 85\% to 91\%. Furthermore, we provide a more elaborated and up-to-date related work.}
+\red{\\This paper extends our previous work \cite{Nayrolles2015}, with the following contributions: an extensive validation of JCHARMING on larger scale systems, {\it i.e}, Mahout, Hadoop and, ActiveMQ with 10 more bugs. We further reduce the space search required to reproduce bugs, therefore improving the performances, and improve the accuracy of JCHARMING from 85\% to 91\%. Furthermore, we provide a more elaborated and up-to-date related work.}
 
 The remainder of this paper is organized as follows: In Section
 \ref{sec:rel-work}, we present related work on crash reproduction. In Section \ref{sec:prelimenaries}, we provide some background information on model
@@ -268,21 +269,21 @@ To show the contrast between testing and model checking, we use the hypothetical
 
 \begin{figure}[h!]
   \centering
-    \includegraphics{media/dmc.png}
+    \includegraphics[scale=0.7]{media/dmc.png}
     \caption{A toy program under testing
     \label{fig:testing-toy}}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-    \includegraphics{media/mc.png}
+    \includegraphics[scale=0.7]{media/mc.png}
     \caption{A toy program under model checking
     \label{fig:checking-toy}}
 \end{figure}
 
 \begin{figure}[h!]
   \centering
-    \includegraphics{media/dmc.png}
+    \includegraphics[scale=0.7]{media/dmc.png}
     \caption{A toy program under directed model checking
     \label{fig:dchecking-toy}}
 \end{figure}
@@ -343,7 +344,7 @@ program was launched using a GUI).
   4. at GUI.access$0(GUI.java:85) \\
   5. at GUI$1.actionPerformed(GUI.java:57) \\
   6. caused by java.lang.IndexOutOfBoundsException : 3 \\
-  7. at scam.Foo.buggy(Foo.java:17) \\
+  7. at jsep.Foo.buggy(Foo.java:17) \\
   8. and 4 more ...
       }%
   }
@@ -356,7 +357,7 @@ as frame {\it $f_0$} , subsequently the next line is called frame {\it $f_1$} , 
 does not represent the real crash point but it is only the last
 exception of a chain of exceptions. Indeed, the {\tt InvalidActivity}
 has been triggered by an {\tt IndexOutOfBoundsException} in
-{\tt scam.Foo.buggy} . This kind of crash traces reflects several
+{\tt jsep.Foo.buggy} . This kind of crash traces reflects several
 nested try/catch blocks.
 
 In addition, it is common in Java to have incomplete crash
@@ -378,7 +379,7 @@ their content.
 
 In the preprocessing step, we first reconstruct and reorganize
 the crash trace in order to address the problem of nested
-exceptions. Then, with the aim to obtain an optimal guidancefor our directed model checking engine, we remove frames
+exceptions. Then, with the aim to obtain an optimal guidance for our directed model checking engine, we remove frames
 that are out of our control. Frames out of our controls refer
 usually, but are not limited to, Java library methods and third
 party libraries. In Figure \ref{fig:jcarming-traces}, we can see that Java GUI and
@@ -464,7 +465,7 @@ algorithm. The main loop of the algorithm begins at line 6 and
 ends at line 15. In this loop, we compute the static slice
 between the current frame and the next one. If the computed
 static slice is not empty then we update the final backward
-slice with the newly computed slice.
+slice with the newly computed slice. \\
 
 
 \begin{algorithm}[H]
@@ -485,6 +486,8 @@ slice with the newly computed slice.
 }
 \caption{High level algorithm computing the union of the slices\label{alg:jcharming-slice}}
 \end{algorithm}
+
+\vspace*{0.3cm}
 
 Using backward slicing, the search space of the model checker
 that processes the example of Figures \ref{fig:testing-toy} to \ref{fig:dchecking-toy} is given by the
@@ -569,18 +572,40 @@ defect location. JPF has the ability to keep track of what
 happens during model checking in the form of traces
 containing the visited states and the value of the variables. We
 leverage this capability to create the required objects and call
-the methods leading to the failure location. Although we can
-track back the internal state of objects at a specific time using
-JPF, it can be too computationally taxing to recreate only the
-objects needed to generate the bug. To overcome this, we use
-serialization techniques \cite{Opyrchal1999}. We take advantage of features
-offered by the XStream \cite{Xstream2011} library which enables the
-serialization and deserialization of any Java object — even
-objects that do not implement the Java Serializable interface.
-We use the serialization when the model checker engine
-performs too many operations modifying the property of a
-given object. In such case, we serialize the last state of the
-object.
+the methods leading to the failure location.
+
+\red{During the testing of the SUT, JPF emits a trace that is composed of the executed instructions. 
+For industrial size system, this trace can contain mullions of instructions. This trace is stored in memory and therefore can be queried while JPF is running. 
+However, accessing the trace during the JPF execution considerably slows down the checking process as both the querying mechanism and the JPF engine compete with each other for resources. 
+In order to allow JPF to use 100\% of the available resources and still be able to query the executed instruction post-mortem, we implemented a {\tt listener} that listens the JPF trace emitter. 
+Each time on new instruction is processed by JPF, our listener catch it and then save it to a mongodb database to be queried post-mortem. Figure \ref{fig:jcharming-unittest} presents a high level architecture of the different components.}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[scale=0.8]{media/unittest.png}
+    \caption{\red{High level architecture of the Junit test case generation}
+    \label{fig:jcharming-unittest}}
+\end{figure}
+
+
+\red{When the {\tt validate} step trigger a crash stack similarity superior to a factor {\tt t}, the Junit generation engine queries the mongoDB database and fetches the sequence of instructions that led to the crash of interest. 
+Figure \ref{fig:jcharming-unittest} contains an hypothetical sequence of instructions related to the example of Figures \ref{fig:testing-toy}, \ref{fig:checking-toy}, \ref{fig:dchecking-toy} which reads : {\tt new jsme.Bar}, {\tt invokespecial jsme.Bar()}, {\tt astore\_1 [bar]}, {\tt aload\_1 [bar]}, {\tt iconst\_3}, {\tt invokevirtual jsme.Bar.foo(int)}, {\tt const\_0}, {\tt istore\_2 [i]}, {\tt goto}, {\tt iload\_2 [i]}, {\tt iconst\_2}, {\tt if\_icmple iinc 2 1}, {\tt new java.lang.Exception}. 
+From this sequence we know that, to reproduce to crash of interest, we have to (1) create new object {\tt jsme.Bar} ({\tt new jsme.Bar}, {\tt invokespecial jsme.Bar()}), (2) store the newly created object in a variable named {\tt bar} ({\tt astore\_1 [bar]}), (3) invoke the method {\tt jsme.Bar.foo(int)} of the {\tt bar} object with {\tt 3} as value ({\tt aload\_1 [bar]}, {\tt iconst\_3}, {\tt invokevirtual jsme.Bar.foo(int)}). Then, the {\tt jsme.Bar.foo(int)} method will executes a loop from 0 to 3 and throw an exception at {\tt i = 3}~({\tt const\_0}, {\tt istore\_2 [i]}, {\tt goto}, {\tt iload\_2 [i]}, {\tt iconst\_2}, {\tt if\_icmple iinc 2 1}, {\tt new java.lang.Exception}).}  
+
+\red{The generation of the JUnit test itself is based on templates and targets directly the system under test. Templates are excerpts of Java source code with well-defined tags that will be replaced by values. We use templates because the JUnit test case have common structures as shown by Figure \ref{fig:jcharming-unittemplate}.}
+
+\begin{figure}[h!]
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+    \lstinputlisting[language=Java]{test.java}
+}%
+}
+
+    \caption{\red{Simplified Unit Test template}
+    \label{fig:jcharming-unittemplate}}
+\end{figure}
+
 
 \section{Case studies\label{sec:cases}}
 
@@ -599,17 +624,23 @@ Kilo Line of Code (KLoC) and Number of Classes (NoC).
 
 \begin{table}[h!]
 \centering
+
+\caption{List of taget systems in terms of Kilo line of code (KLoC), number of classes (NoC) and Bug \# ID}
 \begin{tabular}{c|c|c|c}
 SUT        & KLOC & NoC  & Bug \#ID                                        \\ \hline \hline
-Ant        & 265  & 1233 & 38622, 41422                                    \\
-ArgoUML    & 58   & 1922 & 2603, 2558, 311, 1786                           \\
+Ant        & 265  & 1,233 & 38622, 41422                                    \\
+ArgoUML    & 58   & 1,922 & 2603, 2558, 311, 1786                           \\
 dnsjava    & 33   & 182  & 38                                              \\
 jfreechart & 310  & 990  & 434, 664, 916                                   \\
 Log4j      & 70   & 363  & 11570, 40212, 41186, 45335, 46271, 47912, 47957 \\
 MCT        & 203  & 1267 & 440ed48                                         \\
-pdfbox     & 201  & 957  & 1412, 1359 \\ \hline \hline
+pdfbox     & 201  & 957  & 1,412, 1,359 \\ 
+\red{Mahout} & \red{183} & \red{1,242} \\
+\red{Hadoop} & \red{62} & \red{6,337} \\
+\red{ActiveMQ} & \red{132} & \red{3,797} \\ \hline 
+\red{Total} & \red{1,517} & \red{17,348} & \red{30} \\ 
+\hline \hline 
 \end{tabular}
-\caption{List of taget systems in terms of Kilo line of code (KLoC), number of classes (NoC) and Bug \# ID}
 \label{tab:jacharming-systems}
 \end{table}
 
@@ -694,6 +725,7 @@ provided.
 
 \begin{table}[h!]
 \centering
+\caption{Effectiveness of JCHARMING using directed model checking (DMC) and model checking (MC) in minutes}
 \begin{tabular}{c|c|c|c|c}
 SUT                         & Bug \#ID & Reprod. & Time DMC & Time MC \\ \hline \hline
 \multirow{2}{*}{Ant}        & 38622    & Yes     & 25.4     & -       \\
@@ -718,7 +750,7 @@ MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
                             & 1359     & No      & -        & - \\ \hline \hline
 \end{tabular}
 
-\caption{Effectiveness of JCHARMING using directed model checking (DMC) and model checking (MC) in minutes}
+
 \label{tab:jcharming-results}
 \end{table}
 
@@ -750,6 +782,8 @@ occurred during event dispatching:''}
 
 The reporter also attached the following crash trace that we
 used as input for JCHARMING:
+
+\vspace*{0.3cm}
 
 \noindent\fbox{%
     \parbox{\textwidth}{%
@@ -796,12 +830,14 @@ at java.awt.EventQueue
 .dispatchEvent (EventQueue.java:301)\\
 28.
 at java.awt.EventDispatchThread.pumpEvents\\
-(EventDispatch Thread.java:90)
+(EventDispatch Thread.java:90) \\
 29.
 at java.awt.EventDispatchThread.run(EventDispatch
 Thread.java:82)
     }%
 }
+
+\vspace*{0.3cm}
 
 The cause of this bug is that the reference to the attribute of
 the class was lost after being displayed on the left panel of
@@ -840,6 +876,8 @@ suppressed and stayed in the crash trace. That is,
 JCHARMING produced only the 6 (out of 7) first lines and
 reached 83\% similarity, and thus a partial reproduction.
 
+\vspace*{0.3cm}
+
 \noindent\fbox{%
     \parbox{\textwidth}{%
 
@@ -856,6 +894,8 @@ EventObject.java:38)\\
     }%
 }
 
+\vspace*{0.3cm}
+
 In all bugs that were partially reproduced, we found that the
 differences between the crash trace generated from the model
 checker and the original crash trace (after preprocessing)
@@ -869,6 +909,8 @@ For the bug \#47957 belonging to Log4j and reported in late
 2009 the reporter wrote: ``{\it Configure SyslogAppender with a Layout class that does not
 exist; it throws a NullPointerException. Following is the
 exception trace:}'' and attached the following crash trace:
+
+\vspace*{0.3cm}
 
 \noindent\fbox{%
     \parbox{\textwidth}{%
@@ -896,6 +938,8 @@ RID[(null;25KbxlK0voima4h00ZLBQFC;236Al8E60000045C3A
     }%
 }
 
+\vspace*{0.3cm}
+
 The first three lines are not produced by the standard
 execution of the SUT but by an ExceptionHandler belonging
 to Struts \cite{ApacheSoftwareFoundation2000}. Struts is an open source MVC (Model View
@@ -909,8 +953,6 @@ next steps. It is noteworthy that the bug is marked as duplicate
 of the bug \#46271 which contains a proper crash trace. We
 believe that JCHARMING could have successfully
 reproduced the crash, if it was applied to the original bug. \\
-
-While JCHARMING is effective at reproducing on-field failures in lab environment, we want to reduce their number in the coming year. To do so, we built {\tt RESSEMBLE} and {\tt BIANCA} that we present in the next two sections.
 
 \section{Threats to Validity\label{sec:threats}}
 
