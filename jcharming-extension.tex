@@ -104,7 +104,8 @@ provide hints on potential causes. While these techniques are
 efficient in improving our comprehension of the bugs, they are
 not designed with the purpose of reproducing them.
 
-\red{In previous work \cite{Nayrolles2015} we proposed an hybrid approach called JCHARMING
+
+\red{In  \cite{Nayrolles2015}, we proposed an hybrid approach called JCHARMING
 (Java CrasH Automatic Reproduction by directed Model
 checkING) that uses a combination of crash traces and model
 checking to automatically reproduce bugs that caused field
@@ -113,8 +114,7 @@ require instrumentation of the code. It does not need access to
 the content of the heap either. Instead, JCHARMING uses a
 list of functions output when an uncaught exception in Java
 occurs (i.e., the crash trace) to guide a model checking engine
-to uncover the statements that caused the crash.}
-
+to uncover the statements that caused the crash. 
 Model checking (also known as property checking) is a formal
 technique for automatically verifying a set of properties of
 finite-state systems \cite{Baier2008}. More specifically, this technique
@@ -126,26 +126,9 @@ the state explosion problem \cite{Baier2008}. To address this challenge and
 apply model checking on large programs, we direct the model
 checking engine towards the crash using program slicing and
 the content of the crash trace, and hence, reduce the search
-space.
+space. When applied to reproducing bugs of seven open source  systems, JCHARMING achieved  85\% accuracy.}
 
-\red{In our previous work \cite{Nayrolles2015}, we assessed the effectiveness of using model checking engine directed by stack traces. Indeed, we were capable of of achieving 85\% accuracy
-when applied to reproducing bugs from seven different open
-source systems.}
-
-\red{In this extension to our previous work, we improve the performances of our approach by further reducing the number of states to explore and apply  JCHARMING to a total of 10 systems (+3), namely Ant, ArgoUML, dnsjava, jfreechart, Log4j, MCT, pdfbox, Mahout, Hadoop and ActiveMQ  and 30 bugs (+10) with an accuracy of 91\%.}
-
-
-\red{\\In summary, our contributions from \cite{Nayrolles2015} include:}
-
-\begin{itemize}
-	\item  \red{A first approach, JCHARMING, for reproducing bug using crash traces and directed model checking.}
-	\item \red{A directed model checking engine, based on \cite{Visser2004}, that reduces the number of states to explore in order to reproduce a bug.}
-	\item \red{A validation on 7 systems and 20 bugs with an accuracy of 85\%.}
-\end{itemize}
-
-
-
-\red{\\This paper extends our previous work \cite{Nayrolles2015}, with the following contributions: an extensive validation of JCHARMING on larger scale systems, {\it i.e}, Mahout, Hadoop and, ActiveMQ with 10 more bugs. We further reduce the space search required to reproduce bugs, therefore improving the performances, and improve the accuracy of JCHARMING from 85\% to 91\%. Furthermore, we provide a more elaborated and up-to-date related work.}
+\red{\\This paper extends our previous work \cite{Nayrolles2015} with the following main contributions: An extensive validation of JCHARMING on three additional systems: Mahout, Hadoop and, ActiveMQ, bringing the total number of systems used to validate our approach to 10. It should be noted that the new systems are relatively larger compared to those used in \cite{Nayrolles2015}. We further improve the performance of JCHARMING by reducing the space search required to reproduce bugs. The new version of JCHARMING achieves an accuracy of 91\% instead of 85\%. Furthermore, this extended version of the paper  includes a detailed analysis of additional bugs, an elaborate discussion of the results, and an up-to-date related work section.}
 
 The remainder of this paper is organized as follows: In Section
 \ref{sec:rel-work}, we present related work on crash reproduction. In Section \ref{sec:prelimenaries}, we provide some background information on model
@@ -156,13 +139,13 @@ We conclude the paper and sketch future directions in Section
 
 \section{Related Works\label{sec:rel-work}}
 
-\red{In this section, we put the emphasis on how stack traces are used in the crash reproduction activity. 
-The published works that fold in this category can be divided into two distinct parts: (A) on field record and in house replay \cite{Steven2000,Narayanasamy2005,Artzi2008,Roehm2015} and (B) on house crash explanation \cite{Jin2012,Jin2013,Zuddas2014,Chen2013a,Nayrolles2015}}. 
+\red{In this section, we put the emphasis on how stack traces are used in crash reproduction tasks. 
+The published work that falls into this category can be divided into two distinct parts: (A) on field record and in house replay \cite{Steven2000,Narayanasamy2005,Artzi2008,Roehm2015} and (B) on house crash explanation \cite{Jin2012,Jin2013,Zuddas2014,Chen2013a,Nayrolles2015}}. 
 
-\red{These two categories yield heterogeneous results depending on the chosen approach and are mainly differentiated by the need of instrumentation. 
-Indeed, the first category need to oversee -- by means of instrumentation -- the execution of the targeted system on the field in order to reproduce the crashes in house, while tools and approaches belonging to the second category only use materials produced by the crash such as the crash stack or the core dump at crash time.In the first category, tools record different type of evidence such as invoked methods \cite{Narayanasamy2005}, try-catch exception \cite{Rossler2013} or objects \cite{Jaygarl}. In the second category, the tools and approaches aim to understand what happens only using material produced by the crash itself, such as crash stack \cite{Chen2013a}, previous -- and controlled -- execution \cite{Zuddas2014} or model checking \cite{Nayrolles2015}} 
+\red{These two categories yield varying results depending on the selected approach and are mainly differentiated by the need of instrumentation. 
+The first category needs to oversee -- by means of instrumentation -- the execution of the targeted system on the field in order to reproduce the crashes in house, while tools and approaches belonging to the second category only use data produced by the crash such as the crash stack or the core dump at crash time.In the first category, tools record different types of evidence such as the invoked methods \cite{Narayanasamy2005}, try-catch exceptions \cite{Rossler2013}, or objects \cite{Jaygarl}. In the second category, existing tools and approaches are aimed towards understanding the causes of a crash, using data produced by the crash itself, such as a crash stack \cite{Chen2013a}, previous -- and controlled -- execution \cite{Zuddas2014}.} 
 
-\red{In one hand, the tools and approaches relying on instrumentation face common limitations such as: (A-1) the needs to instrument the source code in order to introduce logging mechanisms \cite{Narayanasamy2005,Jaygarl,Artzi2008} and therefore (A-2) slowing down the target system. 
+\red{On one hand, the tools and approaches relying on instrumentation face common limitations such as: (A-1) the needs to instrument the source code in order to introduce logging mechanisms \cite{Narayanasamy2005,Jaygarl,Artzi2008} and therefore (A-2) slowing down the target system. 
 In addition to these limitations, (A-3) recording system behavior by means of instrumentation in order to eventually reproduce on-field crashes yield severe privacy concerns. 
 On the other hand, tools and approaches that only use material that are the result of a crash -- such as core dump or exception stack crash -- face different limitations.
 Indeed, in this second category, approaches have to (B-1)reconstruct the timeline of events that have led to the crash \cite{Chen2013a,Nayrolles2015}. 
