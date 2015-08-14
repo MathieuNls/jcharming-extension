@@ -219,7 +219,7 @@ They denote themselves by a having a low overhead on the instrumented applicatio
 
 \red{Except for STAR, existing approaches that target the reproduction of field crashes require the instrumentation of the code or the running platform in order to save the stack call or the objects to successfully reproduce bugs. As we discussed earlier, instrumentation can cause a massive overhead (1\% to 1066\%) while running the system. In addition, data generated at run-time using instrumentation may contain sensitive information.}
 
-\red{JCHARMING's directed model checking overcomes the state explosion problem of classical model checking techniques and allows the generation of Junit test cases in a reasonable amount of time. JCHARMING is also easy to deploy. It does not require instrumentation, and hence does not require access to data that may potentially considered confidential. 
+\red{JCHARMING's directed model checking overcomes the state explosion problem of classical model checking techniques and allows the generation of Junit test cases in a reasonable amount of time. JCHARMING is also easy to deploy. It does not require instrumentation, and hence does not require access to data that may potentially be considered confidential. 
 
 
 \section{Preliminaries\label{sec:prelimenaries}}
@@ -675,8 +675,7 @@ manipulation of existing documents.
 
 In this study, we have selected the reproduced bugs randomly
 in order to avoid the introduction of any bias. We selected a
-random number of bugs ranging from 1 to 10 for each SUT
-containing the word ``exception'' and where the description of
+random number of bugs ranging from 1 to 10 for each SUT containing the word ``exception'' and where the description of
 the bug contains a match a regular expression designed to find the pattern of a
 Java exception.
 
