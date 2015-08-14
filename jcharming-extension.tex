@@ -36,7 +36,7 @@ Montreal, Quebec, Canada
 H3G 1M8}
 
 \begin{abstract}
-Due to their inherent complexity, software systems
+\red{Due to their inherent complexity, software systems
 are pledged to be released with bugs. These bugs manifest
 themselves on client's computers, causing crashes and undesired
 behaviors. Field crashes, in particular, are challenging to
@@ -54,9 +54,9 @@ takes advantage of the completeness provided by model checking
 while ignoring unneeded system states by means of information
 found in crash traces combined with static slices. We show the
 effectiveness of JCHARMING by applying it to seven different
-open source programs cumulating more than one million lines of
-code scattered in around 7000 classes. Overall, JCHARMING
-was able to reproduce 85\% of the submitted bugs.
+open source programs cumulating more than one and a half million lines of
+code scattered in around 17,500 classes. Overall, JCHARMING
+was able to reproduce 80\% of the submitted bugs.}
 \end{abstract}
 
 \keywords{Automatic Bug Reproduction, Dynamic Analysis,
@@ -128,7 +128,7 @@ checking engine towards the crash using program slicing and
 the content of the crash trace, and hence, reduce the search
 space. When applied to reproducing bugs of seven open source  systems, JCHARMING achieved  85\% accuracy. \\
 
-This paper extends our previous work \cite{Nayrolles2015} with the following main contributions: An extensive validation of JCHARMING on three additional systems: Mahout, Hadoop and, ActiveMQ, bringing the total number of systems used to validate our approach to 10. It should be noted that the new systems are relatively larger compared to those used in \cite{Nayrolles2015}. We further improve the performance of JCHARMING by reducing the space search required to reproduce bugs. The new version of JCHARMING achieves an accuracy of 91\% instead of 85\%. Furthermore, this extended version of the paper  includes a detailed analysis of additional bugs, an elaborate discussion of the results, and an up-to-date related work section.
+This paper extends our previous work \cite{Nayrolles2015} with the following main contributions: An extensive validation of JCHARMING on three additional systems: Mahout, Hadoop and, ActiveMQ, bringing the total number of systems used to validate our approach to 10. It should be noted that the new systems are relatively larger compared to those used in \cite{Nayrolles2015}. We further improve the performance of JCHARMING by reducing the space search required to reproduce bugs. \red{The new version of JCHARMING achieves an accuracy of 80\% as it tackles more challenging crashes in bigger software systems}. Furthermore, this extended version of the paper  includes a detailed analysis of additional bugs, an elaborate discussion of the results, and an up-to-date related work section.
 
 The remainder of this paper is organized as follows: In Section
 \ref{sec:rel-work}, we present related work on crash reproduction. In Section \ref{sec:prelimenaries}, we provide some background information on model
@@ -591,7 +591,7 @@ The generation of the JUnit test itself is based on templates and targets direct
 \section{Case studies\label{sec:cases}}
 
 In this section, we show the effectiveness of JCHARMING to
-reproduce bugs in ten open source systems\footnote{The bug reports used in this study and the result of the model checker are
+reproduce bugs in ten open source systems\footnote{The bug reports used in this study and the result of JCHARMING are
 made available for download from research.mathieu-
 nayrolles.com/jcharming/}. The aim of the
 case study is to answer the following question: {\it Can we use
@@ -616,14 +616,15 @@ jfreechart & 310  & 990  & 434, 664, 916                                   \\
 Log4j      & 70   & 363  & 11570, 40212, 41186, 45335, 46271, 47912, 47957 \\
 MCT        & 203  & 1267 & 440ed48                                         \\
 pdfbox     & 201  & 957  & 1,412, 1,359 \\ 
-\red{Mahout} & \red{183} & \red{1,242} \\
-\red{Hadoop} & \red{62} & \red{6,337} \\
-\red{ActiveMQ} & \red{132} & \red{3,797} \\ \hline 
-\red{Total} & \red{1,517} & \red{17,348} & \red{30} \\ 
+Mahout 	   & 183  & 1,242 &  486, 1367, 1594, 1635\\
+Hadoop 	   & 62   & 6,337 & 2893, 3093, 11878\\
+ActiveMQ   & 132  & 3,797 & 1054, 2880, 2880\\ \hline 
+Total      & 1,517 & 17,348 & 30 \\ 
 \hline \hline 
 \end{tabular}
 \label{tab:jacharming-systems}
 \end{table}
+
 
 Apache Ant \cite{ApacheSoftwareFoundation} is a popular command-line tool to build
 make files. While it is mainly known for Java applications,
@@ -670,6 +671,14 @@ PDFBox \cite{ApacheSoftwareFoundation2014} is another tool supported by the Apac
 Software Foundation since 2009 and was created in 2008.
 PDFBox allows the creation of new PDF documents and the
 manipulation of existing documents.
+
+\red{Hadoop \cite{hadoop2011hadoop} is a framework for storing and processing large dataset in distributed environments. It contains four main modules: {\it Common}, {\it HDFS}, {\it YARN} and {\it MapReduce}. In this paper, we study the {\it Common} module that contains the different libraries required by the other three modules.}
+
+\red{Mahout \cite{mahout2012scalable} is a relatively new piece of software, built on top of Hadoop that does not have reach its first version\footnote{version 0.11 was released 7$^{th}$ of august 2015}. 
+Mahout focuses on producing free implementation of machine learning algorithms primarily in the areas of collaborative filtering, clustering and classification.}
+
+\red{Finally, ActiveMQ \cite{snyder2011activemq} is an open source messaging server that allows application written in Java, C, C++, C\#, Ruby, Perl or PHP to exchange messages using various protocols. ActiveMQ is actively maintained and developed since it became an Apache Software Foundation project in 2005.}
+
 
 \subsection{Bug Selection and Crash Traces}
 
@@ -722,29 +731,39 @@ DnsJava                     & 38       & Yes     & 4        & 23      \\ \hline
                             & 40212    & Yes     & 15.8     & -       \\
                             & 41186    & Partial & 16.7     & -       \\
                             & 45335    & No      & -        & -       \\
-                            & 46271    & Yes     & 13.9    & -       \\
+                            & 46271    & Yes     & 13.9     & -       \\
                             & 47912    & Yes     & 12.3     & -       \\
-                            & 47957    & No      & -        & -       \\
+                            & 47957    & No      & -        & -       \\ \hline
 MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 \multirow{2}{*}{PDFBox}     & 1412     & Partial & 19.7     & -       \\
-                            & 1359     & No      & -        & - \\ \hline \hline
+                            & 1359     & No      & -        & - \\ \hline
+\multirow{4}{*}{\red{Mahout}}   & 486      & Partial & 34.5     & -        \\
+                            & 1367     & Partial & 21.1     & -       \\ 
+                            & 1594 	   & No 	 & - 	    & -       \\
+                            & 1635     & Yes     & 31.0     & - \\ \hline 
+\multirow{3}{*}{\red{Hadoop}}     & 2893     & Partial & 7.4      & 32       \\
+						    & 3093     & Yes 	 & 13.1     & -        \\
+                            & 11878    & Yes 	 & 17.4     & - \\  \hline 
+\multirow{3}{*}{\red{ActiveMQ}}   & 1054     & Yes & 38.3     & -      \\
+						    & 2880     & Partial 	 & -        & -        \\
+                            & 5035     & No 	 & 27.4     & - \\  \hline \hline             
 \end{tabular}
 
 
 \label{tab:jcharming-results}
 \end{table}
 
-As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 17 bugs
-out of 20 bugs either completely or partially (85% success
-ratio). The average time to reproduce a bug is 16 minutes.
+\red{As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
+out of 30 bugs either completely or partially (80\% success
+ratio). The average time to reproduce a bug is 19 minutes.
 This result demonstrates the effectiveness of our approach,
 more particularly, the use of backward slicing to create a
 manageable search space that guides adequately the model
 checking engine. We also believe that our approach is usable
-in practice since it is also time efficient. Among the 20 different bugs we have tested, we will describe
-one bug (chosen randomly) for each category (successfully
+in practice since it is also time efficient. Among the 30 different bugs we have tested, we will describe
+two bugs (chosen randomly) for each category (successfully
 reproduced, partially reproduced, and not reproduced) for
-further analysis.
+further analysis.}
 
 \subsection{Successfully reproduced}
 
@@ -834,7 +853,48 @@ Section IV.C. The fourth step performs the model checking on
 the static slice to produce the same crash trace. More
 specifically, the model checker identifies that the method
 {\tt setTargetInternal(Object o)} could receive a null object that
-will result in a {\tt Null} pointer exception.
+will result in a {\tt Null} pointer exception. \\
+
+\red{The second reproduced bug we describe during this discussion is the bug \#486 belonging to MAHOUT. The submitter (Robin Anil) named his entry {\it Null Pointer Exception running DictionaryVectorizer with ngram=2 on Reuters dataset} and simply past the following crash stack without further explanation:}
+
+\vspace*{0.3cm}
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+1 java.io.IOException: Spill failed \\
+2 at org.apache.hadoop.mapred.MapTask\$MapOutputBuffer.collect(MapTask.java:860) \\
+...\\
+14 Caused by: java.lang.NullPointerException \\
+15 at java.io.ByteArrayOutputStream.write(ByteArrayOutputStream.java:86) \\
+16 at java.io.DataOutputStream.write(DataOutputStream.java:90) \\
+17 at org.apache.mahout.utils.nlp.collocations.llr.Gram.write(Gram.java:181) \\
+18 at org.apache.hadoop.io.serializer.WritableSerialization\$WritableSerializer.serialize ... \\
+19 at org.apache.hadoop.io.serializer.WritableSerialization\$WritableSerializer.serialize ... \\
+20 at org.apache.hadoop.mapred.IFile\$Writer.append(IFile.java:179) \\
+21 at org.apache.hadoop.mapred.Task\$CombineOutputCollector.collect(Task.java:880) \\
+22 at org.apache.hadoop.mapred.Task\$NewCombinerRunner\$OutputConverter.write(Task.java:1201) \\
+23 at org.apache.hadoop.mapreduce.TaskInputOutputContext.write(TaskInputOutputContext.java:80) \\
+24 at org.apache.mahout.utils.nlp.collocations.llr.CollocCombiner.reduce(CollocCombiner.java:40) \\
+25 at org.apache.mahout.utils.nlp.collocations.llr.CollocCombiner.reduce(CollocCombiner.java:25) \\
+26 at org.apache.hadoop.mapreduce.Reducer.run(Reducer.java:176) \\
+27 at org.apache.hadoop.mapred.Task\$NewCombinerRunner.combine(Task.java:1222) \\
+28 at org.apache.hadoop.mapred.MapTask\$MapOutputBuffer.sortAndSpill(MapTask.java:1265) \\
+29 at org.apache.hadoop.mapred.MapTask\$MapOutputBuffer.access\$1800(MapTask.java:686) \\
+30 at org.apache.hadoop.mapred.MapTask\$MapOutputBuffer\$SpillThread.run(MapTask.java:1173) \\
+}%
+}
+
+\vspace*{0.3cm}
+
+\red{Drew Farris, which was assigned to fix this bug, commented {\it Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class and the current version of Mahout is 0.11} refactoring work.} 
+While this quick comment, made only two and a half hour after the bug submission was insightful as shown in our generated test case\footnote{As a reminder, generated test cases are made available at research.mathieu-nayrolles.com/jcharming} the fix happen in the {\tt CollocCombiner} class which is one of the {\tt Reducer}\footnote{As in Map/Reduce} available in Mahout. 
+The fix (commit \#f13833) involved creating an iterator to combine the frequencies of the {\tt Gram} and a null check of the final frequency.}
+
+\red{JCHARMING's preprocessing step
+removed the lines between lines 1 to 14 because they
+belong to a second exception thrown because a {\tt java.lang.NullPointerException} happened when writing in a {\tt ByteArrayOutputStream}. 
+JCHARMING aims to reproduce the root exceptions and not the exceptions that derive from other exceptions. 
+Consequently, the {\tt java.io.IOException: Spill failed} is ignored and our directed model checking engine focused, with success, on reproducing the {\tt java.lang.NullPointerException}.}
 
 \subsection{Partially reproduced}
 
@@ -875,6 +935,35 @@ EventObject.java:38)\\
 }
 
 \vspace*{0.3cm}
+
+\red{The second partially reproduced bug we present here is bug \#2893 belonging to HADOOP. This bug, reported in February 2008 by Lohit Vijayarenu as for title {\it checksum exceptions on trunk} and contains the following description: {\it While running jobs like Sort/WordCount on trunk I see few task failures with ChecksumException
+Re-running the tasks on different nodes succeeds.
+Here is the stack}}
+
+\vspace*{0.3cm}
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+
+1 Map output lost, rescheduling: getMapOutput(task\_200802251721\_0004\_m\_000237\_0,29) failed : \\
+2 org.apache.hadoop.fs.ChecksumException: Checksum error: \/tmps\/4\/mapred\-tt\/mapred\-local/task\_200802251721\_0004\_m\_000237\_0\/file.out at 2085376 \\
+3 at org.apache.hadoop.fs.FSInputChecker.verifySum(FSInputChecker.java:276) \\
+4 at org.apache.hadoop.fs.FSInputChecker.readChecksumChunk(FSInputChecker.java:238) \\
+5 at org.apache.hadoop.fs.FSInputChecker.read1(FSInputChecker.java:189) \\
+6 at org.apache.hadoop.fs.FSInputChecker.read(FSInputChecker.java:157) \\
+7 at java.io.DataInputStream.read(DataInputStream.java:132) \\
+8 at org.apache.hadoop.mapred.TaskTracker\$MapOutputServlet.doGet(TaskTracker.java:2299) \\
+... \\
+23 at org.mortbay.util.ThreadPool\$PoolThread.run(ThreadPool.java:534)
+
+    }%
+}
+
+\vspace*{0.3cm}
+
+\red{Similarly to the first partially reproduced bug, the crash traces produced by our directed model checking engine and the related test case did not match the attached crash stack a 100\%. 
+While, JCHARMING successfully reproduced the bug, the crash stack contains timestamps information, i.e 200802251721, 
+that were logically different in our produced stack trace as we ran the experiment years later.}
 
 In all bugs that were partially reproduced, we found that the
 differences between the crash trace generated from the model
