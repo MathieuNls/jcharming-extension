@@ -173,24 +173,25 @@ This approach particularly suffers from the limitation related to slowing down t
 The overhead for full monitoring is considerably high (between 13\% and 64\% in some cases). 
 The authors  propose an alternative in which they record only the methods surrounding the crash. For this work, the crash has to occur at least once so they could use the information causing the crash to identify the methods surrounding it.}
 
-\red{Similarly to ReCrash, JRapture \cite{Steven2000} is a capture/replay tool for observation-based testing. The tool captures execution of Java programs to replay it in-house. To capture the execution of a Java program, they used their own version of the Java Virtual Machine (JVM) and employ a lightweight, transparent capture process. 
+\red{Similarly to ReCrash, JRapture \cite{Steven2000} is a capture/replay tool for observation-based testing. The tool captures execution of Java programs to replay it in-house. To capture the execution of a Java program, the creator of JRaptrue used their own version of the Java Virtual Machine (JVM) and a lightweight, transparent capture process. 
 Using their own JVM allows capturing any interactions between a Java program and the system, including GUI, files, and console inputs, and on the replay it presents each thread with exactly the same input sequence it saw during capture. 
 However, using a custom JVM is virtually impossible for popular software. 
-Indeed, instead of instrumenting the source code, they require the user to install their JVM that might have some discrepancies with the original one and yield bugs if used with other software. 
-Consequently, JRapture fails at assessing the A-1 and A-3 limitation because it imposes the installation of another JVM that can monitor other software than the intended one.}
+Instead of instrumenting the source code, they require the user to install their JVM that might have some discrepancies with the original one and yield bugs if used with other software applications. 
+In our view,  JRapture fails at addressing the limitations caused by instrumentation because it imposes the installation of another JVM that can monitor other software than the intended one.}
 
 \red{RECORE (REconstructing CORE dumps) is a tool proposed by Robler {\it et al.} The tool instruments Java bytecode to wrap every method in a try and catch block while keeping a quasi-null overhead \cite{Rossler2013}. They start from the core dump and try (with evolutionary algorithms) to reproduce the same dump by executing the programs many times. When the generated dump matches the collected one, they have found the set of input responsible for the failure.}
 
-\red{As of now, all presented approaches operate at code level, however, other approaches \cite{Herbold2011,Roehm2015} focus on recording user-GUI interactions. 
-Roehm {\it et al.} extract the recorder data using delta debugging \cite{Zeller2002}, sequential pattern mining and their combination to reproduce between 75\% and 90\% of the submitted bug while pruning 93\% of the actions.}
+\red{All the presented approaches so far operate at code-level, there exist also approaches \cite{Herbold2011,Roehm2015} that focus on recording user-GUI interactions. 
+Roehm {\it et al.} extract the recorder data using delta debugging \cite{Zeller2002}, sequential pattern mining and their combination to reproduce between 75\% and 90\% of the submitted bugs while pruning 93\% of the actions.}
 
-\red{Among approaches presented here, only the ones proposed by Clause {\it et al.} and Burg {\it et al.} address one limitation (AB-4) at the cost, however, of A-3 (privacy). Beside the AB-4 limitation, the RECORE approach has lowered the A-2 limitation (speed). One way of lowering the A-2 and A-3 limitation will be to let user choose where to put the bar between the speed of the targeted program, privacy and bug reproduction efficiency. As an example, users can choose to contribute or not to improving the software -- policy employed by many major players such as Microsoft in Visual Studio or Mozilla in Firefox -- and propose different type of monitoring where the cost in terms of speed, privacy leaks and efficiency at reproducing bug is clearly explained.}
+\red{Among approaches presented here, only the ones proposed by Clause {\it et al.} and Burg {\it et al.} address the limitation of the need for external data  at the cost, however, of privacy. to address the limitations caused by instrumentation,  the RECORE approach proposes to let users choose where to put the bar between the speed of the targeted program, privacy, and bug reproduction efficiency. As an example, users can choose to contribute or not to improving the software -- policy employed by many major players such as Microsoft in Visual Studio or Mozilla in Firefox -- and propose different types of monitoring where the cost in terms of speed, privacy leaks, and efficiency for reproducing the bug is clearly explained.}
 
  
 
 \subsection{\red{On house crash explanation}}
 
-\red{On the other side of the picture, we have the tools and approaches belonging to the on house crash explanation are fewer and newer.
+\red{On the other side of the picture, we have tools and approaches belonging to the on house crash explanation, which are fewer but newer than those that on field record and replaying tools.
+
 Win {\it et al.} proposed BugRedux for reproducing field failures for in-house debugging \cite{Jin2012}.
 The tool aims to synthesize in-house executions that mimic field failures. 
 To do so, the authors use several types of data collected in the field such as stack traces, crash stack and point of failure and call sequences. 
@@ -209,19 +210,16 @@ of the bug. They also use grouping, profiling and filtering, to
 improve the fault localization process. MIMIC further extends F3 by comparing a model of correct behavior to failing executions and identifying violations of the model as potential explanations for
 failures.}
 
-
 \red{While being close to our approach, BugRedux and F3 may require the call sequence and/or the complete execution trace in order to achieve bug reproduction. When using only the crash traces (referred to as call stack at crash time in their paper), the success rate of BugRedux significantly drops to 37.5\% (6/16). The call sequence and the complete execution trace required to reach 100\% of bug reproduction can only be obtained through instrumentation and with an overhead ranging from 10\% to 1066\%. Chronicle \cite{Bell2013}, is an approach that supports remote debugging by capturing inputs in the application through code instrumentation. 
 They denote themselves by a having a low overhead on the instrumented application, around 10\%.}
 
 \red{Likewise, Zamfir {\it et al.} proposed ESD \cite{Zamfir2010}, an execution synthesis approach which automatically synthesizes failure execution using only the stack trace information. However, this stack trace is extracted from the core dump and may not always contain the components that caused the crash. }
 
-\red{To the best of our knowledge, the most complete work in this category is the one of Chen in his Ph.D thesis \cite{Chen2013a}. Chen proposed an approach named STAR (Stack Trace used based Automatic crash Reproduction). Using only the crash stack, STAR starts from the crash line and goes backward towards the entry point of the program. During the backward process, STAR computes the required condition using an SMT solver named Yices \cite{Dutertre2006}. The objects that satisfy the required conditions are generated and orchestrated inside a JUnit test case. The test is run and the resulting crash stack is compared to the original one. If both match, the bug is said to be reproduced. Star clearly focuses on assessing the B-2 limitation (state explosion). Indeed, they try to reconstruct the events in a backward fashion and therefore save numerous states to explore. Also, Star do well with B-3 (complexity to implement) as it uses Yices \cite{Dutertre2006} and potentially Z3 \cite{de2008z3} (stated in future work) that are well-known and well-supported SMT solver.} \\
+\red{To the best of our knowledge, the most complete work in this category is the one of Chen in his Ph.D thesis \cite{Chen2013a}. Chen proposed an approach named STAR (Stack Trace used based Automatic crash Reproduction). Using only the crash stack, STAR starts from the crash line and goes backward towards the entry point of the program. During the backward process, STAR computes the required condition using an SMT solver named Yices \cite{Dutertre2006}. The objects that satisfy the required conditions are generated and orchestrated inside a JUnit test case. The test is run and the resulting crash stack is compared to the original one. If both match, the bug is said to be reproduced. STAR aims to tackle the state explosion problem of reproducing a bug by reconstructing the events in a backward fashion and therefore saving numerous states to explore. Also, STAR is relatively easy to implement as it uses Yices \cite{Dutertre2006} and potentially Z3 \cite{de2008z3} (stated in their future work) that are well-known and well-supported SMT solvers.} \\
 
-\red{Except for STAR, approaches targeting the reproduction of field crashes require the instrumentation of the code or the running platform in order to save the stack call or the objects to successfully reproduce bugs. As we discussed earlier, instrumentation can cause a massive overhead (1\% to 1066\%) while running the system. In addition, data generated at run-time using instrumentation may contain sensitive information.}
+\red{Except for STAR, existing approaches that target the reproduction of field crashes require the instrumentation of the code or the running platform in order to save the stack call or the objects to successfully reproduce bugs. As we discussed earlier, instrumentation can cause a massive overhead (1\% to 1066\%) while running the system. In addition, data generated at run-time using instrumentation may contain sensitive information.}
 
-\red{JCHARMING's directed model checking overcome the state explosion problem (B-2) of classical model checking and allow the generation of Junit test case in a reasonable amount of time. 
-In order to address the limitation B-1 (reconstruct the events), B-2 (state explosion) and B-3 (complex implementation) authors have adopted different approaches such as execution synthesis, backward analysis, well-known and supported SMT and directed model checking, respectively. While all approaches assess B-1 and are able to yield acceptable results, it seems that no good trade-off can be found between the simplicity of implementation (B-3) and the reduction of state explosion (B-2).}
-
+\red{JCHARMING's directed model checking overcomes the state explosion problem of classical model checking techniques and allows the generation of Junit test cases in a reasonable amount of time. JCHARMING is also easy to deploy. It does not require instrumentation, and hence does not require access to data that may potentially considered confidential. 
 
 
 \section{Preliminaries\label{sec:prelimenaries}}
@@ -558,10 +556,10 @@ leverage this capability to create the required objects and call
 the methods leading to the failure location.
 
 \red{During the testing of the SUT, JPF emits a trace that is composed of the executed instructions. 
-For industrial size system, this trace can contain mullions of instructions. This trace is stored in memory and therefore can be queried while JPF is running. 
+For industrial size system, this trace can contain millions of instructions. This trace is stored in memory and therefore can be queried while JPF is running. 
 However, accessing the trace during the JPF execution considerably slows down the checking process as both the querying mechanism and the JPF engine compete with each other for resources. 
 In order to allow JPF to use 100\% of the available resources and still be able to query the executed instruction post-mortem, we implemented a {\tt listener} that listens the JPF trace emitter. 
-Each time on new instruction is processed by JPF, our listener catch it and then save it to a mongodb database to be queried post-mortem. Figure \ref{fig:jcharming-unittest} presents a high level architecture of the different components.}
+Each time a new instruction is processed by JPF, our listener catches it and then saves it to a MongoDB database to be queried post-mortem. Figure \ref{fig:jcharming-unittest} presents a high-level architecture of the different components.}
 
 \begin{figure}[h!]
   \centering
@@ -571,11 +569,11 @@ Each time on new instruction is processed by JPF, our listener catch it and then
 \end{figure}
 
 
-\red{When the {\tt validate} step trigger a crash stack similarity superior to a factor {\tt t}, the Junit generation engine queries the mongoDB database and fetches the sequence of instructions that led to the crash of interest. 
+\red{When the {\tt validate} step triggers a crash stack similarity superior to a factor {\tt t}, the JUnit generation engine queries the mongoDB database and fetches the sequence of instructions that led to the crash of interest. 
 Figure \ref{fig:jcharming-unittest} contains an hypothetical sequence of instructions related to the example of Figures \ref{fig:testing-toy}, \ref{fig:checking-toy}, \ref{fig:dchecking-toy} which reads : {\tt new jsme.Bar}, {\tt invokespecial jsme.Bar()}, {\tt astore\_1 [bar]}, {\tt aload\_1 [bar]}, {\tt iconst\_3}, {\tt invokevirtual jsme.Bar.foo(int)}, {\tt const\_0}, {\tt istore\_2 [i]}, {\tt goto}, {\tt iload\_2 [i]}, {\tt iconst\_2}, {\tt if\_icmple iinc 2 1}, {\tt new java.lang.Exception}. 
-From this sequence we know that, to reproduce to crash of interest, we have to (1) create new object {\tt jsme.Bar} ({\tt new jsme.Bar}, {\tt invokespecial jsme.Bar()}), (2) store the newly created object in a variable named {\tt bar} ({\tt astore\_1 [bar]}), (3) invoke the method {\tt jsme.Bar.foo(int)} of the {\tt bar} object with {\tt 3} as value ({\tt aload\_1 [bar]}, {\tt iconst\_3}, {\tt invokevirtual jsme.Bar.foo(int)}). Then, the {\tt jsme.Bar.foo(int)} method will executes a loop from 0 to 3 and throw an exception at {\tt i = 3}~({\tt const\_0}, {\tt istore\_2 [i]}, {\tt goto}, {\tt iload\_2 [i]}, {\tt iconst\_2}, {\tt if\_icmple iinc 2 1}, {\tt new java.lang.Exception}).}  
+From this sequence we know that, to reproduce to crash of interest, we have to (1) create a new object {\tt jsme.Bar} ({\tt new jsme.Bar}, {\tt invokespecial jsme.Bar()}), (2) store the newly created object in a variable named {\tt bar} ({\tt astore\_1 [bar]}), (3) invoke the method {\tt jsme.Bar.foo(int)} of the {\tt bar} object with {\tt 3} as value ({\tt aload\_1 [bar]}, {\tt iconst\_3}, {\tt invokevirtual jsme.Bar.foo(int)}). Then, the {\tt jsme.Bar.foo(int)} method will execute a loop from 0 to 3 and throw an exception at {\tt i = 3}~({\tt const\_0}, {\tt istore\_2 [i]}, {\tt goto}, {\tt iload\_2 [i]}, {\tt iconst\_2}, {\tt if\_icmple iinc 2 1}, {\tt new java.lang.Exception}).}  
 
-\red{The generation of the JUnit test itself is based on templates and targets directly the system under test. Templates are excerpts of Java source code with well-defined tags that will be replaced by values. We use templates because the JUnit test case have common structures as shown by Figure \ref{fig:jcharming-unittemplate}.}
+\red{The generation of the JUnit test itself is based on templates and targets directly the system under test. Templates are excerpts of Java source code with well-defined tags that will be replaced by values. We use templates because the JUnit test cases have common structures as shown in Figure \ref{fig:jcharming-unittemplate}.}
 
 \begin{figure}[h!]
 
@@ -593,9 +591,9 @@ From this sequence we know that, to reproduce to crash of interest, we have to (
 \section{Case studies\label{sec:cases}}
 
 In this section, we show the effectiveness of JCHARMING to
-reproduce bugs in seven open source systems\footnote{The bug reports used in this study and the result of the model checker are
+reproduce bugs in ten open source systems\footnote{The bug reports used in this study and the result of the model checker are
 made available for download from research.mathieu-
-nayrolles.com/jcharming/} . The aim of the
+nayrolles.com/jcharming/}. The aim of the
 case study is to answer the following question: {\it Can we use
 crash traces and directed model checking to reproduce on-
 field bugs in a reasonable amount of time?}
@@ -608,7 +606,7 @@ Kilo Line of Code (KLoC) and Number of Classes (NoC).
 \begin{table}[h!]
 \centering
 
-\caption{List of taget systems in terms of Kilo line of code (KLoC), number of classes (NoC) and Bug \# ID}
+\caption{List of target systems in terms of Kilo line of code (KLoC), number of classes (NoC) and Bug \# ID}
 \begin{tabular}{c|c|c|c}
 SUT        & KLOC & NoC  & Bug \#ID                                        \\ \hline \hline
 Ant        & 265  & 1,233 & 38622, 41422                                    \\
