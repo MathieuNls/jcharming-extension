@@ -360,7 +360,26 @@ their content.
 
 In the preprocessing step, we first reconstruct and reorganize
 the crash trace in order to address the problem of nested
-exceptions. Then, with the aim to guide the directed model checking engine in an optimal way, we remove frames
+exceptions. \red{Nested exception refers to the following structure in Java: \\}
+
+\noindent\fbox{%
+  \parbox{\textwidth}{%
+
+1 java.io.IOException: Spill failed \\
+... \\
+14 Caused by: java.lang.IllegalArgumentException \\
+... \\
+28 Caused by: java.lang.NullPointerException \\
+	}%
+ }
+
+\vspace*{0.3cm}
+
+\red{In such a case, we want to reproduce the root exception (line 28) 
+that led to the the other two (lines 14 and 1). Consequently, we remove the line
+1 to 14.}
+
+Then, with the aim to guide the directed model checking engine in an optimal way, we remove frames
 that are out of our control. Frames out of our controls refer
 usually, but are not limited to, Java library methods and third
 party libraries. In Figure \ref{fig:jcarming-traces}, we can see that Java GUI and
@@ -430,12 +449,13 @@ while $\cup_{i=0}^n bslice_{[f_{i+1} \leftarrow f_i]}$.
     \label{fig:jcharming-slice}}
 \end{figure}
 
-In the worst case scenerio where there exists one and only one
+In the worst case scenario where there exists one and only one
 transition between each frame, which is very unlikely for real
 and complex systems, then $bslice_{[entry \leftarrow f_0]}$ and
  $\cup_{i=0}^n bslice_{[f_{i+1} \leftarrow f_i]}$ yield the same set of states with a
 comparable computational cost since the number of branches
 to explore will be the same in both cases.
+
 
 Algorithm \ref{alg:jcharming-slice} is a high level
 representation of how we compute the backward slice between
@@ -446,7 +466,43 @@ algorithm. The main loop of the algorithm begins at line 6 and
 ends at line 15. In this loop, we compute the static slice
 between the current frame and the next one. If the computed
 static slice is not empty then we update the final backward
-slice with the newly computed slice. \\
+slice with the newly computed slice. 
+
+If the computed slice is empty, it means that the frame i + 1
+was corrupted then we try with the frame i + 2, and so forth.
+At the end of the algorithm, we compute the slice between the
+last frame and the entry point of the program, and update the
+final slice. In the rare cases where the final slice is empty (this
+may happen in situations where the content of the crash trace
+is seriously corrupted) then JCHARMING would simply
+proceed with non-directed model checking. 
+\red{While we gave JCHARMING the possibility to compute non-directed model 
+checking, none of 30 bugs we experimented with contained crash traces
+that were damaged enough for this fall back mechanism to be used.}
+
+In order to compute the backward slice, we implement the
+algorithm in Figure 5 as an add-on to the T. J. Watson
+Libraries for Analysis (WALA) \cite{IBM2006} which provides static
+analysis capabilities for Java Bytecode and JavaScript. This
+tool was part of a research project at IBM and donated to the
+community in 2006. WALA offers a very comprehensive API
+to perform static backward slicing on Java Bytecode from a
+specific point to another.
+\red{We did not have to extend WALA core in any way to perform our 
+analysis, we used it as-is.}
+
+At first sight, it may appear that static slicing alone can be
+used to reproduce the bug since it contains all the functions
+that lead to the first user-defined method of the crash trace.
+The problem is that a static slice may also contain many other
+parts of the program that are not relevant to the failure. A
+quick solution to this is to prune out the content of the
+resulting static slice by eliminating the unwanted statements.
+This can be achieved by defining specific inputs. The result
+will be a dynamic slice. This assumes that we know in
+advance which input we need to provide to the program in
+order to reach the crash, which defeats the purpose of bug
+reproduction in the first place. \\
 
 
 \begin{algorithm}[H]
@@ -529,7 +585,7 @@ preprocessing). If the two exceptions match, we conclude that
 the conditions needed to trigger the failure have been met and
 the bug is reproduced.
 
-However, as argued by Kim et al. in \cite{Kim2013b}, the same failure can
+However, as argued by Kim {\it et al.} in \cite{Kim2013b}, the same failure can
 be reached from different paths of the program. Although the
 states executed to reach the defect are not exactly the same,
 they might be useful to enhance the understanding of the bug
@@ -539,6 +595,23 @@ reproduced if the crash trace generated from the model
 checker matches the original crash trace by a factor of $t$, where
 $t$ is a threshold specified by the user. $t$ is the percentage of
 identical frames between both crash traces.
+
+\red{For our experiments (see Section \ref{sec:results}) we set the value of $t$ to 80\%.
+The choice of this value does not follow any
+specific indication, general law about directed model 
+checking or bug reproduction. 
+We were only guided by the need to find the best trade-off
+between the reproducibility and
+the pertinence of the generated test case, i.e, does the tests helps
+to reproduce the on-field crash or not.}
+
+\red{Thus, we have made several incremental attempts, starting from 10\%
+For each attempt, we modified $t$ by 5\% and
+observed the number of bug reproduced and the quality of the generated tests.
+$t = 80\%$ seamed to be the best trade-off, henceforth, if the user is not informed enough to 
+provide a threshold of his own, this value will be used. Moreover, we prevent JCHARMING to perform directed model checking with a threshold below 50\%.
+Indeed, tests generated with such a low threshold do not yield qualitative result at all.}
+
 
 \subsection{Generating Test Cases for Bug Reproduction}
 
@@ -744,8 +817,8 @@ MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 						    & 3093     & Yes 	 & 13.1     & -        \\
                             & 11878    & Yes 	 & 17.4     & - \\  \hline 
 \multirow{3}{*}{ActiveMQ}   & 1054     & Yes & 38.3     & -      \\
-						    & 2880     & Partial 	 & -        & -        \\
-                            & 5035     & No 	 & 27.4     & - \\  \hline \hline             
+						    & 2880     & Partial 	 & 27.4        & -        \\
+                            & 5035     & No 	 &  -    & - \\  \hline \hline             
 \end{tabular}
 
 
@@ -754,7 +827,11 @@ MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 
 As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
 out of 30 bugs either completely or partially (80\% success
-ratio). The average time to reproduce a bug was 19 minutes.
+ratio). The average time to reproduce a bug was 19 minutes 
+\red{ and the average time to failure was 11 minutes. The time to fail is lower than the time
+to reproduce as, in the majority of the failures, the problem was at the $f_0$ level. 
+Henceforth, JCHARMING do not try to reproduce. The maximum fail time was 42.3 minutes, which the time
+required for JCHARMING to fill all the available memory and stop.}
 This result demonstrates the effectiveness of our approach,
 more particularly, the use of backward slicing to create a
 manageable search space that guides adequately the model
@@ -887,7 +964,7 @@ The second reproduced bug we describe in this section is Bug \#486 belonging to 
 
 Drew Farris, who was assigned to fix this bug, commented {\it Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class and the current version of Mahout is 0.11} refactoring work.} 
 While this quick comment, made only two and a half hour after the bug submission, was insightful as shown in our generated test case,\footnote{As a reminder, generated test cases are made available at research.mathieu-nayrolles.com/jcharming} the fix happened in the {\tt CollocCombiner} class which is one of the {\tt Reducer}\footnote{As in Map/Reduce} available in Mahout. 
-The fix (commit \#f13833) involved creating an iterator to combine the frequencies of the {\tt Gram} and a null check of the final frequency.}
+The fix (commit \#f13833) involved creating an iterator to combine the frequencies of the {\tt Gram} and a null check of the final frequency.
 
 JCHARMING's preprocessing step
 removed the lines between lines 1 to 14 because they
@@ -1008,6 +1085,7 @@ RID[(null;25KbxlK0voima4h00ZLBQFC;236Al8E60000045C3A
 
 \vspace*{0.3cm}
 
+
 The first three lines are not produced by the standard
 execution of the SUT but by an ExceptionHandler belonging
 to Struts \cite{ApacheSoftwareFoundation2000}. Struts is an open source MVC (Model View
@@ -1021,6 +1099,34 @@ next steps. It is noteworthy that the bug is marked as duplicate
 of the bug \#46271 which contains a proper crash trace. We
 believe that JCHARMING could have successfully
 reproduced the crash, if it was applied to the original bug. \\
+
+\red{The second bug we did not manage to reproduce and 
+present here belong to mahout and has been reported by  
+Jaehoon Ko on July 2014. The bug \#1594 was entitled {\it Example factorize-movielens-1M.sh does not use HDFS}
+and reads {\it It seems that factorize-movielens-1M.sh does not use HDFS at all. 
+All paths look local paths, not HDFS. So the example crashes 
+immeidately because it cannot find input data from HDFS: }}
+
+\vspace*{0.3cm}
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+
+1 Exception in thread ``main'' org.apache.hadoop.mapreduce.lib.input.InvalidInputException: Input path does not exist: /tmp/mahout-work-hoseog.lee/movielens/ratings.csv \\
+2 at org.apache.hadoop.mapreduce.lib.input.FileInputFormat.singleThreadedListStatus ... \\
+3 at org.apache.hadoop.mapreduce.lib.input.FileInputFormat.listStatus ... \\
+... \\
+31 at org.apache.hadoop.util.RunJar.main(RunJar.java:212)
+
+ }%
+}
+
+\vspace*{0.3cm}
+
+\red{This entry was ultimately marked as ``Not A Problem'' / ``WONT\_FIX'' meaning that 
+the reported bug was not a bug at all. 
+Indeed, the resolution\footnote{described here https://github.com/apache/mahout/pull/38\#issuecomment-51436303} 
+involved the modification of a bash script Ko was using to {\it query} Mahout. Henceforth, the cause of the failure was external to Mahout itself and JCHARMING could not reproduce it.}
 
 \section{Threats to Validity\label{sec:threats}}
 
@@ -1073,14 +1179,14 @@ programming languages.
 
 \section{Conclusion and Future Work\label{sec:conclusion}}
 
-We presented JCHARMING (Java CrasH Automatic
+\red{We presented JCHARMING (Java CrasH Automatic
 Reproduction by directed Model checking), an automatic bug
 reproduction technique that combines crash traces and
 directed model checking. JCHARMING takes advantage of
 the completeness provided by model checking while ignoring
 unwanted states by using the content of crash traces
-augmented with a backward slice. When applied to twentybugs from six open source systems, JCHARMING was able to
-reproduce fully or partially 85\% of the bugs.
+augmented with a backward slice. When applied to thirty bugs from six open source systems, JCHARMING was able to
+reproduce fully or partially 80\% of the bugs.}
 
 To build on this work, we need to experiment with additional
 (and more complex) bugs with the dual aim to (a) improve and
