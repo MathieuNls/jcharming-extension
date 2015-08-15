@@ -542,6 +542,11 @@ the states in $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset 
 transition $x$ to pass from the current state $s_i$ to $s_{i+1}$ are in
 $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset SUT$ and $x.\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset x.SUT$.
 
+\red{In other words, JPF does not generate each possible state for the system under test. 
+Instead, JPF generates and explores only the states that falls inside the backward static 
+slice we computed in the previous step. As shown before, our backward static slice is 
+greatly reduces the space search and is able to compensate for corrupted frames.}
+
 \subsection{Validation}
 
 To validate the result of directed model checking, we modify
