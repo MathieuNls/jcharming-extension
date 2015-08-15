@@ -37,9 +37,8 @@ H3G 1M8}
 
 \begin{abstract}
 Reproducing a bug that caused a system to crash is an important task for uncovering the causes of the crash and providing appropriate fixes. In this paper, we propose a novel crash reproduction approach that combines directed model checking and backward slicing to identify the program statements needed to reproduce a crash. Our approach, named JCHARMING (Java CrasH
-Automatic Reproduction by directed Model checkING), uses information found in crash traces combined with static program slices to guide a model checking engine in an optimal way. We show that JCHARMING is efficient in reproducing   
-We show the effectiveness of JCHARMING by applying it to ten different
-open source programs. Overall, JCHARMING is able to reproduce 80\% of the bugs used in this study in average time of 19 minutes.
+Automatic Reproduction by directed Model checkING), uses information found in crash traces combined with static program slices to guide a model checking engine in an optimal way. We show that JCHARMING is efficient in reproducing  bugs from ten different
+open source programs. Overall, JCHARMING is able to reproduce 80\% of the bugs used in this study in an average time of 19 minutes.
 
 \end{abstract}
 
@@ -57,7 +56,7 @@ one of the most valuable piece of information that can help
 locate and fix the cause of a crash is the one that can help
 reproduce it \cite{Bettenburg2008}.
 
-Bug reproduction is however a challenging task because the data provided by the end users is often scarce. Existing techniques can be divided into two categories: (a)
+Bug reproduction is however a challenging task because of the limited amount of information  provided by the end users. There exist several bug reproduction technique. They can be grouped into two categories: (a)
 On-field record and in-house replay \cite{Narayanasamy2005,Artzi2008,Jaygarl}, and (b) In-house crash explanation \cite{Manevich2004,chandra2009snugglebug}. The first category relies on
 instrumenting the system in order to capture objects and other
 system components at run-time. When a faulty behavior
@@ -331,7 +330,9 @@ their content.
 
 In the preprocessing step, we first reconstruct and reorganize
 the crash trace in order to address the problem of nested
-exceptions. \red{Nested exception refers to the following structure in Java: \\}
+exceptions. Nested exception refers to the following structure in Java. In such a case, we want to reproduce the root exception (line 28) 
+that led to the the other two (lines 14 and 1). This said, we remove the lines
+1 to 14. \\
 
 \noindent\fbox{%
   \parbox{\textwidth}{%
@@ -345,10 +346,6 @@ exceptions. \red{Nested exception refers to the following structure in Java: \\}
  }
 
 \vspace*{0.3cm}
-
-\red{In such a case, we want to reproduce the root exception (line 28) 
-that led to the the other two (lines 14 and 1). Consequently, we remove the line
-1 to 14.}
 
 Then, with the aim to guide the directed model checking engine in an optimal way, we remove frames
 that are out of our control. Frames out of our controls refer
@@ -459,8 +456,8 @@ tool was part of a research project at IBM and donated to the
 community in 2006. WALA offers a very comprehensive API
 to perform static backward slicing on Java Bytecode from a
 specific point to another.
-\red{We did not have to extend WALA core in any way to perform our 
-analysis, we used it as-is.}
+We did not need to extend WALA to perform our 
+analysis.
 
 At first sight, it may appear that static slicing alone can be
 used to reproduce the bug since it contains all the functions
@@ -567,21 +564,15 @@ checker matches the original crash trace by a factor of $t$, where
 $t$ is a threshold specified by the user. $t$ is the percentage of
 identical frames between both crash traces.
 
-\red{For our experiments (see Section \ref{sec:results}) we set the value of $t$ to 80\%.
-The choice of this value does not follow any
-specific indication, general law about directed model 
-checking or bug reproduction. 
-We were only guided by the need to find the best trade-off
-between the reproducibility and
-the pertinence of the generated test case, i.e, does the tests helps
-to reproduce the on-field crash or not.}
-
-\red{Thus, we have made several incremental attempts, starting from 10\%
-For each attempt, we modified $t$ by 5\% and
-observed the number of bug reproduced and the quality of the generated tests.
-$t = 80\%$ seamed to be the best trade-off, henceforth, if the user is not informed enough to 
-provide a threshold of his own, this value will be used. Moreover, we prevent JCHARMING to perform directed model checking with a threshold below 50\%.
-Indeed, tests generated with such a low threshold do not yield qualitative result at all.}
+For our experiments (see Section \ref{sec:results}), we set the value of $t$ to 80\%.
+The choice of $t$ should be guided by the need to find the best trade-off
+between the reproducibility of the bug and
+the relevance  of the generated test case (the test should help
+ reproduce the on-field crash). To determine the best $t$, we made several incremental attempts, starting with from $t = 10\%$.  For each attempt, we increased $t$ with a factor 5\% and
+observed the number of bugs reproduced and the quality of the generated tests.
+Having $t = 80\%$ provided the best trade-off. This said, we anticipate that the tool that implements
+our technique should allow software engineers to vary $t$ depending on the bugs and the systems under study. Based on our observations, we recommend, however, 
+to set $t$ to 80\% as a baseline. It should also be noted that we deliberately prevented JCHARMING to perform directed model checking with a threshold below 50\%. This is because the tests generated with such a low threshold during our experiments did not yield qualitative results.
 
 
 \subsection{Generating Test Cases for Bug Reproduction}
@@ -798,10 +789,14 @@ MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 
 As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
 out of 30 bugs either completely or partially (80\% success
+<<<<<<< HEAD
+ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which the time
+=======
 ratio).  The average time to reproduce a bug was 19 minutes 
 \red{ and the average time to failure was 11 minutes. The time to fail is lower than the time
 to reproduce as, in the majority of the failures, the problem was at the $f_0$ level. 
 Henceforth, JCHARMING do not try to reproduce. The maximum fail time was 42.3 minutes, which the time
+>>>>>>> e9d48eca28f599549ee15ee03c5d8386fe5545b3
 required for JCHARMING to fill all the available memory and stop.}
 This result demonstrates the effectiveness of our approach,
 more particularly, the use of backward slicing to create a
@@ -1071,12 +1066,12 @@ of the bug \#46271 which contains a proper crash trace. We
 believe that JCHARMING could have successfully
 reproduced the crash, if it was applied to the original bug. \\
 
-\red{The second bug we did not manage to reproduce and 
-present here belong to mahout and has been reported by  
-Jaehoon Ko on July 2014. The bug \#1594 was entitled {\it Example factorize-movielens-1M.sh does not use HDFS}
+The second bug that we did not reproduce and 
+that we present in this section belongs to Mahout. It was reported by  
+Jaehoon Ko on July 2014. Bug \#1594 is titled {\it Example factorize-movielens-1M.sh does not use HDFS}
 and reads {\it It seems that factorize-movielens-1M.sh does not use HDFS at all. 
 All paths look local paths, not HDFS. So the example crashes 
-immeidately because it cannot find input data from HDFS: }}
+immeidately because it cannot find input data from HDFS: }
 
 \vspace*{0.3cm}
 
@@ -1094,16 +1089,16 @@ immeidately because it cannot find input data from HDFS: }}
 
 \vspace*{0.3cm}
 
-\red{This entry was ultimately marked as ``Not A Problem'' / ``WONT\_FIX'' meaning that 
-the reported bug was not a bug at all. 
-Indeed, the resolution\footnote{described here https://github.com/apache/mahout/pull/38\#issuecomment-51436303} 
-involved the modification of a bash script Ko was using to {\it query} Mahout. Henceforth, the cause of the failure was external to Mahout itself and JCHARMING could not reproduce it.}
+This entry was marked as ``Not A Problem'' / ``WONT\_FIX'' meaning that 
+the reported bug was not a bug in the first place. 
+The resolution\footnote{described here https://github.com/apache/mahout/pull/38\#issuecomment-51436303} of this bug 
+involved the modification of a bash script that Ko (the submitter) was using to {\it query} Mahout. In other words, the cause of the failure was external to Mahout itself and this is why JCHARMING could not reproduce it.}
 
 \section{Threats to Validity\label{sec:threats}}
 
 The selection of SUTs is one of the common threats to validity
 for approaches aiming to improve the understanding of
-program's behavior. It is possible that the selected programs
+program's behaviour. It is possible that the selected programs
 share common properties that we are not aware of and
 therefore, invalidate our results. However, the SUTs analyzed
 by JCHARMING are the same as the ones used in similar
