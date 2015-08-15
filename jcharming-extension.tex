@@ -20,9 +20,9 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \begin{document}
 
-\runningheads{Mathieu Nayrolles {\it et al.}}{JCHARMING: A Directed Model Checking Engine Using Crash Traces to Reproduce Bug.}
+\runningheads{Mathieu Nayrolles {\it et al.}}{A Bug Reproduction Approach Based on Directed Model Checking and Crash Traces.}
 
-\title{JCHARMING: A Directed Model Checking Engine Using Crash Traces to Reproduce Bug.}
+\title{A Bug Reproduction Approach Based on Directed Model Checking and Crash Traces.}
 
 \author{Mathieu Nayrolles \corrauth $^,$ \footnotemark[2] $^,$ $^1$, Abdelwahab Hamou-Lhadj$^1$, Sofi\`ene Tahar$^2$ and Alf Larsson$^3$}
 
@@ -36,27 +36,11 @@ Montreal, Quebec, Canada
 H3G 1M8}
 
 \begin{abstract}
-\red{Due to their inherent complexity, software systems
-are pledged to be released with bugs. These bugs manifest
-themselves on client's computers, causing crashes and undesired
-behaviors. Field crashes, in particular, are challenging to
-understand and fix as the information provided by the impacted
-customers are often scarce and inaccurate. To address this issue,
-there is a need to find ways for automatically reproducing the
-crash in a lab environment in order to fully understand its root
-causes. Crash reproduction is also an important step towards
-developing adequate patches. In this paper, we propose a novel
-crash reproduction approach, called JCHARMING (Java CrasH
-Automatic Reproduction by directed Model checkING).
-JCHARMING uses crash traces and model checking to identify
-program statements needed to reproduce a crash. Our approach
-takes advantage of the completeness provided by model checking
-while ignoring unneeded system states by means of information
-found in crash traces combined with static slices. We show the
-effectiveness of JCHARMING by applying it to seven different
-open source programs cumulating more than one and a half million lines of
-code scattered in around 17,500 classes. Overall, JCHARMING
-was able to reproduce 80\% of the submitted bugs.}
+Reproducing a bug that caused a system to crash is an important task for uncovering the causes of the crash and providing appropriate fixes. In this paper, we propose a novel crash reproduction approach that combines directed model checking and backward slicing to identify the program statements needed to reproduce a crash. Our approach, named JCHARMING (Java CrasH
+Automatic Reproduction by directed Model checkING), uses information found in crash traces combined with static program slices to guide a model checking engine in an optimal way. We show that JCHARMING is efficient in reproducing   
+We show the effectiveness of JCHARMING by applying it to ten different
+open source programs. Overall, JCHARMING is able to reproduce 80\% of the bugs used in this study in average time of 19 minutes.
+
 \end{abstract}
 
 \keywords{Automatic Bug Reproduction, Dynamic Analysis,
@@ -68,26 +52,12 @@ Model Checking, Software Maintenance.}
 
 \section{Introduction}
 
-Despite the efforts spent on testing and verification, there is no
-guarantee that the final releases of a software system are bug-
-free, resulting in crashes (field failures) and unwanted
-behavior of the system. Fixing bugs that cause field crashes is
-known to be an expensive task. Automated techniques that can
-help identify the cause of crashes in order to reproduce them
-can save costs and efforts.
-
-Field failures are, however, challenging to reproduce because
-the data provided by the end users is often scarce. A survey
-conducted with developers of major open source software
-systems such as Apache, Mozilla and Eclipse revealed that
+The first (and perhaps main) step in understanding the cause of a field crash is to reproduce the bug that caused the system to fail. A survey conducted with developers of major open source software systems such as Apache, Mozilla and Eclipse revealed that
 one of the most valuable piece of information that can help
 locate and fix the cause of a crash is the one that can help
-reproduce it \cite{Bettenburg2008}. It is therefore important to invest in
-techniques and tools for automatic bug reproduction to ease
-the maintenance process and accelerate the rate of bug fixes
-and patches.
+reproduce it \cite{Bettenburg2008}.
 
-Existing techniques can be divided into two categories: (a)
+Bug reproduction is however a challenging task because the data provided by the end users is often scarce. Existing techniques can be divided into two categories: (a)
 On-field record and in-house replay \cite{Narayanasamy2005,Artzi2008,Jaygarl}, and (b) In-house crash explanation \cite{Manevich2004,chandra2009snugglebug}. The first category relies on
 instrumenting the system in order to capture objects and other
 system components at run-time. When a faulty behavior
@@ -104,8 +74,7 @@ provide hints on potential causes. While these techniques are
 efficient in improving our comprehension of the bugs, they are
 not designed with the purpose of reproducing them.
 
-
-In  \cite{Nayrolles2015}, we proposed an hybrid approach called JCHARMING
+In  \cite{Nayrolles2015}, we proposed a hybrid approach called JCHARMING
 (Java CrasH Automatic Reproduction by directed Model
 checkING) that uses a combination of crash traces and model
 checking to automatically reproduce bugs that caused field
@@ -115,6 +84,7 @@ the content of the heap either. Instead, JCHARMING uses a
 list of functions output when an uncaught exception in Java
 occurs (i.e., the crash trace) to guide a model checking engine
 to uncover the statements that caused the crash. 
+
 Model checking (also known as property checking) is a formal
 technique for automatically verifying a set of properties of
 finite-state systems \cite{Baier2008}. More specifically, this technique
@@ -126,7 +96,7 @@ the state explosion problem \cite{Baier2008}. To address this challenge and
 apply model checking on large programs, we direct the model
 checking engine towards the crash using program slicing and
 the content of the crash trace, and hence, reduce the search
-space. When applied to reproducing bugs of seven open source  systems, JCHARMING achieved  85\% accuracy. \\
+space. When applied to reproducing bugs of seven open source  systems, JCHARMING achieved  85\% accuracy. 
 
 This paper extends our previous work \cite{Nayrolles2015} with the following main contributions: An extensive validation of JCHARMING on three additional systems: Mahout, Hadoop and, ActiveMQ, bringing the total number of systems used to validate our approach to 10. It should be noted that the new systems are relatively larger compared to those used in \cite{Nayrolles2015}. We further improve the performance of JCHARMING by reducing the space search required to reproduce bugs. The new version of JCHARMING achieves an accuracy of 80\% as it tackles more challenging crashes in larger software systems. Furthermore, this extended version of the paper includes a detailed analysis of additional bugs, an elaborate discussion of the results, and an up-to-date related work section.
 
@@ -137,13 +107,14 @@ is dedicated to the case study, followed by threats to validity.
 We conclude the paper and sketch future directions in Section
 \ref{sec:conclusion}.
 
+
 \section{Related Works\label{sec:rel-work}}
 
 In this section, we put the emphasis on how stack traces are used in crash reproduction tasks. 
-Existing studies can be divided into two distinct categories: (A) on field record and in house replay techniques \cite{Steven2000,Narayanasamy2005,Artzi2008,Roehm2015}, and (B) on house crash understanding \cite{Jin2012,Jin2013,Zuddas2014,Chen2013a,Nayrolles2015}. 
+Existing studies can be divided into two distinct categories: (A) on-field record and in-house replay techniques \cite{Steven2000,Narayanasamy2005,Artzi2008,Roehm2015}, and (B) on-house crash understanding \cite{Jin2012,Jin2013,Zuddas2014,Chen2013a,Nayrolles2015}. 
 
 These two categories yield varying results depending on the selected approach and are mainly differentiated by the need of instrumentation. 
-The first category needs to oversee -- by means of instrumentation -- the execution of the targeted system on the field in order to reproduce the crashes in house, while tools and approaches belonging to the second category only use data produced by the crash such as the crash stack or the core dump at crash time. In the first category, tools record different types of data such as the invoked methods \cite{Narayanasamy2005}, try-catch exceptions \cite{Rossler2013}, or objects \cite{Jaygarl}. In the second category, existing tools and approaches are aimed towards understanding the causes of a crash, using data produced by the crash itself, such as a crash stack \cite{Chen2013a}, previous -- and controlled -- execution \cite{Zuddas2014}, etc. 
+The first category needs to oversee -- by means of instrumentation -- the execution of the targeted system on the field in order to reproduce the crashes in-house, while tools and approaches belonging to the second category only use data produced by the crash such as the crash stack or the core dump at crash time. In the first category, tools record different types of data such as the invoked methods \cite{Narayanasamy2005}, try-catch exceptions \cite{Rossler2013}, or objects \cite{Jaygarl}. In the second category, existing tools and approaches are aimed towards understanding the causes of a crash, using data produced by the crash itself, such as a crash stack \cite{Chen2013a}, previous -- and controlled -- execution \cite{Zuddas2014}, etc. 
 
 Tools and approaches that rely on instrumentation face common limitations such as the needs to instrument the source code in order to introduce logging mechanisms\cite{Narayanasamy2005,Jaygarl,Artzi2008}, which is known to slow down the subject system. 
 In addition,  recording system behavior by means of instrumentation may yield privacy concerns. 
@@ -156,7 +127,7 @@ It is worth mentioning that both categories share a common limitation. It is pos
 
 
 
-\subsection{On field record and in house replay}
+\subsection{On-field record and in-house replay}
 
 Jaygarl {\it et al.} created OCAT (Object Capture based Automated Testing) \cite{Jaygarl}. The authors' approach starts by capturing objects created by the program when it runs on-field in order to provide them to an automated test process. The coverage of automated tests is often low due to lack of correctly constructed objects. Also, the objects can be mutated by means of evolutionary algorithms. These mutations target primitive field in order to create even more objects and therefore, improve the code coverage. While not directly targeting the reproduction of a bug, OCAT is an approach that was used as the main mechanism for bug reproduction systems.
 
@@ -188,16 +159,16 @@ Among approaches presented here, only the ones proposed by Clause {\it et al.} a
 
  
 
-\subsection{On house crash explanation}
+\subsection{On-house crash explanation}
 
-On the other side of the picture, we have tools and approaches belonging to the on house crash explanation, which are fewer but newer than those that on field record and replaying tools.
+On the other side of the picture, we have tools and approaches belonging to the on-house crash explanation, which are fewer but newer than those that on-field record and replaying tools.
 
 Win {\it et al.} proposed BugRedux for reproducing field failures for in-house debugging \cite{Jin2012}.
 The tool aims to synthesize in-house executions that mimic field failures. 
 To do so, the authors use several types of data collected in the field such as stack traces, crash stack and point of failure and call sequences. 
 The data that successfully reproduced the field crash is sent to software developers to fix the bug. 
 BugRedux does not particularly assess one limitation and even raise a new one. 
-Indeed, BugRedux lies on several in house executions that are synthesized in order to narrow down the area of research find the crash location and finally, reproduce the bug. 
+Indeed, BugRedux lies on several in-house executions that are synthesized in order to narrow down the area of research find the crash location and finally, reproduce the bug. 
 However, these in house execution have to be conducted prior to the work on the bug really begins. 
 Also, the in-house executions suffers from the same limitation as unit testing {\it i.e}, the executions are based on the developer knowledge and abilities to develop unlikely scenarios and not only almost normal execution. 
 Based on the success of BugRedux, the authors built F3 (Fault
