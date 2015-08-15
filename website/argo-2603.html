@@ -1,0 +1,215 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>JCHARMING Project</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link href="css.css" rel="stylesheet" type="text/css">
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushJava.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+
+<div id="header">
+<h1>JCHARMING Project. SANER 2015</h1>
+</div>
+
+
+<div id="menu">
+<p class="title_menu"><a class="menu_link" href="index.html">Home</a></p>
+	<p class="title_menu">Experiment</p>
+	<p class="subtitle_menu">Ant</p>
+		<a class="menu_link" href="ant-38622.html">ant-38622</a><br />
+		<a class="menu_link" href="ant-41422.html">ant-41422</a><br />
+	<p class="subtitle_menu">ArgoUML</p>
+		<a class="menu_link" href="argo-2603.html">argo-2603</a><br />
+		<a class="menu_link" href="argo-2558.html">argo-2558</a><br />
+		<a class="menu_link" href="argo-311.html">argo-311</a><br />
+		<a class="menu_link" href="argo-1786.html">argo-1786</a><br />
+	<p class="subtitle_menu">dnsjava</p>
+		<a class="menu_link" href="dns-38.html">dns-38</a><br />
+	<p class="subtitle_menu">jfreechart</p>
+		<a class="menu_link" href="jfree-434.html">jfree-434</a><br />
+		<a class="menu_link" href="jfree-664.html">jfree-664</a><br />
+		<a class="menu_link" href="jfree-916.html">jfree-916</a><br />
+	<p class="subtitle_menu">Log4j</p>
+		<a class="menu_link" href="Log4j-11570.html">Log4j-11570</a><br />
+		<a class="menu_link" href="Log4j-40212.html">Log4j-40212</a><br />
+		<a class="menu_link" href="Log4j-41186.html">Log4j-41186</a><br />
+		<a class="menu_link" href="Log4j-453335.html">Log4j-453335</a><br />
+		<a class="menu_link" href="Log4j-46271.html">Log4j-46271</a><br />
+		<a class="menu_link" href="Log4j-47912.html">Log4j-47912</a><br />
+		<a class="menu_link" href="Log4j-47957.html">Log4j-47957</a><br />
+	<p class="subtitle_menu">MCT</p>
+		<a class="menu_link" href="MCT-440ed48.html">MCT-440ed48</a><br />
+	<p class="subtitle_menu">pdfbox</p>
+		<a class="menu_link" href="pdfbox-1412.html">pdfbox-1412</a><br />
+		<a class="menu_link" href="pdfbox-1359.html">pdfbox-1359</a><br />
+			<p class="subtitle_menu">Mahout</p>
+		<a class="menu_link" href="mahout-486.html">mahout-486</a><br />
+		<a class="menu_link" href="mahout-1367.html">mahout-1367</a><br />
+		<a class="menu_link" href="mahout-1594.html">mahout-1594</a><br />
+		<a class="menu_link" href="mahout-1635.html">mahout-1635</a><br />
+	<p class="subtitle_menu">Hadoop</p>
+		<a class="menu_link" href="hadoop-2893.html">hadoop-2893</a><br />
+		<a class="menu_link" href="hadoop-3093.html">hadoop-3093</a><br />
+		<a class="menu_link" href="hadoop-11878.html">hadoop-11878</a><br />
+	<p class="subtitle_menu">ActiveMQ</p>
+		<a class="menu_link" href="amq-1054.html">amq-1054</a><br />
+		<a class="menu_link" href="amq-2880.html">amq-2880</a><br />
+		<a class="menu_link" href="amq-5035.html">amq-5035</a><br />
+</div>
+
+<div id="content">
+
+<div class="info">
+<h3> Crash Information </h3>
+Argo-2603 <a href="http://argouml.tigris.org/issues/show_bug.cgi?id=2603">java NullPointerException when loading the .zargo file</a>
+</div>
+
+<div class="info">
+<h3> Stack Crash </h3>
+<pre  class="brush: java;">
+java.lang.NullPointerException
+        at org.argouml.uml.diagram.ProjectMemberDiagram.<init>(ProjectMemberDiag
+ram.java:74)
+        at org.argouml.kernel.Project.addMember(Project.java:503)
+        at org.argouml.kernel.Project.loadZippedProjectMembers(Project.java:343)
+
+
+        at org.argouml.kernel.ProjectManager.loadProjectFromZargo(ProjectManager
+.java:364)
+        at org.argouml.kernel.ProjectManager.loadProject(ProjectManager.java:235
+)
+        at org.argouml.uml.ui.ActionOpenProject.loadProject(ActionOpenProject.ja
+va:192)
+        at org.argouml.uml.ui.ActionOpenProject.actionPerformed(ActionOpenProjec
+t.java:156)
+        at javax.swing.AbstractButton.fireActionPerformed(Unknown Source)
+        at javax.swing.AbstractButton$ForwardActionEvents.actionPerformed(Unknow
+n Source)
+        at javax.swing.DefaultButtonModel.fireActionPerformed(Unknown Source)
+        at javax.swing.DefaultButtonModel.setPressed(Unknown Source)
+        at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Unknown Sour
+ce)
+        at java.awt.AWTEventMulticaster.mouseReleased(Unknown Source)
+        at java.awt.AWTEventMulticaster.mouseReleased(Unknown Source)
+        at java.awt.Component.processMouseEvent(Unknown Source)
+        at java.awt.Component.processEvent(Unknown Source)
+        at java.awt.Container.processEvent(Unknown Source)
+        at java.awt.Component.dispatchEventImpl(Unknown Source)
+        at java.awt.Container.dispatchEventImpl(Unknown Source)
+        at java.awt.Component.dispatchEvent(Unknown Source)
+        at java.awt.LightweightDispatcher.retargetMouseEvent(Unknown Source)
+        at java.awt.LightweightDispatcher.processMouseEvent(Unknown Source)
+        at java.awt.LightweightDispatcher.dispatchEvent(Unknown Source)
+        at java.awt.Container.dispatchEventImpl(Unknown Source)
+        at java.awt.Window.dispatchEventImpl(Unknown Source)
+        at java.awt.Component.dispatchEvent(Unknown Source)
+        at java.awt.EventQueue.dispatchEvent(Unknown Source)
+        at java.awt.EventDispatchThread.pumpOneEventForHierarchy(Unknown Source)
+
+
+        at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+        at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+        at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+        at java.awt.EventDispatchThread.run(Unknown Source)
+java.lang.NullPointerException
+        at javax.swing.tree.TreePath.equals(Unknown Source)
+        at javax.swing.tree.TreePath.isDescendant(Unknown Source)
+        at javax.swing.JTree.getDescendantSelectedPaths(Unknown Source)
+        at javax.swing.JTree.removeDescendantSelectedPaths(Unknown Source)
+        at javax.swing.JTree$TreeModelHandler.treeStructureChanged(Unknown Sourc
+e)
+        at org.argouml.ui.DisplayTextTree.doForceUpdate(DisplayTextTree.java:335
+)
+        at org.argouml.ui.DisplayTextTreeRun.run(DisplayTextTree.java:524)
+        at java.awt.event.InvocationEvent.dispatch(Unknown Source)
+        at java.awt.EventQueue.dispatchEvent(Unknown Source)
+        at java.awt.EventDispatchThread.pumpOneEventForHierarchy(Unknown Source)
+
+
+        at java.awt.EventDispatchThread.pumpEventsForHierarchy(Unknown Source)
+        at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+        at java.awt.EventDispatchThread.pumpEvents(Unknown Source)
+        at java.awt.EventDispatchThread.run(Unknown Source)
+</pre>
+</div>
+
+<div class="info">
+<h3> Generated Test Case </h3>
+<pre  class="brush: java;">
+public class Argo-2603 extends TestCase {
+
+	private static final String faillure = // Stack Crash;
+	
+	private static final int threshold = 80;
+	private static int differences = Integer.MAX_VALUE;
+	private static final StringTokenizer tokenizerFaillure = 
+		new StringTokenizer(faillure, "\n");
+
+	/**
+	 * JCHAMING GENERATED TEST -- USE WITH CAUTION
+	 */
+	@Test
+	public testArgo() {
+		try {
+
+			org.argouml.kernel.ProjectManager v0 = org.argouml.kernel.ProjectManager.getManager();
+			String v1 = org.argouml.util.FileConstants.COMPRESSED_FILE_EXT;
+			v0.loadProject(v1);
+		
+		} catch (Exception e) {
+			 differences = 0;
+			 StringTokenizer tokenizerFaillure = new 
+			 StringTokenizer(e.getStackTrace()
+			 .toString(), "\n");
+			 while (tokenizeOriginalFaillure.hasMoreTokens()) {
+				 if (tokenizeOriginalFaillure.nextToken().compareTo(
+						 tokenizerFaillure.nextToken()) != 0) 
+				 {
+					 differences++;
+				 }
+			 } 
+		}
+		
+		assertTrue(differences <= tokenizeOriginalFaillure.countTokens() / 100
+			* (threshold-100));
+			 
+	}
+}
+</pre>
+</div>
+
+<div class="info">
+<h3> JCharming Infos </h3>
+<p>Partially Reproduced in 9.4m. (~85%)</p>
+<p> <b> at org.argouml.uml.ui.ActionOpenProject.actionPerformed(ActionOpenProject.java:156)</b> <br /> not found in the JCharming's stack trace.</p>
+</div>
+</div>
+<div class='author'>
+Mathieu Nayrolles, Wahab Hamou-Lhadj<br />
+SBA Research Lab<br />
+ECE, Concordia University<br />
+Montréal, Canada<br />
+m_nayrol@encs.concordia.ca, abdelw@ece.concordia.ca<br />
+</div>
+<div class='author'>
+Sofiène Tahar <br />
+ECE Department<br />
+Concordia University<br />
+Montréal, Canada<br />
+tahar@ece.concordia.ca<br />
+</div>
+<div class='author'>
+Alf Larsson<br />
+PLF System Management<br />
+Ericsson, R & D<br />
+Stockholm, Sweden<br />
+alf.larsson@ericsson.com<br />
+</div>
+
+</body>
+</html>

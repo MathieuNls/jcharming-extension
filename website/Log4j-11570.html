@@ -1,0 +1,165 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>JCHARMING Project</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link href="css.css" rel="stylesheet" type="text/css">
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushJava.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+
+<div id="header">
+<h1>JCHARMING Project. SANER 2015</h1>
+</div>
+
+
+<div id="menu">
+<p class="title_menu"><a class="menu_link" href="index.html">Home</a></p>
+	<p class="title_menu">Experiment</p>
+	<p class="subtitle_menu">Ant</p>
+		<a class="menu_link" href="ant-38622.html">ant-38622</a><br />
+		<a class="menu_link" href="ant-41422.html">ant-41422</a><br />
+	<p class="subtitle_menu">ArgoUML</p>
+		<a class="menu_link" href="argo-2603.html">argo-2603</a><br />
+		<a class="menu_link" href="argo-2558.html">argo-2558</a><br />
+		<a class="menu_link" href="argo-311.html">argo-311</a><br />
+		<a class="menu_link" href="argo-1786.html">argo-1786</a><br />
+	<p class="subtitle_menu">dnsjava</p>
+		<a class="menu_link" href="dns-38.html">dns-38</a><br />
+	<p class="subtitle_menu">jfreechart</p>
+		<a class="menu_link" href="jfree-434.html">jfree-434</a><br />
+		<a class="menu_link" href="jfree-664.html">jfree-664</a><br />
+		<a class="menu_link" href="jfree-916.html">jfree-916</a><br />
+	<p class="subtitle_menu">Log4j</p>
+		<a class="menu_link" href="Log4j-11570.html">Log4j-11570</a><br />
+		<a class="menu_link" href="Log4j-40212.html">Log4j-40212</a><br />
+		<a class="menu_link" href="Log4j-41186.html">Log4j-41186</a><br />
+		<a class="menu_link" href="Log4j-453335.html">Log4j-453335</a><br />
+		<a class="menu_link" href="Log4j-46271.html">Log4j-46271</a><br />
+		<a class="menu_link" href="Log4j-47912.html">Log4j-47912</a><br />
+		<a class="menu_link" href="Log4j-47957.html">Log4j-47957</a><br />
+	<p class="subtitle_menu">MCT</p>
+		<a class="menu_link" href="MCT-440ed48.html">MCT-440ed48</a><br />
+	<p class="subtitle_menu">pdfbox</p>
+		<a class="menu_link" href="pdfbox-1412.html">pdfbox-1412</a><br />
+		<a class="menu_link" href="pdfbox-1359.html">pdfbox-1359</a><br />
+			<p class="subtitle_menu">Mahout</p>
+		<a class="menu_link" href="mahout-486.html">mahout-486</a><br />
+		<a class="menu_link" href="mahout-1367.html">mahout-1367</a><br />
+		<a class="menu_link" href="mahout-1594.html">mahout-1594</a><br />
+		<a class="menu_link" href="mahout-1635.html">mahout-1635</a><br />
+	<p class="subtitle_menu">Hadoop</p>
+		<a class="menu_link" href="hadoop-2893.html">hadoop-2893</a><br />
+		<a class="menu_link" href="hadoop-3093.html">hadoop-3093</a><br />
+		<a class="menu_link" href="hadoop-11878.html">hadoop-11878</a><br />
+	<p class="subtitle_menu">ActiveMQ</p>
+		<a class="menu_link" href="amq-1054.html">amq-1054</a><br />
+		<a class="menu_link" href="amq-2880.html">amq-2880</a><br />
+		<a class="menu_link" href="amq-5035.html">amq-5035</a><br />
+</div>
+
+<div id="content">
+
+<div class="info">
+<h3> Crash Information </h3>
+Log4j-11570 <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=11570"> XML Appender throws NullPointerException when logging null</a>
+</div>
+
+<div class="info">
+<h3> Stack Crash </h3>
+<pre  class="brush: java;">
+java.lang.NullPointerException
+ at org.apache.log4j.helpers.Transform.appendEscapingCDATA(Transform.java:74)
+ at org.apache.log4j.xml.XMLLayout.format(Unknown Source)
+ at org.apache.log4j.WriterAppender.subAppend(WriterAppender.java:292)
+ at org.apache.log4j.RollingFileAppender.subAppend(RollingFileAppender.java:225)
+ at org.apache.log4j.WriterAppender.append(WriterAppender.java:150)
+ at org.apache.log4j.AppenderSkeleton.doAppend(AppenderSkeleton.java:221)
+at
+org.apache.log4j.helpers.AppenderAttachableImpl.appendLoopOnAppenders(AppenderAttachableImpl.java:57)
+ at org.apache.log4j.Category.callAppenders(Category.java:187)
+ at org.apache.log4j.Category.forcedLog(Category.java:372)
+ at org.apache.log4j.Category.error(Category.java:286)
+ at com.bluearc.mgr.screens.Index.doThroughput(Index.java:253)
+</pre>
+</div>
+
+<div class="info">
+<h3> Generated Test Case </h3>
+<pre  class="brush: java;">
+public class Log4j-11570 extends TestCase {
+
+	private static final String faillure = // Stack Crash;
+	
+	private static final int threshold = 80;
+	private static int differences = Integer.MAX_VALUE;
+	private static final StringTokenizer tokenizerFaillure = 
+		new StringTokenizer(faillure, "\n");
+
+	/**
+	 * JCHAMING GENERATED TEST -- USE WITH CAUTION
+	 */
+	@Test
+	public testLog4j() {
+		try {
+
+			org.apache.log4j.spi.Logger v0 = 
+				org.apache.log4j.spi.LoggerFactory.Logger.getLogger(
+				this.getClass().getCanonicalName());
+			v0.error(null);
+		
+		} catch (Exception e) {
+			 differences = 0;
+			 StringTokenizer tokenizerFaillure = new 
+			 StringTokenizer(e.getStackTrace()
+			 .toString(), "\n");
+			 while (tokenizeOriginalFaillure.hasMoreTokens()) {
+				 if (tokenizeOriginalFaillure.nextToken().compareTo(
+						 tokenizerFaillure.nextToken()) != 0) 
+				 {
+					 differences++;
+				 }
+			 } 
+		}
+		
+		assertTrue(differences <= tokenizeOriginalFaillure.countTokens() / 100
+			* (threshold-100));
+			 
+	}
+}
+</pre>
+</div>
+
+<div class="info">
+<h3> JCharming Infos </h3>
+<p>Fully reproduced in 12.1m.</p>
+</div>
+</div>
+<div class='author'>
+Mathieu Nayrolles, Wahab Hamou-Lhadj<br />
+SBA Research Lab<br />
+ECE, Concordia University<br />
+Montréal, Canada<br />
+m_nayrol@encs.concordia.ca, abdelw@ece.concordia.ca<br />
+</div>
+<div class='author'>
+Sofiène Tahar <br />
+ECE Department<br />
+Concordia University<br />
+Montréal, Canada<br />
+tahar@ece.concordia.ca<br />
+</div>
+<div class='author'>
+Alf Larsson<br />
+PLF System Management<br />
+Ericsson, R & D<br />
+Stockholm, Sweden<br />
+alf.larsson@ericsson.com<br />
+</div>
+
+</body>
+</html>

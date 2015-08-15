@@ -1,0 +1,201 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>JCHARMING Project</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link href="css.css" rel="stylesheet" type="text/css">
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	<script type="text/javascript" src="scripts/shBrushJava.js"></script>
+	<link type="text/css" rel="stylesheet" href="styles/shCoreDefault.css"/>
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+</head>
+<body>
+
+<div id="header">
+<h1>JCHARMING Project. SANER 2015</h1>
+</div>
+
+
+<div id="menu">
+<p class="title_menu"><a class="menu_link" href="index.html">Home</a></p>
+	<p class="title_menu">Experiment</p>
+	<p class="subtitle_menu">Ant</p>
+		<a class="menu_link" href="ant-38622.html">ant-38622</a><br />
+		<a class="menu_link" href="ant-41422.html">ant-41422</a><br />
+	<p class="subtitle_menu">ArgoUML</p>
+		<a class="menu_link" href="argo-2603.html">argo-2603</a><br />
+		<a class="menu_link" href="argo-2558.html">argo-2558</a><br />
+		<a class="menu_link" href="argo-311.html">argo-311</a><br />
+		<a class="menu_link" href="argo-1786.html">argo-1786</a><br />
+	<p class="subtitle_menu">dnsjava</p>
+		<a class="menu_link" href="dns-38.html">dns-38</a><br />
+	<p class="subtitle_menu">jfreechart</p>
+		<a class="menu_link" href="jfree-434.html">jfree-434</a><br />
+		<a class="menu_link" href="jfree-664.html">jfree-664</a><br />
+		<a class="menu_link" href="jfree-916.html">jfree-916</a><br />
+	<p class="subtitle_menu">Log4j</p>
+		<a class="menu_link" href="Log4j-11570.html">Log4j-11570</a><br />
+		<a class="menu_link" href="Log4j-40212.html">Log4j-40212</a><br />
+		<a class="menu_link" href="Log4j-41186.html">Log4j-41186</a><br />
+		<a class="menu_link" href="Log4j-453335.html">Log4j-453335</a><br />
+		<a class="menu_link" href="Log4j-46271.html">Log4j-46271</a><br />
+		<a class="menu_link" href="Log4j-47912.html">Log4j-47912</a><br />
+		<a class="menu_link" href="Log4j-47957.html">Log4j-47957</a><br />
+	<p class="subtitle_menu">MCT</p>
+		<a class="menu_link" href="MCT-440ed48.html">MCT-440ed48</a><br />
+	<p class="subtitle_menu">pdfbox</p>
+		<a class="menu_link" href="pdfbox-1412.html">pdfbox-1412</a><br />
+		<a class="menu_link" href="pdfbox-1359.html">pdfbox-1359</a><br />
+			<p class="subtitle_menu">Mahout</p>
+		<a class="menu_link" href="mahout-486.html">mahout-486</a><br />
+		<a class="menu_link" href="mahout-1367.html">mahout-1367</a><br />
+		<a class="menu_link" href="mahout-1594.html">mahout-1594</a><br />
+		<a class="menu_link" href="mahout-1635.html">mahout-1635</a><br />
+	<p class="subtitle_menu">Hadoop</p>
+		<a class="menu_link" href="hadoop-2893.html">hadoop-2893</a><br />
+		<a class="menu_link" href="hadoop-3093.html">hadoop-3093</a><br />
+		<a class="menu_link" href="hadoop-11878.html">hadoop-11878</a><br />
+	<p class="subtitle_menu">ActiveMQ</p>
+		<a class="menu_link" href="amq-1054.html">amq-1054</a><br />
+		<a class="menu_link" href="amq-2880.html">amq-2880</a><br />
+		<a class="menu_link" href="amq-5035.html">amq-5035</a><br />
+</div>
+
+<div id="content">
+
+<div class="info">
+<h3> Crash Information </h3>
+Argo-2258 <a href="http://argouml.tigris.org/issues/show_bug.cgi?id=2258">Exception in explorer</a>
+</div>
+
+<div class="info">
+<h3> Stack Crash </h3>
+<pre  class="brush: java;">
+  [argouml] Exception occurred during event dispatching:
+  [argouml] java.lang.NullPointerException
+  [argouml]     at org.argouml.ui.explorer.ExplorerTreeModel.modelElementAdded(E
+xplorerTreeModel.java:90)
+  [argouml]     at org.argouml.ui.explorer.ExplorerEventAdaptor.modelElementAdde
+d(ExplorerEventAdaptor.java:89)
+  [argouml]     at org.argouml.uml.ui.ActionAddDiagram.actionPerformed(ActionAdd
+Diagram.java:86)
+  [argouml]     at javax.swing.AbstractButton.fireActionPerformed(AbstractButton
+.java:1445)
+  [argouml]     at javax.swing.AbstractButton$ForwardActionEvents.actionPerforme
+d(AbstractButton.java:1499)
+  [argouml]     at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultBut
+tonModel.java:373)
+  [argouml]     at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.
+java:245)
+  [argouml]     at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(Basi
+cButtonListener.java:211)
+  [argouml]     at java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaste
+r.java:225)
+  [argouml]     at java.awt.AWTEventMulticaster.mouseReleased(AWTEventMulticaste
+r.java:225)
+  [argouml]     at java.awt.Component.processMouseEvent(Component.java:3710)
+  [argouml]     at java.awt.Component.processEvent(Component.java:3539)
+  [argouml]     at java.awt.Container.processEvent(Container.java:1159)
+  [argouml]     at java.awt.Component.dispatchEventImpl(Component.java:2588)
+  [argouml]     at java.awt.Container.dispatchEventImpl(Container.java:1208)
+  [argouml]     at java.awt.Component.dispatchEvent(Component.java:2492)
+  [argouml]     at java.awt.LightweightDispatcher.retargetMouseEvent(Container.j
+ava:2451)
+  [argouml]     at java.awt.LightweightDispatcher.processMouseEvent(Container.ja
+va:2216)
+  [argouml]     at java.awt.LightweightDispatcher.dispatchEvent(Container.java:2
+125)
+  [argouml]     at java.awt.Container.dispatchEventImpl(Container.java:1195)
+  [argouml]     at java.awt.Window.dispatchEventImpl(Window.java:923)
+  [argouml]     at java.awt.Component.dispatchEvent(Component.java:2492)
+  [argouml]     at java.awt.EventQueue.dispatchEvent(EventQueue.java:334)
+  [argouml]     at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDi
+spatchThread.java:126)
+  [argouml]     at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDisp
+atchThread.java:93)
+  [argouml]     at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.j
+ava:88)
+  [argouml]     at java.awt.EventDispatchThread.run(EventDispatchThread.java:80)
+
+  [argouml] Configuration saved to C:\Documents and Settings\Administrator\argo.
+user.properties
+</pre>
+</div>
+
+<div class="info">
+<h3> Generated Test Case </h3>
+<pre  class="brush: java;">
+public class Argo-2558 extends TestCase {
+
+	private static final String faillure = // Stack Crash;
+	
+	private static final int threshold = 80;
+	private static int differences = Integer.MAX_VALUE;
+	private static final StringTokenizer tokenizerFaillure = 
+		new StringTokenizer(faillure, "\n");
+
+	/**
+	 * JCHAMING GENERATED TEST -- USE WITH CAUTION
+	 */
+	@Test
+	public testArgo() {
+		try {
+
+			org.argouml.uml.ui.ActionAddDiagram v0 = new org.argouml.uml.ui.ActionAddDiagram(this.getClass().getCanonicalName());
+			java.awt.event.ActionEvent v1 = new java.awt.event.ActionEvent((Object)v0, java.awt.event.ActionEvent.ACTION_PERFORMED, "");
+			v0.dispatchEvent(v1);
+		
+		} catch (Exception e) {
+			 differences = 0;
+			 StringTokenizer tokenizerFaillure = new 
+			 StringTokenizer(e.getStackTrace()
+			 .toString(), "\n");
+			 while (tokenizeOriginalFaillure.hasMoreTokens()) {
+				 if (tokenizeOriginalFaillure.nextToken().compareTo(
+						 tokenizerFaillure.nextToken()) != 0) 
+				 {
+					 differences++;
+				 }
+			 } 
+		}
+		
+		assertTrue(differences <= tokenizeOriginalFaillure.countTokens() / 100
+			* (threshold-100));
+			 
+	}
+}
+</pre>
+</div>
+
+<div class="info">
+<h3> JCharming Infos </h3>
+<p>Partially Reproduced in 9.4m.</p>
+<p> <b> [argouml] Configuration saved to C:\Documents and Settings\Administrator\argo.
+user.properties</b> <br /> not found in the JCharming's stack trace.</p>
+</div>
+</div>
+<div class='author'>
+Mathieu Nayrolles, Wahab Hamou-Lhadj<br />
+SBA Research Lab<br />
+ECE, Concordia University<br />
+Montréal, Canada<br />
+m_nayrol@encs.concordia.ca, abdelw@ece.concordia.ca<br />
+</div>
+<div class='author'>
+Sofiène Tahar <br />
+ECE Department<br />
+Concordia University<br />
+Montréal, Canada<br />
+tahar@ece.concordia.ca<br />
+</div>
+<div class='author'>
+Alf Larsson<br />
+PLF System Management<br />
+Ericsson, R & D<br />
+Stockholm, Sweden<br />
+alf.larsson@ericsson.com<br />
+</div>
+
+</body>
+</html>

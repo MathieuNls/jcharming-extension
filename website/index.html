@@ -1,0 +1,338 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>JCHARMING Project</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link href="css.css" rel="stylesheet" type="text/css">
+	<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+<div id="header">
+<h1>JCHARMING Project.</h1>
+</div>
+
+<div id="menu">
+<p class="title_menu"><a class="menu_link" href="index.html">Home</a></p>
+	<p class="title_menu"><u><b>Experiments</b></u></p>
+	<p class="subtitle_menu">Ant</p>
+		<a class="menu_link" href="ant-38622.html">ant-38622</a><br />
+		<a class="menu_link" href="ant-41422.html">ant-41422</a><br />
+	<p class="subtitle_menu">ArgoUML</p>
+		<a class="menu_link" href="argo-2603.html">argo-2603</a><br />
+		<a class="menu_link" href="argo-2558.html">argo-2558</a><br />
+		<a class="menu_link" href="argo-311.html">argo-311</a><br />
+		<a class="menu_link" href="argo-1786.html">argo-1786</a><br />
+	<p class="subtitle_menu">dnsjava</p>
+		<a class="menu_link" href="dns-38.html">dns-38</a><br />
+	<p class="subtitle_menu">jfreechart</p>
+		<a class="menu_link" href="jfree-434.html">jfree-434</a><br />
+		<a class="menu_link" href="jfree-664.html">jfree-664</a><br />
+		<a class="menu_link" href="jfree-916.html">jfree-916</a><br />
+	<p class="subtitle_menu">Log4j</p>
+		<a class="menu_link" href="Log4j-11570.html">Log4j-11570</a><br />
+		<a class="menu_link" href="Log4j-40212.html">Log4j-40212</a><br />
+		<a class="menu_link" href="Log4j-41186.html">Log4j-41186</a><br />
+		<a class="menu_link" href="Log4j-453335.html">Log4j-453335</a><br />
+		<a class="menu_link" href="Log4j-46271.html">Log4j-46271</a><br />
+		<a class="menu_link" href="Log4j-47912.html">Log4j-47912</a><br />
+		<a class="menu_link" href="Log4j-47957.html">Log4j-47957</a><br />
+	<p class="subtitle_menu">MCT</p>
+		<a class="menu_link" href="MCT-440ed48.html">MCT-440ed48</a><br />
+	<p class="subtitle_menu">pdfbox</p>
+		<a class="menu_link" href="pdfbox-1412.html">pdfbox-1412</a><br />
+		<a class="menu_link" href="pdfbox-1359.html">pdfbox-1359</a><br />
+	<p class="subtitle_menu">Mahout</p>
+		<a class="menu_link" href="mahout-486.html">mahout-486</a><br />
+		<a class="menu_link" href="mahout-1367.html">mahout-1367</a><br />
+		<a class="menu_link" href="mahout-1594.html">mahout-1594</a><br />
+		<a class="menu_link" href="mahout-1635.html">mahout-1635</a><br />
+	<p class="subtitle_menu">Hadoop</p>
+		<a class="menu_link" href="hadoop-2893.html">hadoop-2893</a><br />
+		<a class="menu_link" href="hadoop-3093.html">hadoop-3093</a><br />
+		<a class="menu_link" href="hadoop-11878.html">hadoop-11878</a><br />
+	<p class="subtitle_menu">ActiveMQ</p>
+		<a class="menu_link" href="amq-1054.html">amq-1054</a><br />
+		<a class="menu_link" href="amq-2880.html">amq-2880</a><br />
+		<a class="menu_link" href="amq-5035.html">amq-5035</a><br />
+
+</div>
+
+<div id="content">
+
+<h2>JCHARMING: A Bug Reproduction Approach Using
+Crash Traces and Directed Model Checking</h2>
+
+<p id="abstract">Due to their inherent complexity, software systems
+are pledged to be released with bugs. These bugs manifest
+themselves on client's computers, causing crashes and undesired
+behaviors. Field crashes, in particular, are challenging to
+understand and fix as the information provided by the impacted
+customers are often scarce and inaccurate. To address this issue,
+there is a need to find ways for automatically reproducing the
+crash in a lab environment in order to fully understand its root
+causes. Crash reproduction is also an important step towards
+developing adequate patches. In this paper, we propose a novel
+crash reproduction approach, called JCHARMING (Java CrasH
+Automatic Reproduction by directed Model checkING).
+JCHARMING uses crash traces and model checking to identify
+program statements needed to reproduce a crash. Our approach
+takes advantage of the completeness provided by model checking
+while ignoring unneeded system states by means of information
+found in crash traces combined with static slices. We show the
+effectiveness of JCHARMING by applying it to seven different
+open source programs cumulating more than one million lines of
+code scattered in around 7000 classes. Overall, JCHARMING
+was able to reproduce 85% of the submitted bugs.</p>
+
+<table>
+	<caption>Results for Ant</caption>
+	<thead>
+		<tr>
+			<th>Bug</th>
+			<th>Reproducted</th>
+			<th>Time DMC</th>
+			<th>Time MC</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a class="menu_link" href="ant-38622.html">ant-38622</a></td>
+			<td>YES</td>
+			<td>25.4</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="ant-41422.html">ant-41422</a></td>
+			<td>NO</td>
+			<td>-</td>
+			<td>-</td>
+		</tr>
+	</tbody>
+</table>
+
+<table>
+	<caption>Results for ArgoUML</caption>
+	<thead>
+		<tr>
+			<th>Bug</th>
+			<th>Reproducted</th>
+			<th>Time DMC</th>
+			<th>Time MC</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a class="menu_link" href="argo-2558.html">argo-2558</a><br /></td>
+			<td>Partial</td>
+			<td>10.6</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="argo-2603.html">argo-2603</a><br /></td>
+			<td>Partial</td>
+			<td>9.4</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="argo-311.html">argo-311</a><br /></td>
+			<td>YES</td>
+			<td>11.3</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="argo-1786.html">argo-1786</a><br /></td>
+			<td>Partial</td>
+			<td>9.9</td>
+			<td>-</td>
+
+		</tr>
+	</tbody>
+</table>
+
+<table>
+	<caption>Results for DnsJava</caption>
+	<thead>
+		<tr>
+			<th>Bug</th>
+			<th>Reproducted</th>
+			<th>Time DMC</th>
+			<th>Time MC</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a class="menu_link" href="dns-38.html">dns-38</a><br /></td>
+			<td>Yes</td>
+			<td>4</td>
+			<td>23</td>
+		</tr>
+	</tbody>
+</table>
+
+<table>
+	<caption>Results for JFreeChart</caption>
+	<thead>
+		<tr>
+			<th>Bug</th>
+			<th>Reproducted</th>
+			<th>Time DMC</th>
+			<th>Time MC</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a class="menu_link" href="jfree-434.html">jfree-434</a><br /></td>
+			<td>Yes</td>
+			<td>27.3</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="jfree-664.html">jfree-664</a><br /></td>
+			<td>Partial</td>
+			<td>31.2</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="jfree-916.html">jfree-916</a><br /></td>
+			<td>YES</td>
+			<td>26.4</td>
+			<td>-</td>
+		</tr>
+	</tbody>
+</table>
+
+<table>
+	<caption>Results for Log4j</caption>
+	<thead>
+		<tr>
+			<th>Bug</th>
+			<th>Reproducted</th>
+			<th>Time DMC</th>
+			<th>Time MC</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a class="menu_link" href="Log4j-11570.html">Log4j-11570</a><br /></td>
+			<td>Yes</td>
+			<td>12.1</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="Log4j-40212.html">Log4j-40212</a><br /></td>
+			<td>Yes</td>
+			<td>15.8</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="Log4j-41186.html">Log4j-41186</a><br /></td>
+			<td>Partial</td>
+			<td>16.7</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="Log4j-453335.html">Log4j-453335</a><br /></td>
+			<td>No</td>
+			<td>-</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="Log4j-46271.html">Log4j-46271</a><br /></td>
+			<td>YES</td>
+			<td>13.9</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="Log4j-47912.html">Log4j-47912</a><br /></td>
+			<td>YES</td>
+			<td>12.3</td>
+			<td>-</td>
+		</tr>
+				<tr>
+			<td><a class="menu_link" href="Log4j-47957.html">Log4j-47957</a><br /></td>
+			<td>NO</td>
+			<td>-</td>
+			<td>-</td>
+		</tr>
+	</tbody>
+</table>
+
+<table>
+	<caption>Results for MCT</caption>
+	<thead>
+		<tr>
+			<th>Bug</th>
+			<th>Reproducted</th>
+			<th>Time DMC</th>
+			<th>Time MC</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a class="menu_link" href="MCT-440ed48.html">MCT-440ed48</a><br /></td>
+			<td>Yes</td>
+			<td>18.6</td>
+			<td>-</td>
+		</tr>
+	</tbody>
+</table>
+
+<table>
+	<caption>Results for PDFBox</caption>
+	<thead>
+		<tr>
+			<th>Bug</th>
+			<th>Reproducted</th>
+			<th>Time DMC</th>
+			<th>Time MC</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><a class="menu_link" href="pdfbox-1412.html">pdfbox-1412</a><br /></td>
+			<td>Partial</td>
+			<td>19.7</td>
+			<td>-</td>
+		</tr>
+		<tr>
+			<td><a class="menu_link" href="pdfbox-1359.html">pdfbox-1359</a><br /></td>
+			<td>No</td>
+			<td>-</td>
+			<td>-</td>
+		</tr>
+	</tbody>
+
+</table>
+
+</div>
+
+<div style="background:blue; width: 100%">
+
+<div class='author'>
+Mathieu Nayrolles, Wahab Hamou-Lhadj<br />
+SBA Research Lab<br />
+ECE, Concordia University<br />
+Montréal, Canada<br />
+m_nayrol@encs.concordia.ca, abdelw@ece.concordia.ca<br />
+</div>
+<div class='author'>
+Sofiène Tahar <br />
+ECE Department<br />
+Concordia University<br />
+Montréal, Canada<br />
+tahar@ece.concordia.ca<br />
+</div>
+<div class='author'>
+Alf Larsson<br />
+PLF System Management<br />
+Ericsson, R &amp; D<br />
+Stockholm, Sweden<br />
+alf.larsson@ericsson.com<br />
+</div>
+
+</div>
+
+
+</body>
+</html>
