@@ -542,10 +542,10 @@ the states in $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset 
 transition $x$ to pass from the current state $s_i$ to $s_{i+1}$ are in
 $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset SUT$ and $x.\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset x.SUT$.
 
-\red{In other words, JPF does not generate each possible state for the system under test. 
+In other words, JPF does not generate each possible state for the system under test. 
 Instead, JPF generates and explores only the states that falls inside the backward static 
-slice we computed in the previous step. As shown before, our backward static slice is 
-greatly reduces the space search and is able to compensate for corrupted frames.}
+slice we computed in the previous step. As shown before, our backward static slice  
+greatly reduces the space search and is able to compensate for corrupted frames. In short, the idea is that instead of going through all the states of the program as a complete model checker would do, the backward slice directs the model checker to explore only the states that might reach the targeted frame.
 
 \subsection{Validation}
 
@@ -793,8 +793,8 @@ MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 \end{table}
 
 As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
-out of 30 bugs either completely or partially (80\% success ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which the time 
-required for JCHARMING to fill all the available memory and stop.
+out of 30 bugs either completely or partially (80\% success ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which was the time 
+required for JCHARMING to fill out all the available memory and stop.
 This result demonstrates the effectiveness of our approach,
 more particularly, the use of backward slicing to create a
 manageable search space that guides adequately the model
@@ -1111,7 +1111,8 @@ can at all be measured) may perhaps have an impact on the
 running time of the approach, but we are not convinced that
 the accuracy of our approach depends on the complexity or the
 type of bugs we use. Instead, it depends on the quality of the
-produced crash trace.
+produced crash trace. This said, in theory, we may face situations where the crash trace is completely corrupted. In such cases, there is nothing that guides the model checker. In other words, we will end up
+running a full model checker. It is difficult to evaluate the number of times we may face this situation without conducting an empirical study in the quality of crash traces. We defer this to future work.
 
 In addition, we see a threat to validity that stems from the fact
 that we only used open source systems. The results may not be
@@ -1142,21 +1143,16 @@ programming languages.
 
 \section{Conclusion and Future Work\label{sec:conclusion}}
 
-\red{We presented JCHARMING (Java CrasH Automatic
+In this paper, we presented JCHARMING (Java CrasH Automatic
 Reproduction by directed Model checking), an automatic bug
 reproduction technique that combines crash traces and
-directed model checking. JCHARMING takes advantage of
-the completeness provided by model checking while ignoring
-unwanted states by using the content of crash traces
-augmented with a backward slice. When applied to thirty bugs from six open source systems, JCHARMING was able to
-reproduce fully or partially 80\% of the bugs.}
+directed model checking. JCHARMING relies on crash traces and backward program slices to direct a model checker. This way, we do not need to visit all the states of the subject program, which would be computationally taxing. When applied to .  When applied to thirty bugs from six open source systems, JCHARMING was able to reproduce 30 bugs of 10 open source systems, JCHARMING achieved an 80\% accuracy. The average time to reproduce a bug was 19 minutes, which is quite reasonable, given the complexity of reproducing bug that cause field crashes. 
 
 To build on this work, we need to experiment with additional
 (and more complex) bugs with the dual aim to (a) improve and
 fine tune the approach, and (b) assess the scalability of our
 approach when applied to even larger (and proprietary)
-systems. Finally, we want to test the performance of
-JCHARMING on bugs due to multi-threading.
+systems. We also need to conduct empirical studies that assess the quality of crash traces. This is because poorly reported crash trace impact our approach as we showed in cases where JCHARMING was not able to reproduce the bug. Finally, we should also extend JCHARMING to consider bugs that involves multi-threading.
 
 \ack This class file was developed by Sunrise Setting Ltd,
 Paignton, Devon, UK. Website:\\
