@@ -480,7 +480,7 @@ reproduction in the first place. \\
  Int n $\leftarrow$ size of frame\;
  Int offset $\leftarrow$ 1\;
  Bslice bSlice $\leftarrow$ $\emptyset$\;
-\For{i $\leftarrow$ 0 to i $<$ n \&\& offset $<$ n - 1}{
+\For{i $\leftarrow$ 0; (i $<$ n \&\& offset $<$ n - 1); i++}{
   BSlice currentBSlice $\leftarrow$ backward slice from frames[i] to i + offset\;
   \eIf{currentBSlice $\not=$ $\emptyset$}{
    bSlice $\leftarrow$ bSlice $\cup$ currentBSlice\;
