@@ -761,7 +761,7 @@ provided.
 \begin{tabular}{c|c|c|c|c}
 SUT                         & Bug \#ID & Reprod. & Time DMC & Time MC \\ \hline \hline
 \multirow{2}{*}{Ant}        & 38622    & Yes     & 25.4     & -       \\
-                            & 41422    & No      & -        & -       \\ \hline
+                            & 41422    & No      & 42.3     & -       \\ \hline
 \multirow{4}{*}{ArgoUML}    & 2558     & Partial & 10.6     & -       \\
                             & 2603     & Partial & 9.4      & -       \\
                             & 311      & Yes     & 11.3     & -       \\
@@ -773,23 +773,23 @@ DnsJava                     & 38       & Yes     & 4        & 23      \\ \hline
 \multirow{7}{*}{Log4j}      & 11570    & Yes     & 12.1     & -       \\
                             & 40212    & Yes     & 15.8     & -       \\
                             & 41186    & Partial & 16.7     & -       \\
-                            & 45335    & No      & -        & -       \\
+                            & 45335    & No      & 3.2      & -       \\
                             & 46271    & Yes     & 13.9     & -       \\
                             & 47912    & Yes     & 12.3     & -       \\
-                            & 47957    & No      & -        & -       \\ \hline
+                            & 47957    & No      & 2        & -       \\ \hline
 MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 \multirow{2}{*}{PDFBox}     & 1412     & Partial & 19.7     & -       \\
-                            & 1359     & No      & -        & - \\ \hline
+                            & 1359     & No      & 7.5        & - \\ \hline
 \multirow{4}{*}{Mahout}   & 486      & Partial & 34.5     & -        \\
                             & 1367     & Partial & 21.1     & -       \\ 
-                            & 1594 	   & No 	 & - 	    & -       \\
+                            & 1594 	   & No 	 & 14.8 	    & -       \\
                             & 1635     & Yes     & 31.0     & - \\ \hline 
 \multirow{3}{*}{Hadoop}     & 2893     & Partial & 7.4      & 32       \\
 						    & 3093     & Yes 	 & 13.1     & -        \\
                             & 11878    & Yes 	 & 17.4     & - \\  \hline 
-\multirow{3}{*}{ActiveMQ}   & 1054     & Yes & 38.3     & -      \\
-						    & 2880     & Partial 	 & 27.4        & -        \\
-                            & 5035     & No 	 &  -    & - \\  \hline \hline             
+\multirow{3}{*}{ActiveMQ}   & 1054     & Yes     & 38.3     & -      \\
+						    & 2880     & Partial & 27.4        & -        \\
+                            & 5035     & No 	 & 1    & - \\  \hline \hline             
 \end{tabular}
 
 
@@ -798,7 +798,7 @@ MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 
 As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
 out of 30 bugs either completely or partially (80\% success
-ratio). The average time to reproduce a bug was 19 minutes 
+ratio).  The average time to reproduce a bug was 19 minutes 
 \red{ and the average time to failure was 11 minutes. The time to fail is lower than the time
 to reproduce as, in the majority of the failures, the problem was at the $f_0$ level. 
 Henceforth, JCHARMING do not try to reproduce. The maximum fail time was 42.3 minutes, which the time
@@ -1087,7 +1087,7 @@ immeidately because it cannot find input data from HDFS: }}
 2 at org.apache.hadoop.mapreduce.lib.input.FileInputFormat.singleThreadedListStatus ... \\
 3 at org.apache.hadoop.mapreduce.lib.input.FileInputFormat.listStatus ... \\
 ... \\
-31 at org.apache.hadoop.util.RunJar.main(RunJar.java:212)
+31 at org.apache.hadoop.util.RunJarm.theain(RunJar.java:212)
 
  }%
 }
