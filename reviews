@@ -30,54 +30,155 @@ For more details, see below.
 DETAILED COMMENTS
 Page 2
 l.16 "In [7]": poor style (writing rules say that the sentence must be complete if you leave out the reference), also see l.40
-l.21 "uses a list of function outputs": every output comes from a function -> be more specific. Also, make clear that JCHARMING additionally uses the source code.
-l.28 "control flow graph" seems a bit misleading since there is no 1-1 correspondence between statements in the source and program states.
+done
+
+l.21 "uses a list of function outputs": every output comes from a function
+-> be more specific. Also, make clear that JCHARMING additionally uses the source code.
+
+->math: reviewer didn't get the meaning of the sentence here. output WHEN an uncaught...
+
+l.28 "control flow graph" seems a bit misleading since there is
+no 1-1 correspondence between statements in the source and program states.
+
+
 l.38 "Hadoop and, " -> Hadoop, and
-l.43 systems are "relatively complex": you contradict yourself a bit here, since, at least for complex bugs, you write in Section 7 that the quality of the trace is what matters.
+done
+
+l.43 systems are "relatively complex": you contradict yourself a bit here,
+since, at least for complex bugs, you write in Section 7 that the quality of
+the trace is what matters.
+
+->math: fixed by larger. Yes, the quality of trace is important, but the size of the
+remaining slice is even more important
+
 
 Page 3
-l.29 "NP-complex" does not exist as technical term IMO. A problem can be "NP-complete" or in the "complexity class@ NP.
-l.35-39: don't you mean that it is _im_possible to reproduce the bug? What does "specific data" refer to---simply the input?
+l.29 "NP-complex" does not exist as technical term IMO.
+A problem can be "NP-complete" or in the "complexity class@ NP.
+done
+
+l.35-39: don't you mean that it is _im_possible to reproduce the bug?
+-> Not impossible, one could create an approach that re-create a network packet
+based on the crash characteristics.
+
+What does "specific data" refer to---simply the input?
+done
 
 Page 4
 l.08 "minimal"... what?
+->clear to me
+
 l.39 typo in "JRapture"
+done
+
 l.42 "and on the replay": grammar
+done
 
 Page 5
 l.03 "code-level" delete hyphen
+done
+
 l.03 ", there exist": put in a new sentence
+done
+
 l.28 "stack" -> stacks
+Looks good to me
+
 l.33 "prior to the work ... begins": grammar
+done
+
 l.34 add a period after "i.e."
+done
 
 Page 6
-l.42 "P is the set of properties that each state satisfies": incorrect or at least misleading scope of "the set." You mean "P associates with each state the set of properties that it satisfies."
-l.47 what exactly is "x": a state or a _sequence_ of states (path)? I am familiar with the former, i.e., the situation where one asks the model checker whether property p holds in state x of model M, and then might get back the trace that constitutes a counter example. If "x" really is a path, then, for example,  "x \in S" (Eq. 1) wouldn't hold, since $S$ is a set of states. Also, in Eq. (3), you would quantify over paths rather than states.
-l.52 "specification" is not a good term here (and has a different meaning in formal methods),
-do you mean additional assumption?
+l.42 "P is the set of properties that each state satisfies":
+incorrect or at least misleading scope of "the set."
+You mean "P associates with each state the set of properties that it satisfies."
+done
+
+
+l.47 what exactly is "x": a state or a _sequence_ of states (path)?
+I am familiar with the former, i.e., the situation where one asks
+the model checker whether property p holds in state x of model M,
+and then might get back the trace that constitutes a counter example.
+If "x" really is a path, then, for example,  "x \in S" (Eq. 1) wouldn't hold,
+since $S$ is a set of states. Also, in Eq. (3), you would quantify
+over paths rather than states.
+
+-> It's a state
+
+l.52 "specification" is not a good term here (and has a different meaning
+in formal methods), do you mean additional assumption?
+done
+
+
 l.52 just as a remark, "fairness" has a special meaning in (LTL) model checking.
+
 
 Page 7
 l.17 "depicts" -> depict
+done
 
 Page 8
 l.51 "are" -> is
+done
 
 Page 9
-I don't understand Figure 5. Why is there a call to Foo.bar (even though in Figure 1 there is no edge from Bar.foo to Foo.bar)? What is "looptimes" - in Figure 1, the bound is called "loopCount"? Where is the call to Bar.foo the "crash trace contains" (l.23). Generally, I strongly recommend to include a grammar of a trace; this would also help answering some of my later questions (see below).
+I don't understand Figure 5. Why is there a call to Foo.bar
+(even though in Figure 1 there is no edge from Bar.foo to Foo.bar)?
+What is "looptimes" - in Figure 1, the bound is called "loopCount"?
+
+-> This is the result of the String constructor of InvalidActivityException in
+java i.e. throw new InvalidActivityException("loopTimes");
+
+Where is the call to Bar.foo the "crash trace contains" (l.23).
+-> In the "and 4 more"
+
+Generally, I strongly recommend to include a grammar of a trace;
+this would also help answering some of my later questions (see below).
 
 l.38 typo in the caption; I would also reformat the caption to avoid the lonely "2."
-l.42 what exactly is a frame? Put differently, what is the difference between a line number in a trace and a frame? Does f_0 have to contain a property (in terms of a programming language: an expression), as Figure 5 and p. 12 suggest, or does it have to contain an exception?
+done
+
+
+l.42 what exactly is a frame? Put differently, what is the difference between a
+line number in a trace and a frame?
+Does f_0 have to contain a property (in terms of a programming language:
+an expression), as Figure 5 and p. 12 suggest, or does it have to contain
+an exception?
+
+-> As shown in Figure \ref{fig:jcarming-traces}, we can see that the first line (referred to
+as frame {\it $f_0$} , subsequently the next line is called frame {\it $f_1$} , etc.)
+
 l.46 "buggy ": delete the extra blank.
+done
 
 Page 10
 l.17 delete the extra "the."
+done
+
 l.21 "out of control" -> beyond control
+done
+
 l.48 I am not sure whether I completely understand what a slice is in your
-context: does a slice consist of statements and declarations from the program source? And do frames constitute slicing criteria, or (since this wouldn't work) phrased more precisely: the method invocation they contain? Please provide a formal definition of a slice.
+context: does a slice consist of statements and declarations
+from the program source? And do frames constitute slicing criteria,
+or (since this wouldn't work) phrased more precisely: the method invocation
+ they contain? Please provide a formal definition of a slice.
+
+->Definition is fine to me
+
+
+
 l.54 typo in f_{n 1}
-l.55 in my understanding of a slice, the order of statements is essential, especially if the slice has to remain executable. Rather than forming the union of slides, you should therefore, e.g., concatenate them. (Perhaps the implementation is based on a union that happens to preserve the order, so that you never faced the difference between a set and a sequence). Algorithm 1 needs to be changed accordingly.
+done
+
+l.55 in my understanding of a slice, the order of statements is essential,
+especially if the slice has to remain executable.
+Rather than forming the union of slides, you should therefore, e.g.,
+concatenate them. (Perhaps the implementation is based on a union that happens
+to preserve the order, so that you never faced the difference between a set
+and a sequence). Algorithm 1 needs to be changed accordingly.
 
 
 Page 11
