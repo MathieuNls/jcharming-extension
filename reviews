@@ -30,7 +30,7 @@ For more details, see below.
 DETAILED COMMENTS
 Page 2
 l.16 "In [7]": poor style (writing rules say that the sentence must be complete if you leave out the reference), also see l.40
-done
+->math:done
 
 l.21 "uses a list of function outputs": every output comes from a function
 -> be more specific. Also, make clear that JCHARMING additionally uses the source code.
@@ -42,7 +42,7 @@ no 1-1 correspondence between statements in the source and program states.
 
 
 l.38 "Hadoop and, " -> Hadoop, and
-done
+->math:done
 
 l.43 systems are "relatively complex": you contradict yourself a bit here,
 since, at least for complex bugs, you write in Section 7 that the quality of
@@ -55,46 +55,46 @@ remaining slice is even more important
 Page 3
 l.29 "NP-complex" does not exist as technical term IMO.
 A problem can be "NP-complete" or in the "complexity class@ NP.
-done
+->math:
 
 l.35-39: don't you mean that it is _im_possible to reproduce the bug?
--> Not impossible, one could create an approach that re-create a network packet
+->math: Not impossible, one could create an approach that re-create a network packet
 based on the crash characteristics.
 
 What does "specific data" refer to---simply the input?
-done
+->math:
 
 Page 4
 l.08 "minimal"... what?
-->clear to me
+->math:clear to me
 
 l.39 typo in "JRapture"
-done
+->math:done
 
 l.42 "and on the replay": grammar
-done
+->math:done
 
 Page 5
 l.03 "code-level" delete hyphen
-done
+->math:done
 
 l.03 ", there exist": put in a new sentence
-done
+->math:done
 
 l.28 "stack" -> stacks
-Looks good to me
+->math:Looks good to me
 
 l.33 "prior to the work ... begins": grammar
-done
+->math:done
 
 l.34 add a period after "i.e."
-done
+->math:done
 
 Page 6
 l.42 "P is the set of properties that each state satisfies":
 incorrect or at least misleading scope of "the set."
 You mean "P associates with each state the set of properties that it satisfies."
-done
+->math:done
 
 
 l.47 what exactly is "x": a state or a _sequence_ of states (path)?
@@ -105,40 +105,40 @@ If "x" really is a path, then, for example,  "x \in S" (Eq. 1) wouldn't hold,
 since $S$ is a set of states. Also, in Eq. (3), you would quantify
 over paths rather than states.
 
--> It's a state
+->math: It's a state
 
 l.52 "specification" is not a good term here (and has a different meaning
 in formal methods), do you mean additional assumption?
-done
+->math:done
 
 
 l.52 just as a remark, "fairness" has a special meaning in (LTL) model checking.
-
+->math:noted
 
 Page 7
 l.17 "depicts" -> depict
-done
+->math:done
 
 Page 8
 l.51 "are" -> is
-done
+->math:done
 
 Page 9
 I don't understand Figure 5. Why is there a call to Foo.bar
 (even though in Figure 1 there is no edge from Bar.foo to Foo.bar)?
 What is "looptimes" - in Figure 1, the bound is called "loopCount"?
 
--> This is the result of the String constructor of InvalidActivityException in
+->math: This is the result of the String constructor of InvalidActivityException in
 java i.e. throw new InvalidActivityException("loopTimes");
 
 Where is the call to Bar.foo the "crash trace contains" (l.23).
--> In the "and 4 more"
+->math: In the "and 4 more"
 
 Generally, I strongly recommend to include a grammar of a trace;
 this would also help answering some of my later questions (see below).
 
 l.38 typo in the caption; I would also reformat the caption to avoid the lonely "2."
-done
+->math: done
 
 
 l.42 what exactly is a frame? Put differently, what is the difference between a
@@ -147,18 +147,18 @@ Does f_0 have to contain a property (in terms of a programming language:
 an expression), as Figure 5 and p. 12 suggest, or does it have to contain
 an exception?
 
--> As shown in Figure \ref{fig:jcarming-traces}, we can see that the first line (referred to
+->math: As shown in Figure \ref{fig:jcarming-traces}, we can see that the first line (referred to
 as frame {\it $f_0$} , subsequently the next line is called frame {\it $f_1$} , etc.)
 
 l.46 "buggy ": delete the extra blank.
-done
+->math: done
 
 Page 10
 l.17 delete the extra "the."
-done
+->math: done
 
 l.21 "out of control" -> beyond control
-done
+->math: done
 
 l.48 I am not sure whether I completely understand what a slice is in your
 context: does a slice consist of statements and declarations
@@ -166,12 +166,12 @@ from the program source? And do frames constitute slicing criteria,
 or (since this wouldn't work) phrased more precisely: the method invocation
  they contain? Please provide a formal definition of a slice.
 
-->Definition is fine to me
+->math: Definition is fine to me
 
 
 
 l.54 typo in f_{n 1}
-done
+->math: done
 
 l.55 in my understanding of a slice, the order of statements is essential,
 especially if the slice has to remain executable.
@@ -183,30 +183,77 @@ and a sequence). Algorithm 1 needs to be changed accordingly.
 
 Page 11
 l.09 "allow to reach": grammar
+
+->math: done
+
 Figure 6: what is "entry"? What is the purpose of the two self-loops in z0 and
 z1?
-l.31 as a comment, the "worst case scenario" is the best-case scenario from the perspective of state space explosion...
+
+->math: Entry is the entry point of the program, i.e. the main in Java.
+->math: No purposes in particular, self-loops do happens
+
+l.31 as a comment, the "worst case scenario" is the best-case scenario from the
+perspective of state space explosion...
+
+->math: noted
+
+
 l.44 how can a slice be empty? Since there is an underlying execution between
-frame f_i and f_{i+1}, there have to be program statements, no? Again, a definition of a slice would have helped me (perhaps). I also didn't understand why "offset" is reset to 1 in Algorithm 1.
+frame f_i and f_{i+1}, there have to be program statements, no?
+Again, a definition of a slice would have helped me (perhaps).
+I also didn't understand why "offset" is reset to 1 in Algorithm 1.
+
 l.48 "would": is colloquial
+
+->math: ??
+
 l.55 comma after WALA[31]
+
+->math: done
 
 
 Page 12
-l.6-l.14 what is the point in this paragraph? "At first sight, it may appear that static slicing alone be used..."... OK, and what at second sight?
+l.6-l.14 what is the point in this paragraph? "At first sight, it may appear
+that static slicing alone be used..."... OK, and what at second sight?
+
+->math: This is in the text
+
 l.20 "frame" -> frames
+
+->math: didn't find it
+
 l.24 shouldn't "i+offset" be frames[i+offset]?
 Algorithm 1: shouldn't the slicing criterion change in each iteration of the loop?
-l.40, Eq.(6): I need some clarification on the premise of \models: assuming "x" is a path, what does "x." mean? Also, SUT and the union of slides are quite different types, why is it legal for both to write "x."? Further, what is the first subset relation good for (the one without the "x"-qualification)? Please introduce the notation and explain the different terms formally.
 
-l.45 What do you mean by "c_{i>1}" needs to be included"? Is this an extra step or does the slicer find that "c_{i>1}" automatically? And why can one include expressions anyway? Doesn't the slice contain statements?
+
+l.40, Eq.(6): I need some clarification on the premise of \models: assuming "x"
+is a path, what does "x." mean? Also, SUT and the union of slides are quite
+different types, why is it legal for both to write "x."?
+Further, what is the first subset relation good for
+(the one without the "x"-qualification)?
+Please introduce the notation and explain the different terms formally.
+
+l.45 What do you mean by "c_{i>1}" needs to be included"? Is this an
+extra step or does the slicer find that "c_{i>1}" automatically?
+And why can one include expressions anyway? Doesn't the slice contain statements?
+
 l.46 "needs to be untouched": I can't follow
 
 Page 13
 l.05 delete comma after "each"
+
+->math: done
+
 l.10 delete "entry"
+->math: done
+
+
 l.11 typo in s_i+1
+
+->math: ???
+
 l.16 "As shown before": where?
+->math : in fig6. fixed
 
 Page 14
 l.48 "an hypothetical" -> a hypothetical
@@ -215,41 +262,88 @@ reconstruct? Please make explicit.
 
 Page 15
 Figure 8: faillure -> failure (3x)
+
+->math: done
+
 l.49 "Kilo Line": I've never seen KLoC spelled out like this.
+
+->math: that's standard
+
 l.52 "make files": shouldn't it be Makefiles?
+
+->math: fixed
 
 Page 15
 l.22 "player in" -> player among
-l.32 missing period
+
+->math: fixed
+
 l.55 "built on the top" -> built on top
+
+->math: fixed
+
 l.56 "that" -> , which
+->math: fixed
 
 Page 19
 l.08, l.09: delete blanks before the setTarget... method (line 3 and 4 in
 trace, also in the trace on page 22)
 
+->math: fixed
+
 Page 20
 l.38: add comma after "class"
-Removal of lines in the preprocessing step could also mean that variables relevant for control- or data dependence are not discovered, correct? This could then cause problem in the construction of test cases, correct?
+Removal of lines in the preprocessing step could also mean that
+variables relevant for control- or data dependence are not discovered, correct?
+This could then cause problem in the construction of test cases, correct?
 
 Page 21
-Both cases in Section 6.2 I don't find particularly enlightening. Surely, not match-able segments of traces present problems, but that is hardly surprising. Besides, in the second case, JCHARMING could employ a different definition of equality and in the first case include a heuristic. Instead of discussing what is more or less obvious, it  would be much more interesting to count the frequency of those cases. Or to cluster resp. classify them, or to discuss how JCHARMING could improve its precision. Asked differently, what characterizes the "quality of ... crash trace" you refer to on page 23?
+Both cases in Section 6.2 I don't find particularly enlightening.
+Surely, not match-able segments of traces present problems,
+but that is hardly surprising.
+Besides, in the second case, JCHARMING could employ a different
+definition of equality and in the first case include a heuristic.
+Instead of discussing what is more or less obvious, it  would be much
+more interesting to count the frequency of those cases.
+Or to cluster resp. classify them, or to discuss how JCHARMING could
+improve its precision.
+Asked differently, what characterizes the "quality of ... crash trace"
+you refer to on page 23?
 
-Several bug reports contain spelling mistakes (the two reports on page 21 contain 2 resp. 1 typo, the one on p.22f. another one). Are those in the original reports? (If so I'm not sure if one is allowed to correct them. Please inform yourself and get back to me :-)
+Several bug reports contain spelling mistakes (the two reports on page 21
+contain 2 resp. 1 typo, the one on p.22f. another one). Are those in the original
+reports? (If so I'm not sure if one is allowed to correct them.
+Please inform yourself and get back to me :-)
 
 Page 22
-l.42-46 I can't follow your argumentation: why did JCHARMING not find the crash location? What is different in the case of Struts?
-l.47 capitalize log4j
-l.50 add comma after 46721
-l.50/51 "We believe that JCHARMING could have successfully..": why don't you just try it? Is it so complicated to rerun JCHARMING?
+l.42-46 I can't follow your argumentation: why did JCHARMING not find the crash
+location? What is different in the case of Struts?
 
+-> Because the SUT was Log4J and the error belongs to struts.
+
+l.47 capitalize log4j
+->math: fixed
+l.50 add comma after 46721
+->math: fixed
+
+l.50/51 "We believe that JCHARMING could have successfully..":
+why don't you just try it? Is it so complicated to rerun JCHARMING?
+
+->math: the generated exception do not belong to struts. Only the entry point
+is from struts. We all have to do an undirected model checking here.
 
 Page 23
 l.27 add an "a" before "program's behavior"
-l.50-54: correct, certain failures are "hardly reproducible." What to conclude, though?
+
+->math: done
+
+l.50-54: correct, certain failures are "hardly reproducible."
+What to conclude, though?
 
 Page 24
 l.24 "bug" -> bugs
+
+->math: done
 
 References (plenty of problems):
 Capitalization inconsistent in conference titles (e.g., [1,2,3,4])
@@ -290,23 +384,36 @@ Page 1:
 
 - piece -> pieces
 
+->math: Piece is correct, THE most
+
 Page 2:
 
 - functions output -> function outputs
+
+->math: done
 
 Page 3:
 
 - oversee -> oversees
 
+->math: done
+
 - a NP-Complex -> an NP-complete
+
+->math: done
 
 - different SMT (satisfiability modulo theories) solvers: different from what?
 
-- model checking techniques: SMT is being used for model checking itself, so the "even" remark seems to be odd. Why is it so strange that these are proposed?
+- model checking techniques: SMT is being used for model checking itself,
+ so the "even" remark seems to be odd. Why is it so strange that these are proposed?
 
-- For example, the reading of a file that is only present on the hard drive of the customer or the reception of a faulty network packet: This is not a complete sentence. Please complete it or attach it to the previous sentence.
+- For example, the reading of a file that is only present on the
+hard drive of the customer or the reception of a faulty network packet:
+This is not a complete sentence.
+Please complete it or attach it to the previous sentence.
 
-- reproduce a crash to be purely external.: so, is it possible to reproduce the crash / bug or not? You seem to indicate both.
+- reproduce a crash to be purely external.: so, is
+it possible to reproduce the crash / bug or not? You seem to indicate both.
 
 - for bug reproduction systems: also in [4], or in other papers?
 
@@ -314,81 +421,142 @@ Page 4:
 
 - file whose size averages 70KB -> files that are 70Kb on average
 
-- Similarly, private: similar to the approach of Clause et al.? Please mention this
+->math: done
+
+- Similarly, private: similar to the approach of Clause et al.?
+Please mention this
+
+->math: ???
 
 - clones: remove s
 
+->math: done
+
 - JRaptrue -> JRapture
+
+->math: done
 
 - creator -> creators
 
+->math: done
+
 - it saw -> as
+
+->math: done
 
 - phase: a proper ending of this sentence is missing, e.g. "are presented"
 
-- that can also monitor other software system than the intended ones: why is that a problem?
+->math: ???
+
+- that can also monitor other software system than the intended ones:
+why is that a problem?
 
 - system -> systems
+
+->math: which one ?
 
 Page 5:
 
 - level, there -> level. There
 
+->math: done
+
 - lies: relies?
 
+->math: done
+
 - really begins -> really beginning
+
+->math: Sounds good to me
 
 Page 6:
 
 - used based -> based
 
+->math: done
+
 - Except for STAR: so how does JCHARMING compare to STAR?
 
-- the system: for model checking, it is crucial to mention that the system is formally defined (has a clear semantics)
+- the system: for model checking, it is crucial to mention that the system
+is formally defined (has a clear semantics)
 
-- P is the set of properties that each state satisfies -> P is a set of state predicates, and there should be a function assigning subsets of P to states. Typically, however, P does not hold in its entirety in all reachable states
+- P is the set of properties that each state satisfies ->
+ P is a set of state predicates, and there should be a
+function assigning subsets of P to states.
+Typically, however, P does not hold in its entirety in all reachable states
 
-- The SUT is said to satisfy a set of properties: you seem to give a definition here of satisfying a property that corresponds with testing. For model checking, a property is said to hold if there exists no trace contradicting it.
+- The SUT is said to satisfy a set of properties:
+you seem to give a definition here of satisfying a property
+that corresponds with testing.
+ For model checking, a property is said to hold if there exists
+ no trace contradicting it.
 
-- not that p holds nor that ∀x, p is satisfiable: if that is the case, then the system does not satisfy p.
+- not that p holds nor that ∀x, p is satisfiable: if that is the case,
+then the system does not satisfy p.
 
-- fair environment: is there any relation to fairness in formal verification, as in "Behaviour that is infinitely often enabled is also infinitely often executed"?
+- fair environment: is there any relation to fairness in formal verification,
+as in "Behaviour that is infinitely often enabled is also infinitely often executed"?
 
 - properties: How are the properties expressed, using which temporal logics?
 
 Page 7:
 
-- (3): this is closer to satisfying a property in a model checking context. Usually, the "for all x" does not need to be added though. In fact, the shorter notation SUT |= p would be more in line with what is common
+- (3): this is closer to satisfying a property in a model checking context.
+Usually, the "for all x" does not need to be added though.
+In fact, the shorter notation SUT |= p would be more in line with what is common
 
 - such a path exists -> there exists a path contradicting this
 
 - depicts -> depict
 
+->math: done
+
 Page 8:
 
-- what to look for in order to detect the causes: do you mean intermediately, i.e. along the trace? Because the final goal is known here (i > 2)
+- what to look for in order to detect the causes: do you mean intermediately,
+ i.e. along the trace? Because the final goal is known here (i > 2)
 
-- complete, but impractical: that depends on the search order, which, as you mention later, opens the door for directed model checking
+- complete, but impractical: that depends on the search order, which,
+as you mention later, opens the door for directed model checking
 
-- directed (or guided) model checking has been introduced [28]: actually, the term "directed model checking" was coined in an earlier paper, namely "Directed Explicit-State Model Checking in the Validation of Communication Protocols", by Edelkamp, Leue, and Lluch-Lafuente. Also, you should refer to "Survey on Directed Model Checking" by Edelkamp, Schuppan, Bosnacki, Wijs, Fehnker and Aljazzar
+- directed (or guided) model checking has been introduced [28]:
+actually, the term "directed model checking" was coined in an earlier paper,
+namely "Directed Explicit-State Model Checking in the Validation of Communication
+Protocols", by Edelkamp, Leue, and Lluch-Lafuente.
+Also, you should refer to "Survey on Directed Model Checking"
+by Edelkamp, Schuppan, Bosnacki, Wijs, Fehnker and Aljazzar
 
 - use insights -> uses insights
+
+->math: done
 
 Page 9:
 
 - Figure 5: Bar.Goo -> Bar.Foo. Also, it may improve readability if you add f0, f1 etc to the figure, as you refer to these in the text
 
+->math: done
+
 Page 10:
 
 - that led to the: remove the
 
+->math: sounds right to me
+
 - are not limited to, -> but not necessarily, to
+
+->math:fixed
 
 - also reduce -> reduce
 
+->math:fixed
+
 - foo: previously, "foo" was capitalised. Please be consistent
 
+->math:fixed
+
 - foo: see previous statement
+
+->math:fixed
 
 Page 11:
 
@@ -398,9 +566,16 @@ Page 11:
 * i should range to entry-1, since otherwise there should also be an f_entry+1, and this appears not to be the case
 * equation 4 states that the union equals the bslice from f_0 to entry, here it is a subset. Which one is correct?
 
-- Indeed, in Figure 6, the set of states: based on figure 6, this set should be empty, as f_2 has no outgoing transitions. The other sets you mention (f2 to f1 and f1 to f0) are also empty.
+- Indeed, in Figure 6, the set of states: based on figure 6,
+this set should be empty, as f_2 has no outgoing transitions.
+The other sets you mention (f2 to f1 and f1 to f0) are also empty.
 
-- assuming that z2 is a prerequisite: what is a prerequisite? Which state in figure 6 corresponds with entry? Why is bslice from f_0 to entry the given set of states? And the sentence ends prematurely. Which set corresponds with the union of the given bslices? This example is very confusing. Please fix this.
+- assuming that z2 is a prerequisite: what is a prerequisite?
+Which state in figure 6 corresponds with entry?
+Why is bslice from f_0 to entry the given set of states?
+And the sentence ends prematurely. Which set corresponds
+with the union of the given bslices? This example is very confusing.
+Please fix this.
 
 - between each frame -> between each two frames
 

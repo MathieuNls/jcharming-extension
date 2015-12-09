@@ -80,7 +80,7 @@ checking to automatically reproduce bugs that caused field
 failures. Unlike existing techniques, JCHARMING does not
 require instrumentation of the code. It does not need access to
 the content of the heap either. Instead, JCHARMING uses a
-list of functions output when an uncaught exception in Java
+list of function outputs when an uncaught exception in Java
 occurs (i.e., the crash trace) to guide a model checking engine
 to uncover the statements that caused the crash.
 
@@ -113,7 +113,7 @@ In this section, we put the emphasis on how stack traces are used in crash repro
 Existing studies can be divided into two distinct categories: (A) on-field record and in-house replay techniques \cite{Steven2000,Narayanasamy2005,Artzi2008,Roehm2015}, and (B) on-house crash understanding \cite{Jin2012,Jin2013,Zuddas2014,Chen2013a,Nayrolles2015}.
 
 These two categories yield varying results depending on the selected approach and are mainly differentiated by the need for instrumentation.
-The first category of techniques oversee -- by means of instrumentation -- the execution of the target system on the field in order to reproduce the crashes in-house, whereas tools and approaches belonging to the second category only use data produced by the crash such as the crash stack or the core dump at crash time. In the first category, tools record different types of data such as the invoked methods \cite{Narayanasamy2005}, try-catch exceptions \cite{Rossler2013}, or objects \cite{Jaygarl}. In the second category, existing tools and approaches are aimed towards understanding the causes of a crash, using data produced by the crash itself, such as a crash stack \cite{Chen2013a}, previous -- and controlled -- execution \cite{Zuddas2014}, etc.
+The first category of techniques oversees -- by means of instrumentation -- the execution of the target system on the field in order to reproduce the crashes in-house, whereas tools and approaches belonging to the second category only use data produced by the crash such as the crash stack or the core dump at crash time. In the first category, tools record different types of data such as the invoked methods \cite{Narayanasamy2005}, try-catch exceptions \cite{Rossler2013}, or objects \cite{Jaygarl}. In the second category, existing tools and approaches are aimed towards understanding the causes of a crash, using data produced by the crash itself, such as a crash stack \cite{Chen2013a}, previous -- and controlled -- execution \cite{Zuddas2014}, etc.
 
 Tools and approaches that rely on instrumentation face common limitations such as the need to instrument the source code in order to introduce logging mechanisms\cite{Narayanasamy2005,Jaygarl,Artzi2008}, which is known to slow down the subject system.
 In addition,  recording system behavior by means of instrumentation may yield privacy concerns.
@@ -132,20 +132,21 @@ Jaygarl {\it et al.} created OCAT (Object Capture based Automated Testing) \cite
 
 Narayanasamy {\it et al.} \cite{Narayanasamy2005} proposed BugNet, a tool that continuously records program execution for deterministic replay debugging. According to the authors, the size of the recorded data needed to reproduce a bug with high accuracy is around 10MB. This recording is then sent to the developers and allows the deterministic replay of a bug. The authors argued that with nowadays Internet bandwidth the size of the recording is not an issue during the transmission of the recorded data.
 
-Another approach in this category was  proposed by Clause {\it et al.} \cite{Clause2007}. The approach records the execution of the program on the client side and compresses the generated data to the minimal required size that ensures that the reproduction is still achievable. This compression is also performed on the client side. Moreover, the approach keeps traces of all accessed documents in the operating system and also compresses/reduces them to the minimal. Overall, the approach is able to reproduce on-field bugs using a file whose size averages 70KB. The minimal execution paths triggering the failure are then sent to the developer who can replay the execution on a sandbox simulating the client's environment.
+Another approach in this category was  proposed by Clause {\it et al.} \cite{Clause2007}. The approach records the execution of the program on the client side and compresses the generated data to the minimal required size that ensures that the reproduction is still achievable. This compression is also performed on the client side. Moreover, the approach keeps traces of all accessed documents in the operating system and also compresses/reduces them to the minimal. Overall, the approach is able to reproduce on-field bugs using a file that are 70kb in average.
+The minimal execution paths triggering the failure are then sent to the developer who can replay the execution on a sandbox simulating the client's environment.
 This special feature of the approach proposed by Clause {\it et al.} addresses the limitation where crashes are caused by external causes. While the authors broaden the scope of reproducible bugs, their approach records a lot of data that may be deemed private such as files used for the proper operation of the operating system.
 
 Timelapse \cite{Burg2013} also addresses the problem of reproducing bugs using external data. The tool focuses on web applications and allows developers to browse and visualize the execution traces recorded by Dolos. Dolos captures and reuses user inputs and network responses to deterministically replay a field crash. Also, both Timelapse and Dolos allow developers to use conventional tools such as breakpoints and classical debuggers. Similarly, private data are recorded without obfuscation of any sort.
 
-Another approach was proposed by Artzi {\it et al.} and named ReCrash. ReCrash records the object states of the targeted programs \cite{Artzi2008}. The authors use an in-memory stack, which contains every argument and object clones of the real execution in order to reproduce a crash via the automatic generation of unit test cases.
+Another approach was proposed by Artzi {\it et al.} and named ReCrash. ReCrash records the object states of the targeted programs \cite{Artzi2008}. The authors use an in-memory stack, which contains every argument and object clone of the real execution in order to reproduce a crash via the automatic generation of unit test cases.
 Unit test cases are used to provide hints to the developers about the buggy code.
 This approach particularly suffers from the limitation related to slowing down the execution.
 The overhead for full monitoring is considerably high (between 13\% and 64\% in some cases).
 The authors  propose an alternative solution in which they record only the methods surrounding the crash. For this to work, the crash has to occur at least once so they could use the information causing the crash to identify the methods surrounding it.
 
-Similarly to ReCrash, JRapture \cite{Steven2000} is a capture/replay tool for observation-based testing. The tool captures execution of Java programs to replay it in-house. To capture the execution of a Java program, the creator of JRapture used their own version of the Java Virtual Machine (JVM) and a lightweight, transparent capture process.
+Similarly to ReCrash, JRapture \cite{Steven2000} is a capture/replay tool for observation-based testing. The tool captures execution of Java programs to replay it in-house. To capture the execution of a Java program, the creators of JRapture used their own version of the Java Virtual Machine (JVM) and a lightweight, transparent capture process.
 Using their own JVM allows capturing any interactions between a Java program and the system including GUI, files, and console inputs.
-On the replay these interactions  with exactly the same input sequence it saw during the capture phase.
+On the replay these interactions  with exactly the same input sequence as saw during the capture phase.
 However, using a custom JVM is virtually impossible for popular software.
 Instead of instrumenting the source code, they require from users to install their JVM that might have some discrepancies with the original one and yield bugs if used with other software applications.
 In our view,  JRapture fails at addressing the limitations caused by instrumentation because it imposes the installation of another JVM that can also monitor other software system than the intended ones.
@@ -168,7 +169,7 @@ Jin {\it et al.} proposed BugRedux for reproducing field failures for in-house d
 The tool aims to synthesize in-house executions that mimic field failures.
 To do so, the authors use several types of data collected in the field such as stack traces, crash stack at points of failure, and call sequences.
 The data that successfully reproduced the field crash is sent to software developers to fix the bug.
-BugRedux lies on several in-house executions that are synthesized in order to narrow down the search scope,  find the crash location, and finally reproduce the bug.
+BugRedux relies on several in-house executions that are synthesized in order to narrow down the search scope,  find the crash location, and finally reproduce the bug.
 However, these in-house executions have to be conducted prior the work on the bug really begins.
 Also, the in-house executions suffer from the same limitation as unit testing {\it i.e.}, the executions are based on the developer's knowledge and abilities to develop unlikely scenarios and not only normal executions.
 Based on the success of BugRedux, the authors built F3 (Fault
@@ -186,7 +187,7 @@ The approach seems to have a low overhead on the instrumented application, aroun
 
 Likewise, Zamfir {\it et al.} proposed ESD \cite{Zamfir2010}, an execution synthesis approach that automatically synthesizes failure execution using only the stack trace information. However, this stack trace is extracted from the core dump and may not always contain the components that caused the crash.
 
-To the best of our knowledge, the most complete work in this category is the one of Chen in his Ph.D thesis \cite{Chen2013a}. Chen proposed an approach named STAR (Stack Trace used based Automatic crash Reproduction). Using only the crash stack, STAR starts from the crash line and goes backward towards the entry point of the program. During the backward process, STAR computes the required condition using an SMT solver named Yices \cite{Dutertre2006}. The objects that satisfy the required conditions are generated and orchestrated inside a JUnit test case. The test is run and the resulting crash stack is compared to the original one. If both match, the bug is said to be reproduced. STAR aims to tackle the state explosion problem of reproducing a bug by reconstructing the events in a backward fashion and therefore saving numerous states to explore. Also, STAR is relatively easy to implement as it uses Yices \cite{Dutertre2006} and potentially Z3 \cite{de2008z3} (stated in their future work) that are well-known and well-supported SMT solvers.
+To the best of our knowledge, the most complete work in this category is the one of Chen in his Ph.D thesis \cite{Chen2013a}. Chen proposed an approach named STAR (Stack Trace based Automatic crash Reproduction). Using only the crash stack, STAR starts from the crash line and goes backward towards the entry point of the program. During the backward process, STAR computes the required condition using an SMT solver named Yices \cite{Dutertre2006}. The objects that satisfy the required conditions are generated and orchestrated inside a JUnit test case. The test is run and the resulting crash stack is compared to the original one. If both match, the bug is said to be reproduced. STAR aims to tackle the state explosion problem of reproducing a bug by reconstructing the events in a backward fashion and therefore saving numerous states to explore. Also, STAR is relatively easy to implement as it uses Yices \cite{Dutertre2006} and potentially Z3 \cite{de2008z3} (stated in their future work) that are well-known and well-supported SMT solvers.
 
 Except for STAR, existing approaches that target the reproduction of field crashes require the instrumentation of the code or the running platform in order to save the stack call or the objects to successfully reproduce bugs. As we discussed earlier, instrumentation can cause a massive overhead (1\% to 1066\%) while running the system. In addition, the data generated at run-time using instrumentation may contain sensitive information.
 
@@ -244,7 +245,7 @@ Figure \ref{fig:testing-toy} shows the program statements that could be covered 
 
 Software testing depends on how well the tester understands the SUT in order to write relevant test cases that are likely to find errors in the program. Program testing is usually insufficient because it is not exhaustive. In our case, using testing would mean that the tester knows what to look for in order to detect the causes of the failure. We do not assume this knowledge in JCHARMING.
 
-Model checking, on the other hand, explores each and every state of the program (Figure \ref{fig:checking-toy}), which makes it complete, but impractical for real-world and large systems. To overcome the state explosion problem of model checking, directed (or guided) model checking has been introduced \cite{Rungta2009}. Directed model checking use insights -- generally heuristics -- about the SUT in order to reduce the number of states that need to be examined. Figure \ref{fig:dchecking-toy} explores only the states that may lead to a specific location, in our case, the location of the fault. The challenge, however, is to design techniques that can guide the model checking engine. As we will describe in the next section, we use crash traces and program slicing to overcome this challenge.
+Model checking, on the other hand, explores each and every state of the program (Figure \ref{fig:checking-toy}), which makes it complete, but impractical for real-world and large systems. To overcome the state explosion problem of model checking, directed (or guided) model checking has been introduced \cite{Rungta2009}. Directed model checking uses insights -- generally heuristics -- about the SUT in order to reduce the number of states that need to be examined. Figure \ref{fig:dchecking-toy} explores only the states that may lead to a specific location, in our case, the location of the fault. The challenge, however, is to design techniques that can guide the model checking engine. As we will describe in the next section, we use crash traces and program slicing to overcome this challenge.
 
 \section{The JCHARMING Approach\label{sec:jcharming}}
 
@@ -300,7 +301,7 @@ program was launched using a GUI).
   8. and 4 more ...
       }%
   }
-    \caption{Java InvalidActivityException is thrown in the Bar.Goo loop if the control variable is greater than~2.
+    \caption{Java InvalidActivityException is thrown in the Bar.Foo loop if the control variable is greater than~2.
     \label{fig:jcarming-traces}}
 \end{figure}
 
@@ -352,7 +353,7 @@ that led to the other two (lines 14 and 1). This said, we remove the lines
 
 Then, with the aim to guide the directed model checking engine in an optimal way, we remove frames
 that are beyond control. Frames out of our control refer
-usually, but are not limited to, Java library methods and third
+usually, but not necessarily, Java library methods and third
 party libraries. In Figure \ref{fig:jcarming-traces}, we can see that Java GUI and
 event management components appear in the crash trace. We
 assume that these methods are not the cause of the crash;
@@ -369,10 +370,10 @@ location point. We need to complete the content of the crash
 trace by identifying all the statements that have been executed
 starting from the main function until the last line of the
 preprocessed crash trace. In Figure \ref{fig:jcarming-traces}, this will be the function
-call {\tt Bar.foo()}, which happens to be also the crash location
+call {\tt Bar.Foo()}, which happens to be also the crash location
 point. To achieve this, we turn to static analysis by extracting
 a backward slice from the main function of the program to the
-{\tt Bar.foo()} method.
+{\tt Bar.Foo()} method.
 
 A backward slice contains all possible branches that may lead
 to a point {\it n} from a point {\it m} as well as the definition of the
@@ -452,7 +453,7 @@ that were damaged enough for this fall back mechanism to be used.
 
 In order to compute the backward slice, we implement our
 algorithm as an add-on to the T. J. Watson
-Libraries for Analysis (WALA) \cite{IBM2006} which provides static
+Libraries for Analysis (WALA)\cite{IBM2006}, which provides static
 analysis capabilities for Java Bytecode and JavaScript. This
 tool was part of a research project at IBM and donated to the
 community in 2006. WALA offers a very comprehensive API
@@ -532,12 +533,11 @@ restored later. The backtrack operation consists of restoring
 the last state in the backtrack table. The restore operation
 allows restoring any state and can be used to restore the entire
 program as it was the last time we choose between two
-branches. After each, forward, backtrack and restore state
+branches. After each forward, backtrack and restore state
 operation the check properties operation is triggered.
 
 In order to direct JPF, we have to modify the {\it generate states}
 and the {\it forward} steps. The {\it generate states} is populated with
-entry
 the states in $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset SUT$ and we adjust the
 {\it forward step} to explore a state if the target state $s_i+1$ and the
 transition $x$ to pass from the current state $s_i$ to $s_{i+1}$ are in
@@ -545,7 +545,8 @@ $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset SUT$ and $x.\b
 
 In other words, JPF does not generate each possible state for the system under test.
 Instead, JPF generates and explores only the states that falls inside the backward static
-slice we computed in the previous step. As shown before, our backward static slice
+slice we computed in the previous step.
+As shown in figure \ref{fig:jcharming-slice}, our backward static slice can
 greatly reduces the space search and is able to compensate for corrupted frames. In short, the idea is that instead of going through all the states of the program as a complete model checker would do, the backward slice directs the model checker to explore only the states that might reach the targeted frame.
 
 \subsection{Validation}
@@ -667,12 +668,12 @@ Total      & 1,517 & 17,348 & 30 \\
 
 
 Apache Ant \cite{ApacheSoftwareFoundation} is a popular command-line tool to build
-make files. While it is mainly known for Java applications,
+Makefiles. While it is mainly known for Java applications,
 Apache Ant also allows building C and C++ applications. We
 choose to analyze Apache Ant because it has been used by
 other researchers in similar studies.
 
-ArgoUML \cite{CollabNet} is one of the major players in the open source
+ArgoUML \cite{CollabNet} is one of the major players among the open source
 UML modeling tools. It has many years of bug management
 and, similar to Apache Ant, it has been extensively used as a
 test subject in many studies.
@@ -714,7 +715,7 @@ manipulation of existing documents.
 
 Hadoop \cite{hadoop2011hadoop} is a framework for storing and processing large datasets in a distributed environment. It contains four main modules: {\it Common}, {\it HDFS}, {\it YARN} and {\it MapReduce}. In this paper, we study the {\it Common} module that contains the different libraries required by the other three modules.
 
-Mahout \cite{mahout2012scalable} is a relatively new software application, built on the top of Hadoop. We used Mahout version 0.11 that was released in August 2015.
+Mahout \cite{mahout2012scalable} is a relatively new software application, built on top of Hadoop. We used Mahout version 0.11, which was released in August 2015.
 Mahout supports various machine learning algorithms with a focus on collaborative filtering, clustering, and classification.
 
 Finally, ActiveMQ \cite{snyder2011activemq} is an open source messaging server that allows applications written in Java, C, C++, C\#, Ruby, Perl or PHP to exchange messages using various protocols. ActiveMQ has  been actively maintained since it became an Apache Software Foundation project in 2005.
@@ -1013,7 +1014,7 @@ consists of few lines only.
 
 To conclude the discussion on the case study, we present a
 case where JCHARMING was unable to reproduce the failure.
-For the bug \#47957 belonging to Log4j and reported in late
+For the bug \#47957, belonging to LOG4J and reported in late
 2009 the reporter wrote: ``{\it Configure SyslogAppender with a Layout class that does not
 exist; it throws a NullPointerException. Following is the
 exception trace:}'' and attached the following crash trace:
@@ -1094,7 +1095,7 @@ involved the modification of a bash script that Ko (the submitter) was using to 
 \section{Threats to Validity\label{sec:threats}}
 
 The selection of SUTs is one of the common threats to validity
-for approaches aiming to improve the understanding of
+for approaches aiming to improve the understanding of a
 program's behavior. It is possible that the selected programs
 share common properties that we are not aware of and
 therefore, invalidate our results. However, the SUTs analyzed
@@ -1130,7 +1131,7 @@ JCHARMING.
 
 Finally, the programs we used in this study are all based on
 the Java programming language and JCHARMING leverages
-the crash traces produced by the JVM to reproduce bugs. This
+the crash traces produced by the JVM to reproduce bug. This
 can limit the generalization of the results. However, similar to
 Java, .Net, Python and Ruby languages also produce crash
 traces. Therefore, JCHARMING could be applied to other
