@@ -56,7 +56,7 @@ one of the most valuable piece of information that can help
 locate and fix the cause of a crash is the one that can help
 reproduce it \cite{Bettenburg2008}.
 
-Bug reproduction is however a challenging task because of the limited amount of information  provided by the end users. There exist several bug reproduction techniques. They can be grouped into two categories: (a)
+Bug reproduction is, however, a challenging task because of the limited amount of information  provided by the end users. There exist several bug reproduction techniques. They can be grouped into two categories: (a)
 On-field record and in-house replay \cite{Narayanasamy2005,Artzi2008,Jaygarl}, and (b) In-house crash explanation \cite{Manevich2004,chandra2009snugglebug}. The first category relies on
 instrumenting the system in order to capture objects and other
 system components at run-time. When a faulty behavior
@@ -91,11 +91,12 @@ builds a control flow graph where each node represents one
 state of the program and the set of properties that needs to be
 verified in each state. For real-world programs, model
 checking is often computationally impracticable because of
-the state explosion problem \cite{Baier2008}. To address this challenge and
+The state explosion problem \cite{Baier2008}. To address this challenge and
 apply model checking on large programs, we direct the model
 checking engine towards the crash using program slicing and
 the content of the crash trace, and hence, reduce the search
-space. When applied to reproducing bugs of seven open source  systems, JCHARMING achieved  85\% accuracy.
+space. When applied to reproducing bugs of seven open source  systems, JCHARMING achieved
+ 85\% accuracy.
 
 This paper extends our previous work \cite{Nayrolles2015} with the following main contributions:
 An extensive validation of JCHARMING by conducting experiments with three
@@ -103,7 +104,7 @@ additional systems: Mahout, Hadoop, and ActiveMQ,
 bringing the total number of subject systems used to
 validate our approach to 10 and the number of bugs to 30.
 It should be noted that the new systems are larger compared to
-those used in \cite{Nayrolles2015}.
+Those used in \cite{Nayrolles2015}.
 The accuracy of JCHARMING when applied to the 30 bugs is 80\%,
 which is a slight decrease compared to the previous study.
 This is explained by the fact that the new systems used in
@@ -725,7 +726,26 @@ throw an exception at {\tt i = 3}~({\tt const\_0}, {\tt istore\_2 [i]}, {\tt got
 The generation of the JUnit test itself is based on templates and targets directly
 the system under test. Templates are excerpts of Java source code with well-defined
 tags that will be replaced by values. We use templates because the
-JUnit test cases have common structures as shown in Figure \ref{fig:jcharming-unittemplate}.
+JUnit test cases have common structures.
+Figure \ref{fig:jcharming-unittemplate} shows our template for generating JUnit
+test cases. In this figure, each {\tt \{\% \%\}} will be dynamically replaced by
+the corresponding value when the JUnit test is generated. For example, {\tt \{\% SUT \%\}}
+will be replaced by {\tt Ant} if the SUT is Ant.
+First, we declare four variables that contain the {\tt failure},
+the {\tt threshold} above which a given bug is said to be partially reproduced,
+the {\tt differences} which count how many lines differ between the orginal
+failure and the failure produced by JCHARMING and a {\tt StringTokenizer}.
+The {\tt StringTokenizer} allows to break the original {\tt failure} into
+tokens. Second, the test method where {\tt \{\%SUT\%\}} is replaced by the name
+of the SUT and {\tt \{\%STEPS\%\}} by the steps to make the SUT crash.
+Then, the stack trace related to the crash is received in {\tt catch} part of
+the {\tt try-catch} block. In the {\tt catch} part, we compute the number of lines
+that does not match the original exception and store it into {\tt differences}
+\footnote{This code has been replaced by {\tt //Count the differences} to ease the
+reading.}.Finally, the {\tt assertTrue} call will assert that
+the stack traces from the induced and the original crash are at least {\tt threshold}
+ percent similar to each other.
+
 
 \begin{figure}[h!]
 
@@ -742,10 +762,10 @@ JUnit test cases have common structures as shown in Figure \ref{fig:jcharming-un
 \section{Case studies\label{sec:cases}}
 
 In this section, we show the effectiveness of JCHARMING to
-reproduce bugs in ten open source systems\footnote{The bug reports used in this study and the result of JCHARMING are
-made available for download from research.mathieu-
-nayrolles.com/jcharming/}. The aim of the
-case study is to answer the following question: {\it Can we use
+reproduce bugs in ten open source systems
+\footnote{The bug reports used in this study and the result of JCHARMING are
+made available for download from research.mathieu\-nayrolles.com/jcharming/}. The aim of the
+case studies is to answer the following question: {\it Can we use
 crash traces and directed model checking to reproduce on-
 field bugs in a reasonable amount of time?}
 
@@ -767,8 +787,8 @@ jfreechart & 310  & 990  & 434, 664, 916                                   \\
 Log4j      & 70   & 363  & 11570, 40212, 41186, 45335, 46271, 47912, 47957 \\
 MCT        & 203  & 1267 & 440ed48                                         \\
 pdfbox     & 201  & 957  & 1,412, 1,359 \\
-Mahout 	   & 287  & 1,242 &  486, 1367, 1594, 1635\\
 Hadoop 	   & 308   & 6,337 & 2893, 3093, 11878\\
+Mahout 	   & 287  & 1,242 &  486, 1367, 1594, 1635\\
 ActiveMQ   & 205  & 3,797 & 1054, 2880, 2880\\ \hline
 Total      & 1,517 & 17,348 & 30 \\
 \hline \hline
@@ -798,10 +818,11 @@ Scarab.
 
 JfreeChart \cite{ObjectRefineryLimited2005} is a well-known library that enables the
 creation of professional charts. Similar to dnsjava, it has been
-maintained over a very long period of time —JfreeChart was
-created in 2005— and it is a relatively large application.
+maintained over a very long period of time---JfreeChart was
+created in 2005---and it is a relatively large application.
 
-Apache Log4j \cite{TheApacheSoftwareFoundation1999} is a logging library for Java. This is not a
+Apache Log4j \cite{TheApacheSoftwareFoundation1999} is a logging library for Java.
+This is not a
 very large library, but it is extensively used by thousands of
 programs. As other Apache projects, this tool is well
 maintained by a strong open source community and allows
@@ -854,7 +875,7 @@ model checker is identical to the crash trace collected
 during the failure of the system.
 \item The result is ``Partial'' if the similarity between the crash
 trace generated by the model checker and the original
-crash trace is above t=80\%. Given an 80\% similarity
+crash trace is above t=80\% and below t=100\%. Given an 80\% similarity
 threshold, we consider partial reproduction as successful.
 A different threshold could be used.
 \item Finally, the result of the approach is reported as ``No'' if
@@ -906,7 +927,7 @@ MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 
 As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
 out of 30 bugs either completely or partially (80\% success ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which was the time
-required for JCHARMING to fill out all the available memory and stop. Finally, a ``-'' denotes that JCHARMING reached a 60 minutes timeout.
+required for JCHARMING to fill all the available memory and stop. Finally, a ``-'' denotes that JCHARMING reached a 60 minutes timeout.
 This result demonstrates the effectiveness of our approach,
 more particularly, the use of backward slicing to create a
 manageable search space that guides adequately the model
@@ -996,8 +1017,8 @@ throws a null pointer exception. In the subsequent version,
 ArgoUML developers added a TargetManager to keep the
 reference of such object in the program. Using the crash trace, JCHARMING's preprocessing step
 removed the lines between lines 11 and 29 because they
-belong to the Java standard library and we do not want neither
-the static slice nor the model checking engine to verify the
+belong to the Java standard library and we do not want either
+the static slice or the model checking engine to verify the
 Java standard library but only the SUT. Then, the third step
 performs the static analysis following the process described in
 Section IV.C. The fourth step performs the model checking on
@@ -1038,7 +1059,7 @@ The second reproduced bug we describe in this section is Bug \#486 belonging to 
 \vspace*{0.3cm}
 
 Drew Farris, who was assigned to fix this bug, commented {\it Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class, and the current version of Mahout is 0.11} refactoring work.}
-While this quick comment, made only two and a half hour after the bug submission, was insightful as shown in our generated test case\footnote{As a reminder, the generated test cases are made available at research.mathieu-nayrolles.com/jcharming}, the fix happened in the {\tt CollocCombiner} class which is one of the {\tt Reducer}\footnote{As in Map/Reduce} available in Mahout.
+While this quick comment, made only two and a half hours after the bug submission, was insightful as shown in our generated test case\footnote{As a reminder, the generated test cases are made available at research.mathieu-nayrolles.com/jcharming}, the fix happened in the {\tt CollocCombiner} class which is one of the {\tt Reducer}\footnote{As in Map/Reduce} available in Mahout.
 The fix (commit \#f13833) involved creating an iterator to combine the frequencies of the {\tt Gram} and a null check of the final frequency.
 
 JCHARMING's preprocessing step
@@ -1086,7 +1107,11 @@ EventObject.java:38)\\
 
 \vspace*{0.3cm}
 
-The second partially reproduced bug we present here is Bug \#2893 belonging to Hadoop. This bug, reported in February 2008 by Lohit Vijayarenu, was titled {\it checksum exceptions on trunk} and contained the following description: {\it While running jobs like Sort/WordCount on trunk I see few task failures with ChecksumException
+The second partially reproduced bug we present here is Bug \#2893 belonging to Hadoop.
+This bug, reported in February 2008 by Lohit Vijayarenu,
+was titled {\it checksum exceptions on trunk} and contained the following
+description: {\it While running jobs like Sort/WordCount on trunk I see few
+task failures with ChecksumException.
 Re-running the tasks on different nodes succeeds.
 Here is the stack}
 
@@ -1111,14 +1136,18 @@ Here is the stack}
 
 \vspace*{0.3cm}
 
-Similarly to the first partially reproduced bug, the crash traces produced by our directed model checking engine and the related test case did not match 100\% the attached crash stack .
-While, JCHARMING successfully reproduced the bug, the crash stack contains timestamps information (e.g., 200802251721),
-that were logically different in our produced stack trace as we ran the experiment years later.
+Similarly to the first partially reproduced bug, the crash traces produced by our
+directed model checking engine and the related test case did not match 100\% of
+the attached crash stack.
+While JCHARMING successfully reproduced the bug, the crash stack contains
+timestamps information (e.g., 200802251721),
+that was logically different in our produced stack trace as we ran the experiment
+years later.
 
 In all bugs that were partially reproduced, we found that the
 differences between the crash trace generated from the model
 checker and the original crash trace (after preprocessing)
-consists of few lines only.
+consists of a few lines only.
 
 \subsection{Not Reproduced}
 
@@ -1163,7 +1192,7 @@ RID[(null;25KbxlK0voima4h00ZLBQFC;236Al8E60000045C3A
 The first three lines are not produced by the standard
 execution of the SUT but by an ExceptionHandler belonging
 to Struts \cite{ApacheSoftwareFoundation2000}. Struts is an open source MVC (Model View
-Controller) framework for building Java Web Application.
+Controller) framework for building Java web applications.
 JCHARMING examined the source code of Log4J for the
 crash location {\tt struts.CPExceptionHandler.execute} and did not
 find it since this method belongs to the source base of Struts
@@ -1199,7 +1228,7 @@ immeidately because it cannot find input data from HDFS: }
 
 This entry was marked as ``Not A Problem'' / ``WONT\_FIX'' meaning that
 the reported bug was not a bug in the first place.
-The resolution\footnote{described here https://github.com/apache/mahout/pull/38\#issuecomment-51436303} of this bug
+The resolution of this bug\footnote{https://github.com/apache/mahout/pull/38\#issuecomment-51436303}
 involved the modification of a bash script that Ko (the submitter) was using to {\it query} Mahout. In other words, the cause of the failure was external to Mahout itself and this is why JCHARMING could not reproduce it.
 
 \section{Threats to Validity\label{sec:threats}}
@@ -1239,9 +1268,9 @@ the opening of a given file located on the hard drive of the
 users. The resulting failures will hardly be reproducible by
 JCHARMING.
 
-Finally, the programs we used in this study are all based on
+Finally, the programs we used in this study are all written in
 the Java programming language and JCHARMING leverages
-the crash traces produced by the JVM to reproduce bug. This
+the crash traces produced by the JVM to reproduce bugs. This
 can limit the generalization of the results. However, similar to
 Java, .Net, Python and Ruby languages also produce crash
 traces. Therefore, JCHARMING could be applied to other
@@ -1263,7 +1292,7 @@ To build on this work, we need to experiment with additional
 (and more complex) bugs with the dual aim to (a) improve and
 fine tune the approach, and (b) assess the scalability of our
 approach when applied to even larger (and proprietary)
-systems. We also need to conduct empirical studies that assess the quality of crash traces. This is because poorly reported crash traces impact our approach as we showed in cases where JCHARMING was not able to reproduce the bug. Finally, we should also extend JCHARMING to consider bugs that involves multi-threading.
+systems. We also need to conduct empirical studies that assess the quality of crash traces. This is because poorly reported crash traces impact our approach as we showed in cases where JCHARMING was not able to reproduce the bug. Finally, we should also extend JCHARMING to consider bugs that involve multi-threading.
 
 \bibliographystyle{wileyj}
 \bibliography{library}
