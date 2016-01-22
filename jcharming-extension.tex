@@ -132,7 +132,7 @@ The first category of techniques oversees -- by means of instrumentation -- the 
 
 \red{Tools and approaches that rely on instrumentation face common limitations such as the need to instrument the source code in order to introduce logging mechanisms\cite{Narayanasamy2005,Jaygarl,Artzi2008}, which is known to slow down the subject system.
 In addition,  recording system behavior by means of instrumentation may yield privacy concerns.
-Tools and approaches that only use data about a crash -- such as core dump or exception stack crashes -- face a different set of limitations. They have to reconstruct the timeline of events that have led to the crash \cite{Chen2013a,Nayrolles2015}. Computing all the paths from the initial state of the software to the crash point is a NP-complete problem, and may cause state explosion \cite{Chen2013a,Clause2007}.}
+Tools and approaches that only use data about a crash -- such as core dump or exception stack crashes -- face a different set of limitations. They have to reconstruct the timeline of events that have led to the crash \cite{Chen2013a,Nayrolles2015}. Computing all the paths from the initial state of the software to the crash point is a NP-complete problem, and may cause state space explosion \cite{Chen2013a,Clause2007}.}
 
 In order to overcome these limitations, some researchers have proposed to
 use various SMT (satisfiability modulo theories) solvers \cite{Dutertre2006}
@@ -149,7 +149,7 @@ Without this input, it may be challenging to reproduce the bug.
 
 
 
-\subsection{On-field record and in-house replay}
+\subsection{On-field Record and In-house Replay}
 
 Jaygarl {\it et al.} created OCAT (Object Capture based Automated Testing)
 \cite{Jaygarl}.
@@ -166,7 +166,8 @@ for bug reproduction systems.
 
 Narayanasamy {\it et al.} \cite{Narayanasamy2005} proposed BugNet, a tool that continuously records program execution for deterministic replay debugging. According to the authors, the size of the recorded data needed to reproduce a bug with high accuracy is around 10MB. This recording is then sent to the developers and allows the deterministic replay of a bug. The authors argued that with nowadays Internet bandwidth the size of the recording is not an issue during the transmission of the recorded data.
 
-Another approach in this category was  proposed by Clause {\it et al.} \cite{Clause2007}. The approach records the execution of the program on the client side and compresses the generated data to the minimal required size that ensures that the reproduction is still achievable. This compression is also performed on the client side. Moreover, the approach keeps traces of all accessed documents in the operating system and also compresses/reduces them to the minimal. Overall, the approach is able to reproduce on-field bugs using a file that are 70kb in average.
+Another approach in this category was  proposed by Clause {\it et al.} \cite{Clause2007}. The approach records the execution of the program on the client side and compresses the generated data. Moreover, the approach keeps traces of all accessed documents in the operating system and also compresses.
+Overall, the approach is able to reproduce on-field bugs using a file that are 70kb in average.
 The minimal execution paths triggering the failure are then sent to the developer who can replay the execution on a sandbox simulating the client's environment.
 This special feature of the approach proposed by Clause {\it et al.} addresses the limitation where crashes are caused by external causes. While the authors broaden the scope of reproducible bugs, their approach records a lot of data that may be deemed private such as files used for the proper operation of the operating system.
 
@@ -195,7 +196,7 @@ Among the approaches presented here, only the ones proposed by Clause {\it et al
 
 
 
-\subsection{On-house crash explanation}
+\subsection{On-house Crash Explanation}
 
 On the other side of the picture, we have tools and approaches belonging to the on-house crash explanation  (or understanding), which are fewer but newer than on-field record and replaying tools.
 
@@ -251,7 +252,7 @@ which can be represented by a Kripke \cite{Kripke1963} structure:}
 SUT = <S,T,P>
 \end{equation}
 
-\red{where S is the set of states, $T \subseteq S * S$ represents the transitions
+\red{\noindent where S is the set of states, $T \subseteq S * S$ represents the transitions
 between the states and $P$ is a set of state predicates, and there should be a
 function assigning subsets of P to states (P does not necessarily hold in all
 reachable states).
@@ -283,8 +284,8 @@ states and transitions there is no path leading towards a crash. That is:}
 \forall SUT \models \neg c
 \end{equation}
 
-\red{If there exists path contradicting $p$ (i.e., $\exists x$  such that $(SUT, x)
-\models c$) then the model checker engine will output the path
+\red{If there exists a path contradicting $p$ (i.e., $\exists x$  such that $(SUT, x)
+\models c$) then, the model checker engine will output the path
 $x$ (known as the counter-example), which can then be executed.
 The resulting Java exception crash trace is compared with the original
 crash trace to assess if the bug is reproduced.
@@ -317,9 +318,7 @@ To show the contrast between testing and model checking, we use the hypothetical
     \label{fig:dchecking-toy}}
 \end{figure}
 
-Figure \ref{fig:testing-toy} shows the program statements that could be covered using testing approaches. Testing software is a demanding task where a set of techniques is used to test the SUT according to some input.
-
-Software testing depends on how well the tester understands the SUT in order to write relevant test cases that are likely to find errors in the program. Program testing is usually insufficient because it is not exhaustive. In our case, using testing would mean that the tester knows what to look for in order to detect the causes of the failure. We do not assume this knowledge in JCHARMING.
+Figure \ref{fig:testing-toy} shows the program statements that could be covered using testing approaches. Testing software is a demanding task where a set of techniques is used to test the SUT according to some input. Software testing depends on how well the tester understands the SUT in order to write relevant test cases that are likely to find errors in the program. Program testing is usually insufficient because it is not exhaustive. In our case, using testing would mean that the tester knows what to look for in order to detect the causes of the failure. We do not assume this knowledge in JCHARMING.
 
 Model checking, on the other hand, explores each and every state of the program
 (Figure \ref{fig:checking-toy}), which makes it complete, but impractical for
@@ -461,7 +460,7 @@ reduce the search space of the model checker.}
 There exists many techniques to perform static analysis (data flow analysis, control flow analysis, theorem proving, ect\ldots) that can be used to improve programs in terms of performances, understandability or to debug them.
 One of the product of static analysis is the static slice which takes a program and slicing properties in order to create a smaller program with respect to the slicing properties.
 this is particularly interesting for JCHARMING as the sliced program, being smaller, will have a smaller state space.
-In Figure \ref{fig:slicing}, black states are states that are impacted by the slacing properties.
+In Figure \ref{fig:slicing}, black states are states that are impacted by the slicing properties.
 After the slicing, the static slice only contains the black states and the states mandatory to reach them.}
 
 \begin{figure}[h!]
@@ -594,7 +593,7 @@ The final backward static slice is $k$, $i$, $h$, $d$, $b$ and $a$.}
  Int offset $\leftarrow$ 1\;
  Bslice bSlice $\leftarrow$ $\emptyset$\;
 \For{i $\leftarrow$ 0; (i $<$ n \&\& offset $<$ n - 1); i++}{
-  BSlice currentBSlice $\leftarrow$ backward slice from frames[i] to i + offset\;
+  BSlice currentBSlice $\leftarrow$ backward slice from frames[i] to frames[i + offset]\;
   \eIf{currentBSlice $\not=$ $\emptyset$}{
    bSlice $\leftarrow$ bSlice $\cup$ currentBSlice\;
    offset $\leftarrow$ 1\;
@@ -677,7 +676,8 @@ elements of $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}$ . Obviousl
 needs to be included for the final static slice to be usable by
 the model checking engine. \red{That is, the only frame that
 needs to be untouched for the backward static slice to be
-meaningful is $f_0$.}
+meaningful is $f_0$.
+If the first line of the stack trace, i.e., frame 0, is corrupt then JCHARMING cannot perform the slicing because  it does not know where to go. The result is a non-directed model checking which is likely to fail.}
 
 \subsection{Directed Model Checking}
 
@@ -940,37 +940,9 @@ Mahout supports various machine learning algorithms with a focus on collaborativ
 Finally, ActiveMQ \cite{snyder2011activemq} is an open source messaging server that allows applications written in Java, C, C++, C\#, Ruby, Perl or PHP to exchange messages using various protocols. ActiveMQ has  been actively maintained since it became an Apache Software Foundation project in 2005.
 
 
-\subsection{Bug Selection and Crash Traces}
+\pagebreak
 
-In this study, we have selected the reproduced bugs randomly
-in order to avoid the introduction of any bias. We selected a
-random number of bugs ranging from 1 to 10 for each SUT containing the word ``exception'' and where the description of
-the bug contains a match to a regular expression designed to find the pattern of a
-Java exception.
-
-\section{Results\label{sec:results}}
-
-Table \ref{tab:jcharming-results} shows the results of JCHARMING in terms of Bug
-\#ID, reproduction status, and execution time (in minutes) of
-directed model checking (DMC) and Model Checking (MC).
-The experiments have been conducted on a Linux machine (8
-GB of RAM and using Java 1.7.0\_51).
-
-\begin{itemize}
-  \item The result is noted as ``Yes'' if the bug has been fully
-reproduced, meaning that the crash trace generated by the
-model checker is identical to the crash trace collected
-during the failure of the system.
-\item \red{The result is ``Partial'' if the similarity between the crash
-trace generated by the model checker and the original
-crash trace is above t=80\% and below t=100\%. Given an 80\% similarity
-threshold, we consider partial reproduction as successful.
-A different threshold could be used.}
-\item Finally, the result of the approach is reported as ``No'' if
-either the similarity is below $t < 80\%$ or the model
-checker failed to crash the system given the input we
-provided.
-\end{itemize}
+\vspace*{3cm}
 
 \begin{table}[h!]
 \centering
@@ -1013,6 +985,41 @@ MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 \label{tab:jcharming-results}
 \end{table}
 
+\pagebreak
+
+\subsection{Bug Selection and Crash Traces}
+
+In this study, we have selected the reproduced bugs randomly
+in order to avoid the introduction of any bias. We selected a
+random number of bugs ranging from 1 to 10 for each SUT containing the word ``exception'' and where the description of
+the bug contains a match to a regular expression designed to find the pattern of a
+Java exception.
+
+\section{Results\label{sec:results}}
+
+Table \ref{tab:jcharming-results} shows the results of JCHARMING in terms of Bug
+\#ID, reproduction status, and execution time (in minutes) of
+directed model checking (DMC) and Model Checking (MC).
+The experiments have been conducted on a Linux machine (8
+GB of RAM and using Java 1.7.0\_51).
+
+\begin{itemize}
+  \item The result is noted as ``Yes'' if the bug has been fully
+reproduced, meaning that the crash trace generated by the
+model checker is identical to the crash trace collected
+during the failure of the system.
+\item \red{The result is ``Partial'' if the similarity between the crash
+trace generated by the model checker and the original
+crash trace is above t=80\% and below t=100\%. Given an 80\% similarity
+threshold, we consider partial reproduction as successful.
+A different threshold could be used.}
+\item Finally, the result of the approach is reported as ``No'' if
+either the similarity is below $t < 80\%$ or the model
+checker failed to crash the system given the input we
+provided.
+\end{itemize}
+
+
 \red{As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
 out of 30 bugs either completely or partially (80\% success ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which was the time
 required for JCHARMING to fill all the available memory and stop. Finally, a ``-'' denotes that JCHARMING reached a 60 minutes timeout.
@@ -1024,8 +1031,10 @@ in practice since it is also time efficient. Among the 30 different bugs we have
 two bugs (chosen randomly) for each category (successfully
 reproduced, partially reproduced, and not reproduced) for
 further analysis.
+\red{The bug report presented in the following sections are the original reports as submitted by the reporter.
+As such, they contain typos and spelling mistakes that we did not correct.}
 
-\subsection{Successfully reproduced}
+\subsection{Successfully Reproduced}
 
 The first bug we describe in this discussion is the bug \#311
 belonging to ArgoUML. This bug was submitted in an earlier
@@ -1038,6 +1047,8 @@ class by clicking on its name. I add an instance variable to the
 class. The attribute name appears in the left browser panel. I
 can't select the attribute by clicking on its name. Exception
 occurred during event dispatching:''}
+
+
 
 The reporter also attached the following crash trace that we
 used as input for JCHARMING:
@@ -1156,7 +1167,7 @@ belong to the second thrown exception since {\tt java.lang.NullPointerException}
 JCHARMING aims to reproduce the root exceptions and not the exceptions that derive from other exceptions.}
 This said, the {\tt java.io.IOException: Spill failed} was ignored and our directed model checking engine focused, with success, on reproducing the {\tt java.lang.NullPointerException}.
 
-\subsection{Partially reproduced}
+\subsection{Partially Reproduced}
 
 As an example of a partially reproduced bug, we explore Bug \#664 of the Jfreechart program. The description provided
 by the reporter is: ``{\it In ChartPanel.mouseMoved there's a line
