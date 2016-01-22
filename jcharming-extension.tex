@@ -368,10 +368,27 @@ caused by an uncaught exception. Crash traces are usually included in crash repo
 retrieved using a simple regular expression.
 Figure \ref{fig:jcarming-traces} shows an example of a crash trace that contains the
 exception thrown when executing the program depicted in
-Figures \ref{fig:testing-toy} to \ref{fig:dchecking-toy}.\red{ We used the typical Java grammar for representing stack traces \cite{LucaDallOlioChristianCassano2008} to represent crash traces.} The crash trace contains a call to the {\tt Bar.foo()}
-method -- the crash location point -- and calls to Java standard
-library functions (in this case, GUI methods because the
-program was launched using a GUI).
+Figures \ref{fig:testing-toy} to \ref{fig:dchecking-toy}.
+\red{More formally, we define a Java crash trace $T$ of size $N$ as a sequence of frames $T={f_0, f_1, f_2, ..., f_N}$ where each frame represents either a method call and the location of said method, an exception or wrapped exception.
+In Figure \ref{fig:jcarming-traces}, the frame $f_0$ represents an exception, the frame  $f_7$ a method call (\texttt{jsep.Foo.buggy}) in a file (\texttt{Foo.java} line 17) leading to the exception and $f_8$ represents a wrapped exception.}
+
+Tt is common in Java to have crash
+traces \red{that contain wrapped exceptions.
+Such crash traces are imcompled as they do not show all the method calls to go from the entry point of the program to the crash point.}
+According to the Java documentation \cite{Oracle2011}, line 8 of
+Figure \ref{fig:jcarming-traces} should be interpreted as follows: {\it ``This line indicates
+that the remainder of the stack trace for this exception
+matches the indicated number of frames from the bottom of the
+stack trace of the exception that was caused by this exception
+(the ``enclosing exception''). This shorthand can greatly
+reduce the length of the output in the common case where a
+wrapped exception is thrown from the same method as the
+``causative exception'' is caught.}''
+
+We are likely to find shortened traces in bug repositories as
+they are what the user sees without any possibility to expand
+their content.
+
 
 \begin{figure}[h!]
   \noindent\fbox{%
@@ -391,6 +408,11 @@ program was launched using a GUI).
     \label{fig:jcarming-traces}}
 \end{figure}
 
+
+In more details, Figure \ref{fig:jcarming-traces} contains a call to the {\tt Bar.foo()}
+method -- the crash location point -- and calls to Java standard
+library functions (in this case, GUI methods because the
+program was launched using a GUI).
 As shown in Figure \ref{fig:jcarming-traces}, we can see that the first line (referred to
 as frame {\it $f_0$}, subsequently the next line is called frame {\it $f_1$}, etc.)
 does not represent the real crash point but it is only the last
@@ -398,20 +420,7 @@ exception of a chain of exceptions. Indeed, the {\tt InvalidActivity}
 has been triggered by an {\tt IndexOutOfBoundsException} in
 {\tt jsep.Foo.buggy}. This crash trace shows also an example of nested try-catch blocks.
 
-In addition, it is common in Java to have incomplete crash
-traces. According to the Java documentation \cite{Oracle2011}, line 8 of
-Figure \ref{fig:jcarming-traces} should be interpreted as follows: {\it ``This line indicates
-that the remainder of the stack trace for this exception
-matches the indicated number of frames from the bottom of the
-stack trace of the exception that was caused by this exception
-(the ``enclosing exception''). This shorthand can greatly
-reduce the length of the output in the common case where a
-wrapped exception is thrown from the same method as the
-``causative exception'' is caught.}''
 
-We are likely to find shortened traces in bug repositories as
-they are what the user sees without any possibility to expand
-their content.
 
 \subsection{Preprocessing}
 
