@@ -448,7 +448,38 @@ reduce the search space of the model checker.}
 
 \subsection{Building the Backward Static Slice}
 
-For large systems, a crash trace does not necessarily contain all
+\red{Static analysis of programs consists of analyzing programs without executing them nor making assumptions about the inputs of the program.
+There exists many techniques to perform static analysis (data flow analysis, control flow analysis, theorem proving, ect\ldots) that can be used to improve programs in terms of performances, understandability or to debug them.
+One of the product of static analysis is the static slice which takes a program and slicing properties in order to create a smaller program with respect to the slicing properties.
+this is particularly interesting for JCHARMING as the sliced program, being smaller, will have a smaller state space.
+In Figure \ref{fig:slicing}, black states are states that are impacted by the slacing properties.
+After the slicing, the static slice only contains the black states and the states mandatory to reach them.}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[scale=.25]{media/slicing.png}
+    \caption{\red{Hypothetical example of static program slicing}}
+    \label{fig:slicing}}
+\end{figure}
+
+\red{In JCHARMING, we use a particular static slicing known as backward static slicing.} A backward slice contains all possible branches that may lead
+to a point {\it n} from a point {\it m} as well as the definition of the
+variables that control these branches \cite{de2001program}. In other words, the
+slice of a program point {\it n} is the program subset that may
+influence the reachability of point {\it n} starting from point {\it m}.
+The backward slice containing the branches and the definition
+of the variables leading to {\it n} from {\it m} is noted as {\it $bslice_{[m \leftarrow n]}$}.
+\red{Figure \ref{fig:backward-slicing} presents such a backward static slice.}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[scale=.25]{media/backward-slicing.png}
+    \caption{\red{Hypothetical example of backward static program slicing}}
+    \label{fig:backward-slicing}}
+\end{figure}
+
+
+\red{The advantages of computing backward static slice over or static slice are twofold. First, with the stack trace, we have the location of the statement that yield the crash (\textit{n}) and entry point of the program (\textit{m}).} Second, for large systems, a crash trace does not necessarily contain all
 the methods that have been executed starting from the entry
 point of the program (i.e., the main function) to the crash
 location point. We need to complete the content of the crash
@@ -459,14 +490,6 @@ call \red{{\tt Bar.Foo()}}, which happens to be also the crash location
 point. To achieve this, we turn to static analysis by extracting
 a backward slice from the main function of the program to the
 \red{{\tt Bar.Foo()}} method.
-
-A backward slice contains all possible branches that may lead
-to a point {\it n} from a point {\it m} as well as the definition of the
-variables that control these branches \cite{de2001program}. In other words, the
-slice of a program point {\it n} is the program subset that may
-influence the reachability of point {\it n} starting from point {\it m}.
-The backward slice containing the branches and the definition
-of the variables leading to {\it n} from {\it m} is noted as {\it $bslice_{[m \leftarrow n]}$}.
 
 We perform a static backward slice between each frame to
 compensate for possible missing information in the crash
