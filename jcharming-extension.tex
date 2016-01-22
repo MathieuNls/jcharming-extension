@@ -548,23 +548,87 @@ to explore will be the same in both cases.}
 
 \red{Algorithm \ref{alg:jcharming-slice} is a high-level
 representation of how we compute the backward slice between
-each frame. The algorithm takes as input the pre-processed
-crash trace, the byte code of the SUT, and the entry point. From
+each frame.
+The algorithm takes as input the pre-processed
+crash trace $T={f_0, f_1, f_2, ..., f_N}$, the byte code of the SUT, and the entry point. From
 line 1 to line 4 we initialize the different variables used by the
-algorithm. The main loop of the algorithm begins at line 5 and
-ends at line 13. In this loop, we compute the static slice
+algorithm.
+Namely, our algorithm needs to have the crash stack as an array of frame (line 1), the size $n$ of the crash stack (line 2) a \texttt{null} backward static slice (line 4) and an offset set to 1 (line 3).
+The main loop of the algorithm begins at line 5 and
+ends at line 13.
+In this loop, we compute the static slice
 between the current frame and the next one. If the computed
 static slice is not empty then we update the final backward
 slice with the newly computed slice.}
-
 If the computed slice is empty, it means that Frame {\tt i + 1}
 was corrupted then we move to  Frame {\tt i + 2}, and so on.
 At the end of the algorithm, we compute the slice between the
 last frame and the entry point of the program, and update the
-final slice. \red{In the rare cases where the final slice is empty (this
+final slice.
+
+\red{Figure \label{fig:jcharming-algo} presents a step by step graphical reprensentation of Algorithm \ref{alg:jcharming-slice}.
+In this figure, an hypothetical program composed of eleven states ($a...k$) crashes in $k$.
+The produced stack traces is composed of five frames $T={f_0, f_1, f_2, f_3, f_4, f_5}$.
+The frames represents $k$, $i$, $h$, $d$, $b$ and $a$, respectively.
+However, $f_3$ has been tempered with and no longer match a location inside the SUT.
+In such program, Algorithm \ref{alg:jcharming-slice} will begin by computing the backward static slice between $f_0$ ($k$) and $f_1$ ($i$), then it will compute the backward static slice between  $f_1$ ($i$) and $f_2$ ($h$).
+At this point, we passed throught the $for$ loop (line 5 to 12) two times and both times, the backward static slice was not empty.
+Consequently, the $if$ statement was equal to $true$ and we combined both backward static slice in the $bSlice$ variable.
+$bSlice$ is equal to \{$k$, $j$, $i$, $h$\}.
+Then, we want to compute the backward static slice between $f_2$ ($h$) and $f_3$ ($d$).
+Unfortunately, $f_3$ is corrupted and do not point towards a valide location in the SUT.
+The corruption can be the result of a copy-pasting error or a deliberate intervention of the reported as shown in Section \ref{sec:results}.
+Consequently, the backward static slice between $f_2$ ($h$) and $f_3$ ($d$) will be empty, and we will go to the $else$ statement (line 10).
+Here, we simply increment $offset$ by one in order to compute the backward static slice from $f_2$ ($h$) and $f_4$ ($b$) instead of $f_2$ ($h$) and $f_3$ ($d$).
+$f_4$ is not corrupted and the backward static slice from $f_2$ ($h$) and $f_4$ ($b$) can be computed and merged to $bSlice$.
+Finally, we compute the last slice between $f_4$ ($b$) and $f_5$ ($a$).
+The final backward static slice is $k$, $i$, $h$, $d$, $b$ and $a$.}
+
+\vspace*{0.3cm}
+
+\begin{algorithm}[H]
+ \KwData{Crash Stack, BCode, Entry Point}
+ \KwResult{BSolve}
+ Frame[]~frames $\leftarrow$ extract~frames~from~crash~stack; \\
+ Int n $\leftarrow$ size of frames\;
+ Int offset $\leftarrow$ 1\;
+ Bslice bSlice $\leftarrow$ $\emptyset$\;
+\For{i $\leftarrow$ 0; (i $<$ n \&\& offset $<$ n - 1); i++}{
+  BSlice currentBSlice $\leftarrow$ backward slice from frames[i] to i + offset\;
+  \eIf{currentBSlice $\not=$ $\emptyset$}{
+   bSlice $\leftarrow$ bSlice $\cup$ currentBSlice\;
+   offset $\leftarrow$ 1\;
+  }{
+   offset $\leftarrow$ offset +1\;
+  }
+}
+\caption{High level algorithm computing the union of the slices\label{alg:jcharming-slice}}
+\end{algorithm}
+
+\vspace*{0.3cm}
+
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[scale=.20]{media/algo.png}
+    \caption{\red{Steps of Algorithm \ref{alg:jcharming-slice} where $f_3$ is corrupted.}
+    \label{fig:jcharming-algo}}
+\end{figure}
+
+\red{Our algorithm, given an uncorupted stack trace will be able to compute an optimum backward static slice based on the frames (Figure~\ref{fig:jcharming-slice}) and compensate for frames corruption if needs be by \texttt{offsetting} the corrupted frame (Figure~\ref{fig:jcharming-algo}).
+The compensation of corrupted frames, obviously, comes at the cost of a sub-optimum backward static slice.
+In our previous example, the transition between $b$ and $h$ could have been ommited if $f_3$ was not corrupted.
+}
+
+
+\red{In the rare cases where the final slice is empty (this
 may happen in situations where the content of the crash trace
 is seriously corrupted) JCHARMING would simply
 proceed with non-directed model checking.}
+
+
+
+
 Note that while we allow in JCHARMING the possibility to resort to non-directed
 model
 checking, none of the 30 bugs used in this study contained crash traces
@@ -592,27 +656,6 @@ advance which input we need to provide to the program in
 order to reach the crash, which defeats the purpose of bug
 reproduction in the first place. \\
 
-
-\begin{algorithm}[H]
- \KwData{Crash Stack, BCode, Entry Point}
- \KwResult{BSolve}
- Frames~frames $\leftarrow$ extract~frames~from~crash~stack; \\
- Int n $\leftarrow$ size of frames\;
- Int offset $\leftarrow$ 1\;
- Bslice bSlice $\leftarrow$ $\emptyset$\;
-\For{i $\leftarrow$ 0; (i $<$ n \&\& offset $<$ n - 1); i++}{
-  BSlice currentBSlice $\leftarrow$ backward slice from frames[i] to i + offset\;
-  \eIf{currentBSlice $\not=$ $\emptyset$}{
-   bSlice $\leftarrow$ bSlice $\cup$ currentBSlice\;
-   offset $\leftarrow$ 1\;
-  }{
-   offset $\leftarrow$ offset +1\;
-  }
-}
-\caption{High level algorithm computing the union of the slices\label{alg:jcharming-slice}}
-\end{algorithm}
-
-\vspace*{0.3cm}
 
 Using backward slicing, the search space of the model checker
 that processes the example of Figures \ref{fig:testing-toy} to \ref{fig:dchecking-toy} is given by the
