@@ -266,7 +266,7 @@ This can be written as:}
 \red{However, this only ensures that $\exists x$ such that $p$ is reached
 at some point in the execution of the program and not that $p$ holds
 nor that $\forall x$, $p$ is satisfiable.
-In JCHARMING, we assume that SUTs 
+In JCHARMING, we assume that SUTs
 must not crash under a \red{typical environment.
 In the framework of this study, we consider a typical environment
 as any environment where the transitions between the states
@@ -396,7 +396,7 @@ as frame {\it $f_0$}, subsequently the next line is called frame {\it $f_1$}, et
 does not represent the real crash point but it is only the last
 exception of a chain of exceptions. Indeed, the {\tt InvalidActivity}
 has been triggered by an {\tt IndexOutOfBoundsException} in
-{\tt jsep.Foo.buggy}. This crash trace shows also an example of nested try-catch blocks. 
+{\tt jsep.Foo.buggy}. This crash trace shows also an example of nested try-catch blocks.
 
 In addition, it is common in Java to have incomplete crash
 traces. According to the Java documentation \cite{Oracle2011}, line 8 of
@@ -609,11 +609,30 @@ meaningful is $f_0$.}
 The model checking engine we use in this paper is called JPF
 (Java PathFinder) \cite{Visser2004}, which is an extensible JVM for Java
 bytecode verification. This tool was first created as a front-end
-for the SPIN model checker \cite{holzmann1997model} in 1999 before being open-sourced in 2005. JPF is organized around five simple
+for the SPIN model checker \cite{holzmann1997model} in 1999 before being
+open-sourced in 2005.
+\red{The JPF model checker can execute all the bytecode instructions
+and, thereofore, allow the whole Java language to be model checked. Its consists of a custom JVM --- known as JVM\textsuperscript{\textit{JPF}} --- that executes the bytecode instructions.
+This custom JVM supports all the existing Java bytecode instructions and, therefore, is able to execute any \textit{pure}\footnote{In opposition to a Java program with native call.} java programs.
+Furthermore, JPF is an explicite state model checker
+very much like SPIN \cite{holzmann1997model} and not a symbolic model
+checker based on binary decision diagrams \cite{mcmillan1993symbolic}.
+JPF designers opted for a a depth-first traversal with backtracking
+as they thought it will be superior to breadth-first for checking for checking temporal liveness properties.
+Currently\footnote{JPF is still under development at the NASA Bablefish lab.}, the JPF model checker is able to check deadlocks, invariants and user-defined code assertion as same as LTL (Linear Time Logic) properties.}
+
+JPF is organized around five simple
 operations: (i) {\it generate states}, (ii) {\it forward}, (iii) {\it backtrack},
-(iv) {\it restore state} and (v) {\it check}. In the forward operation, the
-model checking engine generates the next state $s_{t+1}$ . If
-$s_{t+1}$ has successors then it is saved in a backtrack table to be
+(iv) {\it restore state} and (v) {\it check}.
+In the forward operation, the
+model checking engine generates the next state $s_{t+1}$.
+\red{Each state consists of three distinct component: }
+\begin{itemize}
+  \item \red{The informations of each thread. More specifically, a stack of frames corresponding to methods' calls.}
+  \item \red{The static variables of a given class.}
+  \item \red{The dynamic variables of a given object.}
+\end{itemize}
+If $s_{t+1}$ has successors then it is saved in a backtrack table to be
 restored later. \red{The backtrack operation consists of restoring
 the last state in the backtrack table. The restore operation
 allows restoring any state. It can also be used to restore the entire
@@ -758,7 +777,7 @@ the crash traces from the induced and the original crash are at least {\tt thres
 In this section, we show the effectiveness of JCHARMING to
 reproduce bugs in ten open source systems
 \footnote{\red{The bug reports used in this study and the result of JCHARMING are
-made available for download from research.mathieu\-nayrolles.com/jcharming/}}. The aim of the
+made available for download from https://research.mathieu\-nayrolles.com/jcharming/}}. The aim of the
 case studies is to answer the following question: {\it Can we use
 crash traces and directed model checking to reproduce on-
 field bugs in a reasonable amount of time?}
