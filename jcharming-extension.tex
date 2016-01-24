@@ -251,7 +251,7 @@ by testing exhaustively all the states of the system under test (SUT),
 which can be represented by a Kripke \cite{Kripke1963} structure:}
 
 \begin{equation}
-SUT = <S, S_0, T, L>
+\red{SUT = <S, S_0, T, L>}
 \end{equation}
 
 \red{\noindent where $S$ is a set of states, $S_0$ the set of initial states, $T$ the transitions relations between states and $L$ the labeling function which labels a state with a set of atomic properties.
@@ -291,7 +291,7 @@ in the SUT, we aim to verify that for all possible combinations of
 states and transitions there is no path leading towards a crash. That is:
 
 \begin{equation}
-\red{(SUT, \forall x) \models \neg c}
+\red{\forall x.(SUT, x) \models \neg c}
 \end{equation}
 
 \red{If there exists contradicting path (i.e., $\exists x$ such that $(SUT, x)
@@ -304,7 +304,7 @@ model checking suffers from the state explosion problem, which hinders
 its applicability to large software systems.}
 
 
-To show the contrast between testing and model checking, we use the hypothetical example of Figures \ref{fig:testing-toy}, \ref{fig:checking-toy} and \ref{fig:dchecking-toy} and sketch the possible results of each approach. These figures depict a toy program where from the entry point, unknown calls are made (dotted points) and, at some points, two methods are called. These methods, called \texttt{Foo.Bar} and \texttt{Bar.Foo}, implement a for \texttt{loop} from 0 to \texttt{loopCount}. The only difference between these two methods is that the \texttt{Bar.Foo} method throws an exception if $i$ becomes larger than two. Hereafter, we denote this property as $c_{i > 2}$.
+To show the contrast between testing and model checking, we use the hypothetical example of Figures \ref{fig:testing-toy}, \ref{fig:checking-toy} and \ref{fig:dchecking-toy} and sketch the possible results of each approach. These figures depict a toy program where from the entry point, unknown calls are made (dotted points) and, at some points, two methods are called. These methods, called \texttt{Foo.Bar} and \texttt{Bar.Foo}, implement a for \texttt{loop} from 0 to \texttt{loopCount}. The only difference between these two methods is that the \texttt{Bar.Foo} method throws an exception if $i$ becomes larger than two. Hereafter, we denote this property as $p_{i > 2}$.
 
 
 \begin{figure}
@@ -334,13 +334,17 @@ Model checking, on the other hand, explores each and every state of the program
 (Figure \ref{fig:checking-toy}), which makes it complete, but impractical for
 real-world and large systems. To overcome the state explosion problem of
 model checking, directed (or guided) model checking has been introduced
-\cite{Edelkamp2004, Edelkamp2009}. Directed model checking uses insights -- generally
-heuristics -- about the SUT in order to reduce the number of states
+\cite{Edelkamp2004, Edelkamp2009}. Directed model checking uses insights --- generally
+heuristics --- about the SUT in order to reduce the number of states
 that need to be examined. Figure \ref{fig:dchecking-toy} explores only
 the states that may lead to a specific location, in our case, the
 location of the fault. The challenge, however, is to design techniques that
 can guide the model checking engine. As we will describe in the next section,
 we use crash traces and program slicing to overcome this challenge.
+
+\red{As powerful as directed model checking is, it loses the advantage of model checking over testing: completeness.
+Indeed, model checking ensures that a system is absolutely correct.
+With directed model checking, we are not ensuring the absolute correctness of the program, but hunting for a bug inside a subset of the said program.}
 
 \section{The JCHARMING Approach\label{sec:jcharming}}
 
@@ -662,28 +666,35 @@ reproduction in the first place. \\
 
 
 Using backward slicing, the search space of the model checker
-that processes the example of Figures \ref{fig:testing-toy} to \ref{fig:dchecking-toy} is given by the
-following expression:
+that processes the example of Figures \ref{fig:testing-toy} to \ref{fig:dchecking-toy}, \red{where a crash happens when $i>2$}, is given by the following expression:
 
 \begin{equation}
   \red{
-  \exists x.
+  Sliced_{SUT} =
   \begin{pmatrix}
-    \bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset SUT, \\
-    x.\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset x.SUT
+    \bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]} \subseteq SUT, \\
+    S_0, \\
+    T.\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subseteq T.SUT, \\
+    L
   \end{pmatrix}
-  \models c_{i>2}
+  }
+\end{equation}
+
+\red{\noindent Where $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]} \subseteq SUT$ is the subset of states that can be reached in the computed backward slice, $S_0$ the set of initial states, $T.\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}$ the subset of transitions relations between states that exist in the computed backward slice and $L$ the labeling function which labels a state with a set of atomic properties.
+Then, in the sliced SUT, we try to find:}
+
+\begin{equation}
+  \red{
+    (Sliced_{SUT}, x) \models p_{i>2}
   }
 \end{equation}
 
 That is, there exists a sequence of state transitions $x$ that
-satisfies $c_{i>2}$ where both the transitions and the states are
-elements of $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}$ . Obviously, $c_{i>2}$ also
-needs to be included for the final static slice to be usable by
-the model checking engine. \red{That is, the only frame that
+satisfies $p_{i>2}$. \red{The only frame that
 needs to be untouched for the backward static slice to be
-meaningful is $f_0$.
-If the first line of the crash trace, i.e., frame 0, is corrupt then JCHARMING cannot perform the slicing because  it does not know where to go. The result is a non-directed model checking which is likely to fail.}
+meaningful is $f_0$. In Figure \ref{fig:jcarming-traces}, $f_0$ is $at~ Foo.bar(Foo.java:10)$.
+If this line of the crash trace is corrupt then JCHARMING cannot perform the slicing because it does not know where to start the static backward slicing from.
+The result is a non-directed model checking which is likely to fail.}
 
 \subsection{Directed Model Checking}
 
@@ -953,38 +964,38 @@ Finally, ActiveMQ \cite{snyder2011activemq} is an open source messaging server t
 \begin{table}
 \centering
 \caption{Effectiveness of JCHARMING using directed model checking (DMC) and model checking (MC) in minutes}
-\begin{tabular}{c|c|c|c|c}
-SUT                         & Bug \#ID & Reprod. & Time DMC & Time MC \\ \hline \hline
-\multirow{2}{*}{Ant}        & 38622    & Yes     & 25.4     & -       \\
-                            & 41422    & No      & 42.3     & -       \\ \hline
-\multirow{4}{*}{ArgoUML}    & 2558     & Partial & 10.6     & -       \\
-                            & 2603     & Partial & 9.4      & -       \\
-                            & 311      & Yes     & 11.3     & -       \\
-                            & 1786     & Partial & 9.9      & -       \\  \hline
-DnsJava                     & 38       & Yes     & 4        & 23      \\ \hline
-\multirow{3}{*}{jFreeChart} & 434      & Yes     & 27.3     & -       \\
-                            & 664      & Partial & 31.2     & -       \\
-                            & 916      & Yes     & 26.4     & -       \\ \hline
-\multirow{7}{*}{Log4j}      & 11570    & Yes     & 12.1     & -       \\
-                            & 40212    & Yes     & 15.8     & -       \\
-                            & 41186    & Partial & 16.7     & -       \\
-                            & 45335    & No      & 3.2      & -       \\
-                            & 46271    & Yes     & 13.9     & -       \\
-                            & 47912    & Yes     & 12.3     & -       \\
-                            & 47957    & No      & 2        & -       \\ \hline
-MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
-\multirow{2}{*}{PDFBox}     & 1412     & Partial & 19.7     & -       \\
-                            & 1359     & No      & 7.5        & - \\ \hline
-\multirow{4}{*}{Mahout}   & 486      & Partial & 34.5     & -        \\
-                            & 1367     & Partial & 21.1     & -       \\
-                            & 1594 	   & No 	 & 14.8 	    & -       \\
-                            & 1635     & Yes     & 31.0     & - \\ \hline
-\multirow{3}{*}{Hadoop}     & 2893     & Partial & 7.4      & 32       \\
-						    & 3093     & Yes 	 & 13.1     & -        \\
-                            & 11878    & Yes 	 & 17.4     & - \\  \hline
-\multirow{3}{*}{ActiveMQ}   & 1054     & Yes     & 38.3     & -      \\
-						    & 2880     & Partial & 27.4        & -        \\
-                            & 5035     & No 	 & 1    & - \\  \hline \hline
+\begin{tabular}{c|c|c|c|c|c}
+SUT                         & Bug \#ID & Reprod. & Time DMC & \red{CE length} & Time MC \\ \hline \hline
+\multirow{2}{*}{Ant}        & 38622    & Yes     & 25.4   & 3  & -       \\
+                            & 41422    & No      & 42.3   & -  & -       \\ \hline
+\multirow{4}{*}{ArgoUML}    & 2558     & Partial & 10.6   & 3  & -       \\
+                            & 2603     & Partial & 9.4    & 3  & -       \\
+                            & 311      & Yes     & 11.3   & 10  & -       \\
+                            & 1786     & Partial & 9.9    & 6  & -       \\  \hline
+DnsJava                     & 38       & Yes     & 4      & 2  & 23      \\ \hline
+\multirow{3}{*}{jFreeChart} & 434      & Yes     & 27.3   & 2  & -       \\
+                            & 664      & Partial & 31.2   & 3   & -       \\
+                            & 916      & Yes     & 26.4   & 4  & -       \\ \hline
+\multirow{7}{*}{Log4j}      & 11570    & Yes     & 12.1   & 2  & -       \\
+                            & 40212    & Yes     & 15.8   & 3  & -       \\
+                            & 41186    & Partial & 16.7   & 9  & -       \\
+                            & 45335    & No      & 3.2    & -  & -       \\
+                            & 46271    & Yes     & 13.9   & 4  & -       \\
+                            & 47912    & Yes     & 12.3   & 3  & -       \\
+                            & 47957    & No      & 2      & -  & -       \\ \hline
+MCT                         & 440ed48  & Yes     & 18.6   & 3  & -       \\ \hline
+\multirow{2}{*}{PDFBox}     & 1412     & Partial & 19.7   & 4  & -       \\
+                            & 1359     & No      & 7.5    & -    & - \\ \hline
+\multirow{4}{*}{Mahout}     & 486      & Partial & 34.5   & 5    & -        \\
+                            & 1367     & Partial & 21.1   & 7  & -       \\
+                            & 1594 	   & No 	 & 14.8 	  & -  & -       \\
+                            & 1635     & Yes     & 31.0   & 14  & - \\ \hline
+\multirow{3}{*}{Hadoop}     & 2893     & Partial & 7.4    & 3  & 32       \\
+						    & 3093      & Yes 	   & 13.1     & -     & 2   \\
+                            & 11878    & Yes 	 & 17.4     & 6 & - \\  \hline
+\multirow{3}{*}{ActiveMQ}   & 1054     & Yes     & 38.3   & 11  & -      \\
+						    & 2880      & Partial  & 27.4    & 6    & -       \\
+                            & 5035     & No 	 & 1  & -  & - \\  \hline \hline
 \end{tabular}
 
 
@@ -1002,9 +1013,9 @@ Java exception.
 
 \section{Results\label{sec:results}}
 
-Table \ref{tab:jcharming-results} shows the results of JCHARMING in terms of Bug
+\red{Table \ref{tab:jcharming-results} shows the results of JCHARMING in terms of Bug
 \#ID, reproduction status, and execution time (in minutes) of
-directed model checking (DMC) and Model Checking (MC).
+directed model checking (DMC), lenght of the counter-example (statements in the JUnit test) and  execution time (in minutes) for Model Checking (MC).}
 The experiments have been conducted on a Linux machine (8
 GB of RAM and using Java 1.7.0\_51).
 
@@ -1025,9 +1036,14 @@ provided.
 \end{itemize}
 
 
-\red{As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
+As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
 out of 30 bugs either completely or partially (80\% success ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which was the time
-required for JCHARMING to fill all the available memory and stop. Finally, a ``-'' denotes that JCHARMING reached a sixty-minute timeout.
+required for JCHARMING to fill all the available memory and stop and a ``-'' denotes that JCHARMING reached a sixty-minute timeout.
+\red{Finally, we report the number of statements in the produced JUnit test, i.e. the counter example.
+While reproducing a bug is the first step in understanding the cause of a field crash, the step to reproduced should be as few as possible.
+Indeed, it is crucial for counter-examples to be short to effectively help the developer craft a fix.
+In average, JCHARMING counter-example were composed of 5.04 Java statements.
+While it is difficult to estimate if the generated counter-example are the shortest possible without a deep understanding of the system at hand, we are confident that five steps is short enough for the developer to understand the problem.}
 This result demonstrates the effectiveness of our approach,
 more particularly, the use of backward slicing to create a
 manageable search space that guides adequately the model
