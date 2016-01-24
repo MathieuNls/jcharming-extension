@@ -181,14 +181,14 @@ The authors  propose an alternative solution in which they record only the metho
 
 \red{Similarly to ReCrash, JRapture \cite{Steven2000} is a capture/replay tool for observation-based testing. The tool captures execution of Java programs to replay it in-house. To capture the execution of a Java program, the creators of JRapture used their own version of the Java Virtual Machine (JVM) and a lightweight, transparent capture process.
 Using a customized JVM allows capturing any interactions between a Java program and the system including GUI, files, and console inputs.
-These interactions can be replayed later  with exactly the same input sequence as saw during the capture phase.
+These interactions can be replayed later  with exactly the same input sequence as seen during the capture phase.
 However, using a custom JVM is not a practical solution. This is because, the authors' approach requires from users to install a JVM that might have some discrepancies with the original one and yield bugs if used with other software applications.
-In our view,  JRapture fails at addressing the limitations caused
+In our view,  JRapture fails to address the limitations caused
 by instrumentation because it imposes the installation of another
 JVM that can also monitor other software systems than the intended ones.
 RECORE (REconstructing CORE dumps) is a tool proposed by Robler {\it et al.}.} The tool instruments Java byte code to wrap every method in a try-catch block while keeping a quasi-null overhead \cite{Rossler2013}. RECORE starts from the core dump and tries (with evolutionary algorithms) to reproduce the same dump by executing the subject program many times. When the generated dump matches the collected one, the approach has found the set of inputs responsible for the failure.
 
-\red{The approaches presented at this point operate at code level.
+\red{The approaches presented at this point operate at the code level.
 There exist also techniques that focus on recording user-GUI interactions \cite{Herbold2011,Roehm2015}.}
 Roehm {\it et al.} extract the recorder data using delta debugging \cite{Zeller2002}, sequential pattern mining, and their combination to reproduce between 75\% and 90\% of the submitted bugs while pruning 93\% of the actions.
 
@@ -206,7 +206,7 @@ To do so, the authors use several types of data collected in the field such as s
 The data that successfully reproduced the field crash is sent to software developers to fix the bug.
 \red{BugRedux relies on several in-house executions that are synthesized so as to narrow down the search scope,  find the crash location, and finally reproduce the bug.}
 However, these in-house executions have to be conducted prior the work on the bug really begins.
-\red{Also, the in-house executions suffer from the same limitation as unit testing {\it i.e.}, the executions are based on the developer's knowledge and ability to develop exceptional scenarios in addition to the normal ones.}
+\red{Also, the in-house executions suffer from the same limitation as unit testing, {\it i.e.}, the executions are based on the developer's knowledge and ability to develop exceptional scenarios in addition to the normal ones.}
 Based on the success of BugRedux, the authors built F3 (Fault
 localization for Field Failures) \cite{Jin2013} and MIMIC \cite{Zuddas2014}. F3 performs many
 executions of a program on top of BugRedux in order to cover
@@ -285,7 +285,7 @@ states and transitions there is no path leading towards a crash. That is:}
 \end{equation}
 
 \red{If there exists a path contradicting $p$ (i.e., $\exists x$  such that $(SUT, x)
-\models c$) then, the model checker engine will output the path
+\models c$) then the model checker engine will output the path
 $x$ (known as the counter-example), which can then be executed.
 The resulting Java exception crash trace is compared with the original
 crash trace to assess if the bug is reproduced.
@@ -368,12 +368,12 @@ retrieved using a simple regular expression.
 Figure \ref{fig:jcarming-traces} shows an example of a crash trace that contains the
 exception thrown when executing the program depicted in
 Figures \ref{fig:testing-toy} to \ref{fig:dchecking-toy}.
-\red{More formally, we define a Java crash trace $T$ of size $N$ as a sequence of frames $T={f_0, f_1, f_2, ..., f_N}$ where each frame represents either a method call and the location of said method, an exception or wrapped exception.
-In Figure \ref{fig:jcarming-traces}, the frame $f_0$ represents an exception, the frame  $f_7$ a method call (\texttt{jsep.Foo.buggy}) in a file (\texttt{Foo.java} line 17) leading to the exception and $f_8$ represents a wrapped exception.}
+\red{More formally, we define a Java crash trace $T$ of size $N$ as an ordered sequence of frames $T={f_0, f_1, f_2, ..., f_N}$. A frame represents either a method call preceded with its location in the source code, an exception, or a wrapped exception.
+In Figure \ref{fig:jcarming-traces}, the frame $f_0$ represents an exception, the frame  $f_7$ a method call (\texttt{jsep.Foo.buggy}) in a file (\texttt{Foo.java} line 17) leading to the exception, and $f_6$ represents a wrapped exception.}
 
-Tt is common in Java to have crash
+It is common in Java to have crash
 traces \red{that contain wrapped exceptions.
-Such crash traces are incomplete as they do not show all the method calls to go from the entry point of the program to the crash point.}
+Such crash traces are incomplete in the sense that they do not show all the method calls that are invoked from the entry point of the program to the crash point.}
 According to the Java documentation \cite{Oracle2011}, line 8 of
 Figure \ref{fig:jcarming-traces} should be interpreted as follows: {\it ``This line indicates
 that the remainder of the stack trace for this exception
@@ -442,9 +442,7 @@ exceptions. Nested exception refers to the following structure in Java. \\
 
 In such a case, we want to reproduce the root exception (line 28)
 that led to the other two (lines 14 and 1). This said, we remove the lines
-1 to 14.
-
-\red{Then, with the aim to guide the directed model checking engine in an optimal way, we remove frames
+1 to 14. \red{Then, with the aim to guide the directed model checking engine in an optimal way, we remove frames
 that are beyond our control. These refer
 to Java library methods and third
 party libraries. In Figure \ref{fig:jcarming-traces}, we can see that Java GUI and
@@ -456,12 +454,12 @@ reduce the search space of the model checker.}
 
 \subsection{Building the Backward Static Slice}
 
-\red{Static analysis of programs consists of analyzing programs without executing them nor making assumptions about the inputs of the program.
-There exist many techniques to perform static analysis (data flow analysis, control flow analysis, theorem proving, ect\ldots) that can be used to improve programs in terms of performances, understandability or to debug them.
+\red{Static analysis of programs consists of analyzing programs without executing them or making assumptions about the inputs of the program.
+There exist many techniques to perform static analysis (data flow analysis, control flow analysis, theorem proving, etc.) that can be used to improve programs in terms of performance, understandability, or to debug them.
 One of the products of static analysis is the static slice which takes a program and slicing properties in order to create a smaller program with respect to the slicing properties.
-this is particularly interesting for JCHARMING as the sliced program, being smaller, will have a smaller state space.
-In Figure \ref{fig:slicing}, black states are states that are impacted by the slicing properties.
-After the slicing, the static slice only contains the black states and the states mandatory to reach them.}
+This is particularly interesting for JCHARMING as the sliced program, being smaller, will have a smaller state space.
+In Figure \ref{fig:slicing}, the black states are states that are impacted by the slicing properties.
+After the slicing, the final static slice  contains the black states and the states that are needed to reach them.}
 
 \begin{figure}[h!]
   \centering
@@ -470,14 +468,14 @@ After the slicing, the static slice only contains the black states and the state
     \label{fig:slicing}}
 \end{figure}
 
-\red{In JCHARMING, we use a particular static slicing known as backward static slicing.} A backward slice contains all possible branches that may lead
-to a point {\it n} from a point {\it m} as well as the definition of the
+\red{In JCHARMING, we use a particular static slicing known as backward static slicing \cite{de2001program}.} A backward slice contains all possible branches that may lead
+to a point {\it n} in the program from a point {\it m} as well as the definition of the
 variables that control these branches \cite{de2001program}. In other words, the
 slice of a program point {\it n} is the program subset that may
 influence the reachability of point {\it n} starting from point {\it m}.
 The backward slice containing the branches and the definition
 of the variables leading to {\it n} from {\it m} is noted as {\it $bslice_{[m \leftarrow n]}$}.
-\red{Figure \ref{fig:backward-slicing} presents such a backward static slice.}
+\red{Figure \ref{fig:backward-slicing} presents an example of a backward static slice.}
 
 \begin{figure}[h!]
   \centering
@@ -487,9 +485,7 @@ of the variables leading to {\it n} from {\it m} is noted as {\it $bslice_{[m \l
 \end{figure}
 
 
-\red{The advantages of computing backward static slice over or static slice are twofold. First, with the stack trace, we have the location of the statement that yields the crash (\textit{n}) and entry point of the program (\textit{m}).} Second, for large systems, a crash trace does not necessarily contain all
-the methods that have been executed starting from the entry
-point of the program (i.e., the main function) to the crash
+\red{In JCHARMING, we compute a backward static slice between the location of the crash (which we have in the crash trace) and the entry point of the program (i.e., the main function). However, for large systems, a crash trace does not necessarily contain all the methods that have been executed starting from the entry point of the program  to the crash
 location point. We need to complete the content of the crash
 trace by identifying all the statements that have been executed
 starting from the main function until the last line of the
@@ -499,9 +495,9 @@ point. To achieve this, we turn to static analysis by extracting
 a backward slice from the main function of the program to the
 \red{{\tt Bar.Foo()}} method.
 
-We perform a static backward slice between each frame to
+We perform backward static slicing between each frame to
 compensate for possible missing information in the crash
-trace. More formally, the final static backward slice is
+trace. More formally, the final backward slice is
 represented as follows:
 
 \begin{equation}
@@ -552,34 +548,32 @@ The algorithm takes as input the pre-processed
 crash trace $T={f_0, f_1, f_2, ..., f_N}$, the byte code of the SUT, and the entry point. From
 line 1 to line 4 we initialize the different variables used by the
 algorithm.
-Namely, our algorithm needs to have the crash stack as an array of frames (line 1), the size $n$ of the crash stack (line 2) a \texttt{null} backward static slice (line 4) and an offset set to 1 (line 3).
+Namely, our algorithm needs to have the crash trace as an array of frames (line 1), the size $N$ of the crash trace (line 2), a \texttt{null} backward static slice (line 4, and an offset set to 1 (line 3).
 The main loop of the algorithm begins at line 5 and
 ends at line 13.
 In this loop, we compute the static slice
-between the current frame and the next one. If the computed
-static slice is not empty then we update the final backward
+between the current frame and the next one. If the slice is not empty then we update the final backward
 slice with the newly computed slice.}
 If the computed slice is empty, it means that Frame {\tt i + 1}
-was corrupted then we move to  Frame {\tt i + 2}, and so on.
+was corrupted then we move to Frame {\tt i + 2}, and so on.
 At the end of the algorithm, we compute the slice between the
 last frame and the entry point of the program, and update the
 final slice.
 
-\red{Figure \label{fig:jcharming-algo} presents a step by step graphical reprensentation of Algorithm \ref{alg:jcharming-slice}.
-In this figure, an hypothetical program composed of eleven states ($a...k$) crashes in $k$.
-The produced stack traces is composed of five frames $T={f_0, f_1, f_2, f_3, f_4, f_5}$.
-The frames represents $k$, $i$, $h$, $d$, $b$ and $a$, respectively.
-However, $f_3$ has been tampered with and no longer match a location inside the SUT.
-In such program, Algorithm \ref{alg:jcharming-slice} will begin by computing the backward static slice between $f_0$ ($k$) and $f_1$ ($i$), then it will compute the backward static slice between  $f_1$ ($i$) and $f_2$ ($h$).
-At this point, we passed through the $for$ loop (line 5 to 12) two times and both times, the backward static slice was not empty.
+\red{Figure \label{fig:jcharming-algo} presents a step by step graphical representation of Algorithm \ref{alg:jcharming-slice}.
+In this figure, an hypothetical program composed of eleven states ($a...k$) crashes at point $k$.
+The produced crash trace is composed of six frames $T={f_0, f_1, f_2, f_3, f_4, f_5}$.
+The frames represent $k$, $i$, $h$, $d$, $b$ and $a$, respectively.
+In the crash trace, $f_3$ is a corrupt frame and no longer matches a location inside the SUT. This can be the result of a copy-paste error or a deliberate intervention of the reported as shown in Section \ref{sec:results}.
+In such a situation, Algorithm \ref{alg:jcharming-slice} will begin by computing the backward static slice between $f_0$ ($k$) and $f_1$ ($i$), then between  $f_1$ ($i$) and $f_2$ ($h$).
+At this point, we passed through the $for$ loop (line 5 to 12) two times, and in both cases the backward static slice was not empty.
 Consequently, the $if$ statement was equal to $true$ and we combined both backward static slice in the $bSlice$ variable.
 $bSlice$ is equal to \{$k$, $j$, $i$, $h$\}.
 Then, we want to compute the backward static slice between $f_2$ ($h$) and $f_3$ ($d$).
-Unfortunately, $f_3$ is corrupted and do not point towards a valid location in the SUT.
-The corruption can be the result of a copy-pasting error or a deliberate intervention of the reported as shown in Section \ref{sec:results}.
-Consequently, the backward static slice between $f_2$ ($h$) and $f_3$ ($d$) will be empty, and we will go to the $else$ statement (line 10).
+Unfortunately, $f_3$ is corrupted and does not point towards a valid location in the SUT.
+As a result, the slice between $f_2$ ($h$) and $f_3$ ($d$) will be empty, and we will go to the $else$ statement (line 10).
 Here, we simply increment $offset$ by one in order to compute the backward static slice from $f_2$ ($h$) and $f_4$ ($b$) instead of $f_2$ ($h$) and $f_3$ ($d$).
-$f_4$ is not corrupted and the backward static slice from $f_2$ ($h$) and $f_4$ ($b$) can be computed and merged to $bSlice$.
+$f_4$ is valid and the backward static slice from $f_2$ ($h$) and $f_4$ ($b$) can be computed and merged to $bSlice$.
 Finally, we compute the last slice between $f_4$ ($b$) and $f_5$ ($a$).
 The final backward static slice is $k$, $i$, $h$, $d$, $b$ and $a$.}
 
@@ -636,8 +630,8 @@ that were damaged enough for this fall back mechanism to be used.
 \red{In order to compute the backward slice, we implement our
 algorithm as an add-on to the T. J. Watson
 Libraries for Analysis (WALA)\cite{IBM2006}, which provide static
-analysis capabilities for Java Bytecode and JavaScript.}  WALA offers a very comprehensive API
-to perform static backward slicing on Java Bytecode from a
+analysis capabilities for Java Byte code and JavaScript.}  WALA offers a very comprehensive API
+to perform static backward slicing on Java Byte code from a
 specific point to another.
 We did not need to extend WALA to perform our
 analysis.
@@ -677,42 +671,39 @@ needs to be included for the final static slice to be usable by
 the model checking engine. \red{That is, the only frame that
 needs to be untouched for the backward static slice to be
 meaningful is $f_0$.
-If the first line of the stack trace, i.e., frame 0, is corrupt then JCHARMING cannot perform the slicing because  it does not know where to go. The result is a non-directed model checking which is likely to fail.}
+If the first line of the crash trace, i.e., frame 0, is corrupt then JCHARMING cannot perform the slicing because  it does not know where to go. The result is a non-directed model checking which is likely to fail.}
 
 \subsection{Directed Model Checking}
 
 The model checking engine we use in this paper is called JPF
 (Java PathFinder) \cite{Visser2004}, which is an extensible JVM for Java
-bytecode verification. This tool was first created as a front-end
+byte code verification. This tool was first created as a front-end
 for the SPIN model checker \cite{holzmann1997model} in 1999 before being
 open-sourced in 2005.
-\red{The JPF model checker can execute all the bytecode instructions
-and, therefore, allow the whole Java language to be model checked. Its consists of a custom JVM --- known as JVM\textsuperscript{\textit{JPF}} --- that executes the bytecode instructions.
-This custom JVM supports all the existing Java bytecode instructions and, therefore, is able to execute any \textit{pure}\footnote{In opposition to a Java program with native call.} java programs.
-Furthermore, JPF is an explicit state model checker
-very much like SPIN \cite{holzmann1997model} and not a symbolic model
+\red{The JPF model checker can execute all the byte code instructions through a custom JVM --- known as JVM\textsuperscript{\textit{JPF}} ---. Furthermore, JPF is an explicit state model checker,
+very much like SPIN \cite{holzmann1997model}. This is contrasted with a symbolic model
 checker based on binary decision diagrams \cite{mcmillan1993symbolic}.
-JPF designers opted for a a depth-first traversal with backtracking
-as they thought it will be superior to breadth-first for checking for checking temporal liveness properties.
-Currently\footnote{JPF is still under development at the NASA Babelfish lab.}, the JPF model checker is able to check deadlocks, invariants, and user-defined code assertion as same as LTL (Linear Time Logic) properties.}
+JPF designers have opted for a depth-first traversal with backtracking  because of its ability
+to check for temporal liveness properties.
+Currently, the JPF model checker can check deadlocks, invariants, and user-defined code assertions as same as LTL (Linear Time Logic) properties.}
 
 JPF is organized around five simple
 operations: (i) {\it generate states}, (ii) {\it forward}, (iii) {\it backtrack},
 (iv) {\it restore state} and (v) {\it check}.
 In the forward operation, the
 model checking engine generates the next state $s_{t+1}$.
-\red{Each state consists of three distinct component: }
+\red{Each state consists of three distinct components: }
 \begin{itemize}
   \item \red{The information of each thread. More specifically, a stack of frames corresponding to methods' calls.}
   \item \red{The static variables of a given class.}
-  \item \red{The dynamic variables of a given object.}
+  \item \red{The instance variables of a given object.}
 \end{itemize}
 If $s_{t+1}$ has successors then it is saved in a backtrack table to be
 restored later. \red{The backtrack operation consists of restoring
 the last state in the backtrack table. The restore operation
 allows restoring any state. It can also be used to restore the entire
 program as it was the last time we chose between two
-branches.} After each, forward, backtrack and restore state
+branches.} After each forward, backtrack and restore state
 operation the check properties operation is triggered.
 
 In order to direct JPF, we have to modify the {\it generate states}
@@ -768,7 +759,7 @@ to set $t$ to 80\% as a baseline. It should also be noted that we deliberately p
 
 \red{To help software developers reproduce the crash in a lab
 environment, we automatically produce the JUnit test cases
-necessary to run the SUT to cause the bug to appear.}
+necessary to run the SUT to cause the bug.}
 
 To build a test suite that reproduces a defect, we need to create
 a set of objects used as arguments for the methods that will
@@ -826,11 +817,11 @@ failure and the failure produced by JCHARMING and a {\tt StringTokenizer}.
 The {\tt StringTokenizer} allows to break the original {\tt failure} into
 tokens. Second, the test method where {\tt \{\%SUT\%\}} is replaced by the name
 of the SUT and {\tt \{\%STEPS\%\}} by the steps to make the SUT crash.
-Then, the stack trace related to the crash is received in the {\tt catch} part of
+Then, the crash trace related to the crash is received in the {\tt catch} part of
 the {\tt try-catch} block. In the {\tt catch} part, we compute the number of lines
 that do not match the original exception and store it into {\tt differences}
 \footnote{This code has been replaced by {\tt //Count the differences} to ease the
-reading.}.Finally, the {\tt assertTrue} call will assert that
+reading.}. Finally, the {\tt assertTrue} call will assert that
 the crash traces from the induced and the original crash are at least {\tt threshold}
  percent similar to each other.}
 
@@ -1022,7 +1013,7 @@ provided.
 
 \red{As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
 out of 30 bugs either completely or partially (80\% success ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which was the time
-required for JCHARMING to fill all the available memory and stop. Finally, a ``-'' denotes that JCHARMING reached a 60 minutes timeout.
+required for JCHARMING to fill all the available memory and stop. Finally, a ``-'' denotes that JCHARMING reached a sixty-minute timeout.
 This result demonstrates the effectiveness of our approach,
 more particularly, the use of backward slicing to create a
 manageable search space that guides adequately the model
@@ -1157,7 +1148,7 @@ The second reproduced bug we describe in this section is Bug \#486 belonging to 
 
 \vspace*{0.3cm}
 
-\red{Drew Farris, who was assigned to fix this bug, commented {\it Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class, and the current version of Mahout is 0.11} refactoring work.}
+\red{Drew Farris, who was assigned to fix this bug, commented {\it "Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class, and the current version of Mahout is 0.11} refactoring work.}"
 While this quick comment, made only two and a half hours after the bug submission, was insightful as shown in our generated test case\footnote{As a reminder, the generated test cases are made available at research.mathieu-nayrolles.com/jcharming}, the fix happened in the {\tt CollocCombiner} class that is one of the {\tt Reducer}\footnote{As in Map/Reduce} available in Mahout.}
 The fix (commit \#f13833) involved creating an iterator to combine the frequencies of the {\tt Gram} and a null check of the final frequency.
 
