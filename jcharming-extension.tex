@@ -16,6 +16,8 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \newcommand{\red}[1]{\textcolor{red}{#1}}
 
+\def\mymathhyphen{{\hbox{-}}}
+
 \def\volumeyear{2015}
 
 \begin{document}
@@ -26,8 +28,8 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \author{Mathieu Nayrolles \corrauth $^,$ \footnotemark[2] $^,$ $^1$, Abdelwahab Hamou-Lhadj$^1$, Sofi\`ene Tahar$^2$ and Alf Larsson$^3$}
 
-\address{\begin{center}$^1$ SBA Research Lab, ECE, Concordia University, Montréal, Canada \\
-$^2$ ECE Department, Concordia University, Montréal, Canada \\
+\address{\begin{center}$^1$ SBA Research Lab, ECE, Concordia University, Montr\'eal, Canada \\
+$^2$ HVG Research Lab,ECE Department, Concordia University, Montr\'eal, Canada \\
 $^3$ PLF System Management, Ericsson, R \& D, Stockholm, Sweden\end{center}}
 
 \corraddr{Mathieu Nayrolles. SBA Research Lab, ECE, Concordia University. Sir George Williams Campus
@@ -249,24 +251,32 @@ by testing exhaustively all the states of the system under test (SUT),
 which can be represented by a Kripke \cite{Kripke1963} structure:}
 
 \begin{equation}
-SUT = <S,T,P>
+SUT = <S, S_0, T, L>
 \end{equation}
 
-\red{\noindent where S is the set of states, $T \subseteq S * S$ represents the transitions
-between the states and $P$ is a set of state predicates, and there should be a
-function assigning subsets of P to states (P does not necessarily hold in all
-reachable states).
-The SUT is said to satisfy a set of properties $p$ when there exists
-no sequence of states $x$ leading to a state contradicting $p$.
+\red{\noindent where $S$ is a set of states, $S_0$ the set of initial states, $T$ the transitions relations between states and $L$ the labeling function which labels a state with a set of atomic properties.
+Figure~\ref{fig:mc-def} presents a system with four steps $S_0$ to $S_3$ which have five atomic properties $p_1$ to $p_5$.
+The labeling function $L$ gives us the properties that are true in a state: $L(S_0) = \{p_1\}, L(S_1) = \{p_1, p_2\}, L(S_2) = \{p_3\}, L(S_3) = \{p_4, p_5\}$.}
+
+\begin{figure}[h!]
+  \centering
+    \includegraphics[scale=0.4]{media/mc-def.png}
+    \caption{\red{System with four steps $S_0$ to $S_3$ which have five atomic properties $p_1$ to $p_5$}
+    \label{fig:mc-def}}
+\end{figure}
+
+
+\red{The SUT is said to satisfy a property $p$ at a given time where there exist a sequence of states $x$ leading to a state where $p$ holds.
 This can be written as:}
 
 \begin{equation}
-(SUT, x)  \models p
+(SUT, x) \models p
 \end{equation}
 
-\red{However, this only ensures that $\exists x$ such that $p$ is reached
-at some point in the execution of the program and not that $p$ holds
-nor that $\forall x$, $p$ is satisfiable.
+\red{For the SUT of Figure~\ref{fig:mc-def}, we can write $(SUT, \{S_0, S_1, S_2\}) \models p_3$ because the sequence of states $\{S_0, S_1, S_2\}$ will lead to a state $S_2$ where $p_3$ holds. However, $(SUT, \{S_0, S_1, S_2\}) \models p_3$ only ensures that $\exists x$ such that $p$ is reached
+at some point in the execution of the program and not that $p_3$ holds
+for $\forall x$.}
+
 In JCHARMING, we assume that SUTs
 must not crash under a \red{typical environment.
 In the framework of this study, we consider a typical environment
@@ -278,13 +288,13 @@ all programs could be tagged as buggy since we could, for example,
 destroy objects in memory while the program continues its execution.
 As we are interested in verifying the absence of unhandled exceptions
 in the SUT, we aim to verify that for all possible combinations of
-states and transitions there is no path leading towards a crash. That is:}
+states and transitions there is no path leading towards a crash. That is:
 
 \begin{equation}
-\forall SUT \models \neg c
+\red{(SUT, \forall x) \models \neg c}
 \end{equation}
 
-\red{If there exists a path contradicting $p$ (i.e., $\exists x$  such that $(SUT, x)
+\red{If there exists contradicting path (i.e., $\exists x$ such that $(SUT, x)
 \models c$) then the model checker engine will output the path
 $x$ (known as the counter-example), which can then be executed.
 The resulting Java exception crash trace is compared with the original
@@ -297,21 +307,21 @@ its applicability to large software systems.}
 To show the contrast between testing and model checking, we use the hypothetical example of Figures \ref{fig:testing-toy}, \ref{fig:checking-toy} and \ref{fig:dchecking-toy} and sketch the possible results of each approach. These figures depict a toy program where from the entry point, unknown calls are made (dotted points) and, at some points, two methods are called. These methods, called \texttt{Foo.Bar} and \texttt{Bar.Foo}, implement a for \texttt{loop} from 0 to \texttt{loopCount}. The only difference between these two methods is that the \texttt{Bar.Foo} method throws an exception if $i$ becomes larger than two. Hereafter, we denote this property as $c_{i > 2}$.
 
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
     \includegraphics[scale=0.7]{media/dmc.png}
     \caption{A toy program under testing
     \label{fig:testing-toy}}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
     \includegraphics[scale=0.7]{media/mc.png}
     \caption{A toy program under model checking
     \label{fig:checking-toy}}
 \end{figure}
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
     \includegraphics[scale=0.7]{media/dmc.png}
     \caption{A toy program under directed model checking
@@ -353,7 +363,7 @@ the original crash trace (after preprocessing). The last step is
 to build a JUnit test, to be used by software engineers to
 reproduce the bug in a deterministic way.
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
     \includegraphics[scale=0.8]{media/jcharming-approach.png}
     \caption{Overview of JCHARMING.
@@ -389,7 +399,7 @@ they are what the user sees without any possibility to expand
 their content.
 
 
-\begin{figure}[h!]
+\begin{figure}
   \noindent\fbox{%
       \parbox{\textwidth}{%
   1.javax.activity.InvalidActivityException:loopTimes \\
@@ -461,9 +471,9 @@ This is particularly interesting for JCHARMING as the sliced program, being smal
 In Figure \ref{fig:slicing}, the black states are states that are impacted by the slicing properties.
 After the slicing, the final static slice  contains the black states and the states that are needed to reach them.}
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
-    \includegraphics[scale=.25]{media/slicing.png}
+    \includegraphics[scale=.2]{media/slicing.png}
     \caption{\red{Hypothetical example of static program slicing}}
     \label{fig:slicing}}
 \end{figure}
@@ -477,9 +487,9 @@ The backward slice containing the branches and the definition
 of the variables leading to {\it n} from {\it m} is noted as {\it $bslice_{[m \leftarrow n]}$}.
 \red{Figure \ref{fig:backward-slicing} presents an example of a backward static slice.}
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
-    \includegraphics[scale=.25]{media/backward-slicing.png}
+    \includegraphics[scale=.2]{media/backward-slicing.png}
     \caption{\red{Hypothetical example of backward static program slicing}}
     \label{fig:backward-slicing}}
 \end{figure}
@@ -502,35 +512,36 @@ represented as follows:
 
 \begin{equation}
 \centering
-\begin{split}
-bslice_{[entry \leftarrow f_0]} = bslice_{[f_1 \leftarrow f_0]} \cup bslice_{[f_2 \leftarrow f_1]} \cup ... \cup bslice_{[f_n \leftarrow f_{n\−1}]} \cup bslice_{[entry \leftarrow f_n]}
+\begin{split}\red{
+bslice_{[f_n \leftarrow f_0]} = bslice_{[f_1 \leftarrow f_0]} \cup bslice_{[f_2 \leftarrow f_1]} \cup ... \cup bslice_{[f_n \leftarrow f_{n\mymathhyphen1}]}}
 \end{split}
 \end{equation}
 
 Note that the union of the slices computed between each pair
 of frames must be a subset of the final slice between $f_0$ and the
-entry point of the program. More formally:
+entry point of the program $f_n$. More formally:
 
 \begin{equation}
 \centering
 \begin{split}
-\bigcup_{i=0}^{entry-1} bslice_{[f_{i+1} \leftarrow f_i]} \subseteq bslice_{[entry \leftarrow f_0]}
+  \red{
+\bigcup_{i=0}^{n-1} bslice_{[f_{i+1} \leftarrow f_i]} \subseteq bslice_{[f_n \leftarrow f_0]}
+  }
 \end{split}
+\label{eq:slice-unions}
 \end{equation}
 
-Indeed, in Figure \ref{fig:jcharming-slice}, the set of states allowing
-to reach $f_2$ from
-$f_0$ is greater than the set of states to reach $f_2$ from $f_1$ plus set
-of states to reach $f_1$ from $f_0$. In this hypothetical example and
-assuming that $z_2$ is a prerequisite to $f_2$ then
-$bslice_{[entry \leftarrow f_0]} = \{f_0 , f_1 , f_2 , z_0 , z_1 , z_2 , z_3 \}$
-while $\cup_{i=0}^n bslice_{[f_{i+1} \leftarrow f_i]}$.
+\red{Figure \ref{fig:jcharming-slice}, presents an example that allow us to grasp Equation \ref{eq:slice-unions}.
+In this example, a toy program composed of six methods $a...f$ crashes in $d$ with a crash trace $T = {e, f, d}$.
+The backward static slice from the crash point $d$ to the entry point $a$ without using $T$ will be $\{a, b, c, d, e, f\}$ as we do not assume to know which path was taken to reach $d$.
+However, if we use $T$ to compute the backward static slice, then, some method can be disregarded as we know which path was taken to reach $d$.
+The slice directed by $T$ is $\{a, e, f, d\}$ which is a subset of $\{a, b, c, d, e, f\}$.}
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
-    \includegraphics{media/jcharming-slices.png}
-    \caption{Hypothetical example representing $bslice_{[entry \leftarrow f_0]}$ Vs. $\cup_{i=0}^n bslice_{[f_{i+1} \leftarrow f_i]} = \{f_0 , f_1 , f_2 , z_2 \}$
-    \label{fig:jcharming-slice}}
+    \includegraphics[scale=0.25]{media/jcharming-slices.png}
+    \caption{\red{Hypothetical example representing $bslice_{[a \leftarrow d]}$ (left) Vs. $\cup_{i=d}^{a} bslice_{[f_{i+1} \leftarrow f_i]}$ (right) for a crash trace $T=\{d, f, e\}$.
+    \label{fig:jcharming-slice}}}
 \end{figure}
 
 \red{In the worst case scenario where there exists one and only one
@@ -579,7 +590,7 @@ The final backward static slice is $k$, $i$, $h$, $d$, $b$ and $a$.}
 
 \vspace*{0.3cm}
 
-\begin{algorithm}[H]
+\begin{algorithm}
  \KwData{Crash Stack, BCode, Entry Point}
  \KwResult{BSolve}
  Frame[]~frames $\leftarrow$ extract~frames~from~crash~stack; \\
@@ -601,7 +612,7 @@ The final backward static slice is $k$, $i$, $h$, $d$, $b$ and $a$.}
 \vspace*{0.3cm}
 
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
     \includegraphics[scale=.20]{media/algo.png}
     \caption{\red{Steps of Algorithm \ref{alg:jcharming-slice} where $f_3$ is corrupted.}
@@ -655,17 +666,18 @@ that processes the example of Figures \ref{fig:testing-toy} to \ref{fig:dcheckin
 following expression:
 
 \begin{equation}
+  \red{
   \exists x.
   \begin{pmatrix}
     \bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset SUT, \\
     x.\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}  \subset x.SUT
   \end{pmatrix}
   \models c_{i>2}
+  }
 \end{equation}
 
 That is, there exists a sequence of state transitions $x$ that
 satisfies $c_{i>2}$ where both the transitions and the states are
-entry
 elements of $\bigcup_{i=0}^{entry} bslice_{[f_{i+1} \leftarrow f_i]}$ . Obviously, $c_{i>2}$ also
 needs to be included for the final static slice to be usable by
 the model checking engine. \red{That is, the only frame that
@@ -680,12 +692,19 @@ The model checking engine we use in this paper is called JPF
 byte code verification. This tool was first created as a front-end
 for the SPIN model checker \cite{holzmann1997model} in 1999 before being
 open-sourced in 2005.
-\red{The JPF model checker can execute all the byte code instructions through a custom JVM --- known as JVM\textsuperscript{\textit{JPF}} ---. Furthermore, JPF is an explicit state model checker,
+\red{The JPF model checker can execute all the byte code instructions through a custom JVM --- known as JVM\textsuperscript{\textit{JPF}}. Furthermore, JPF is an explicit state model checker,
 very much like SPIN \cite{holzmann1997model}. This is contrasted with a symbolic model
 checker based on binary decision diagrams \cite{mcmillan1993symbolic}.
-JPF designers have opted for a depth-first traversal with backtracking  because of its ability
-to check for temporal liveness properties.
-Currently, the JPF model checker can check deadlocks, invariants, and user-defined code assertions as same as LTL (Linear Time Logic) properties.}
+JPF designers have opted for a depth-first traversal with backtracking  because of its ability to check for temporal liveness properties.}
+
+\red{More specifically, JPF's core checks for defects that can be checked without defining any property.
+These defects are called \textit{non functional properties} in JPF and cover deadlock, unhandled exceptions and \texttt{assert} expression.
+In JCHARMING, we leverage the \textit{non functional properties} of JPF as we want to compare the crash trace produced by unhandled exceptions in order to compare them to the bug at hand.
+Consequently, we do not need to define any property ourselves.
+However, in JPF, one can define its own properties by implementing \texttt{listerners} --- very much like what we did for Section~\ref{sec:unit-tests} --- that can monitor all actions taken by JPF. which enables the verification of temporal properties for sequential and concurrency Java programs.
+One of the popular \texttt{listener} of JPF is \texttt{jpf-ltl}.
+This listener supports the verification of method invocations or local and global program variables. \textttt{jpf-ltl} can verify temporal properties of method call sequences, linear relations between program variables and the combination of both.
+In a near future, we might use \texttt{jpf-ltl} and the LTL logic to check multi-threaded related crashes, as described in Section \ref{sec:conclusion}.}
 
 JPF is organized around five simple
 operations: (i) {\it generate states}, (ii) {\it forward}, (iii) {\it backtrack},
@@ -755,7 +774,7 @@ our technique should allow software engineers to vary $t$ depending on the bugs 
 to set $t$ to 80\% as a baseline. It should also be noted that we deliberately prevented JCHARMING to perform directed model checking with a threshold below 50\%. This is because the tests generated with such a low threshold during our experiments did not yield qualitative results.}
 
 
-\subsection{Generating Test Cases for Bug Reproduction}
+\subsection{Generating Test Cases for Bug Reproduction\label{sec:unit-tests}}
 
 \red{To help software developers reproduce the crash in a lab
 environment, we automatically produce the JUnit test cases
@@ -776,7 +795,7 @@ However, accessing the trace during the JPF execution considerably slows down th
 In order to allow JPF to use 100\% of the available resources and still be able to query the executed instructions, we implemented a {\tt listener} that listens to the JPF trace emitter.
 Each time a new instruction is processed by JPF, our listener catches it and then saves it to a MongoDB database to be queried in a post-mortem fashion. Figure \ref{fig:jcharming-unittest} presents a high-level architecture of the components of the JUnit test generation process.}
 
-\begin{figure}[h!]
+\begin{figure}
   \centering
     \includegraphics[scale=0.8]{media/unittest.png}
     \caption{High level architecture of the Junit test case generation
@@ -853,7 +872,7 @@ field bugs in a reasonable amount of time?}
 Table \ref{tab:jacharming-systems} shows the systems and their characteristics in terms of
 Kilo Line of Code (KLoC) and Number of Classes (NoC).
 
-\begin{table}[h!]
+\begin{table}
 \centering
 
 \caption{List of target systems in terms of Kilo line of code (KLoC), number of classes (NoC) and Bug \# ID}
@@ -931,11 +950,7 @@ Mahout supports various machine learning algorithms with a focus on collaborativ
 Finally, ActiveMQ \cite{snyder2011activemq} is an open source messaging server that allows applications written in Java, C, C++, C\#, Ruby, Perl or PHP to exchange messages using various protocols. ActiveMQ has  been actively maintained since it became an Apache Software Foundation project in 2005.
 
 
-\pagebreak
-
-\vspace*{3cm}
-
-\begin{table}[h!]
+\begin{table}
 \centering
 \caption{Effectiveness of JCHARMING using directed model checking (DMC) and model checking (MC) in minutes}
 \begin{tabular}{c|c|c|c|c}
@@ -976,7 +991,6 @@ MCT                         & 440ed48  & Yes     & 18.6     & -       \\ \hline
 \label{tab:jcharming-results}
 \end{table}
 
-\pagebreak
 
 \subsection{Bug Selection and Crash Traces}
 
@@ -1148,7 +1162,7 @@ The second reproduced bug we describe in this section is Bug \#486 belonging to 
 
 \vspace*{0.3cm}
 
-\red{Drew Farris, who was assigned to fix this bug, commented {\it "Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class, and the current version of Mahout is 0.11} refactoring work.}"
+\red{Drew Farris, who was assigned to fix this bug, commented {\it "Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class, and the current version of Mahout is 0.11} refactoring work.}"}
 While this quick comment, made only two and a half hours after the bug submission, was insightful as shown in our generated test case\footnote{As a reminder, the generated test cases are made available at research.mathieu-nayrolles.com/jcharming}, the fix happened in the {\tt CollocCombiner} class that is one of the {\tt Reducer}\footnote{As in Map/Reduce} available in Mahout.}
 The fix (commit \#f13833) involved creating an iterator to combine the frequencies of the {\tt Gram} and a null check of the final frequency.
 
