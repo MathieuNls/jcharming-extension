@@ -179,7 +179,7 @@ Another approach was proposed by Artzi {\it et al.} and named ReCrash. ReCrash r
 Unit test cases are used to provide hints to the developers about the buggy code.
 This approach particularly suffers from the limitation related to slowing down the execution.
 The overhead for full monitoring is considerably high (between 13\% and 64\% in some cases).
-The authors  propose an alternative solution in which they record only the methods surrounding the crash. For this to work, the crash has to occur at least once so they could use the information causing the crash to identify the methods surrounding it.
+The authors  propose an alternative solution in which they record only the methods surrounding the crash. For this to work, the crash has to occur at least once so they could use the information causing the crash to identify the methods surrounding it. \red{ReCrash was able to 100\% (11/11) of the submitted bugs.}
 
 \red{Similarly to ReCrash, JRapture \cite{Steven2000} is a capture/replay tool for observation-based testing. The tool captures execution of Java programs to replay it in-house. To capture the execution of a Java program, the creators of JRapture used their own version of the Java Virtual Machine (JVM) and a lightweight, transparent capture process.
 Using a customized JVM allows capturing any interactions between a Java program and the system including GUI, files, and console inputs.
@@ -188,7 +188,7 @@ However, using a custom JVM is not a practical solution. This is because, the au
 In our view,  JRapture fails to address the limitations caused
 by instrumentation because it imposes the installation of another
 JVM that can also monitor other software systems than the intended ones.
-RECORE (REconstructing CORE dumps) is a tool proposed by Robler {\it et al.}.} The tool instruments Java byte code to wrap every method in a try-catch block while keeping a quasi-null overhead \cite{Rossler2013}. RECORE starts from the core dump and tries (with evolutionary algorithms) to reproduce the same dump by executing the subject program many times. When the generated dump matches the collected one, the approach has found the set of inputs responsible for the failure.
+RECORE (REconstructing CORE dumps) is a tool proposed by Robler {\it et al.}.} The tool instruments Java byte code to wrap every method in a try-catch block while keeping a quasi-null overhead \cite{Rossler2013}. RECORE starts from the core dump and tries (with evolutionary algorithms) to reproduce the same dump by executing the subject program many times. When the generated dump matches the collected one, the approach has found the set of inputs responsible for the failure \red{and was able to reproduce 85\% (6/7) of the submitted bugs.}
 
 \red{The approaches presented at this point operate at the code level.
 There exist also techniques that focus on recording user-GUI interactions \cite{Herbold2011,Roehm2015}.}
@@ -224,12 +224,13 @@ The approach seems to have a low overhead on the instrumented application, aroun
 
 Likewise, Zamfir {\it et al.} proposed ESD \cite{Zamfir2010}, an execution synthesis approach that automatically synthesizes failure execution using only the stack trace information. However, this stack trace is extracted from the core dump and may not always contain the components that caused the crash.
 
-To the best of our knowledge, the most complete work in this category is the one of Chen in his Ph.D thesis \cite{Chen2013a}. Chen proposed an approach named STAR (Stack Trace based Automatic crash Reproduction). Using only the crash stack, STAR starts from the crash line and goes backward towards the entry point of the program. During the backward process, STAR computes the required condition using an SMT solver named Yices \cite{Dutertre2006}. The objects that satisfy the required conditions are generated and orchestrated inside a JUnit test case. The test is run and the resulting crash stack is compared to the original one. If both match, the bug is said to be reproduced. STAR aims to tackle the state explosion problem of reproducing a bug by reconstructing the events in a backward fashion and therefore saving numerous states to explore. Also, STAR is relatively easy to implement as it uses Yices \cite{Dutertre2006} and potentially Z3 \cite{de2008z3} (stated in their future work) that are well-known and well-supported SMT solvers.
+To the best of our knowledge, the most complete work in this category is the one of Chen in his Ph.D thesis \cite{Chen2013a}. Chen proposed an approach named STAR (Stack Trace based Automatic crash Reproduction). Using only the crash stack, STAR starts from the crash line and goes backward towards the entry point of the program. During the backward process, STAR computes the required condition using an SMT solver named Yices \cite{Dutertre2006}. The objects that satisfy the required conditions are generated and orchestrated inside a JUnit test case. The test is run and the resulting crash stack is compared to the original one. If both match, the bug is said to be reproduced. STAR aims to tackle the state explosion problem of reproducing a bug by reconstructing the events in a backward fashion and therefore saving numerous states to explore. \red{STAR was able to reproduce 64\% of the submitted bug (38/64).}
+Also, STAR is relatively easy to implement as it uses Yices \cite{Dutertre2006} and potentially Z3 \cite{de2008z3} (stated in their future work) that are well-known and well-supported SMT solvers.
 
 Except for STAR, existing approaches that target the reproduction of
 field crashes require the instrumentation of the code or the running
 platform in order to save the stack call or the objects to successfully
-reproduce bugs. As we discussed earlier, instrumentation can cause a massive
+reproduce bugs. As we discussed earlier, such approaches yield good results 37.5\% to 100\% but the instrumentation can cause a massive
 overhead (1\% to 1066\%) while running the system.
 In addition, the data generated at run-time using instrumentation
 may contain sensitive information.
@@ -240,6 +241,8 @@ JUnit test cases in a reasonable amount of time.
 JCHARMING is also easy to deploy. It does not require instrumentation,
 and hence does not require access to data that may potentially
 be considered confidential.
+\red{Moreover, JCHARMING offers better results than approaches that only uses bug report materials.
+Indeed, our approach was able to reproduce 80\% (24/30) of submitted bugs and outperforms STAR (64\%, 38/64) and BugRedux (37.5\%, 6/16).}
 
 
 \section{Preliminaries\label{sec:prelimenaries}}
@@ -328,7 +331,7 @@ To show the contrast between testing and model checking, we use the hypothetical
     \label{fig:dchecking-toy}}
 \end{figure}
 
-Figure \ref{fig:testing-toy} shows the program statements that could be covered using testing approaches. Testing software is a demanding task where a set of techniques is used to test the SUT according to some input. Software testing depends on how well the tester understands the SUT in order to write relevant test cases that are likely to find errors in the program. Program testing is usually insufficient because it is not exhaustive. In our case, using testing would mean that the tester knows what to look for in order to detect the causes of the failure. We do not assume this knowledge in JCHARMING.
+Figure \ref{fig:testing-toy} shows the program statements that could be covered using testing approaches. Testing software is a demanding task where a set of techniques is used to test the SUT according to some input. Software testing depends on how well the tester understands the SUT in order to write relevant test cases that are likely to find errors in the program. Program testing is usually insufficient because it is not exhaustive. In our case, using testing will mean that the tester knows what to look for in order to detect the causes of the failure. We do not assume this knowledge in JCHARMING.
 
 Model checking, on the other hand, explores each and every state of the program
 (Figure \ref{fig:checking-toy}), which makes it complete, but impractical for
