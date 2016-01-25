@@ -1018,7 +1018,7 @@ Java exception.
 
 \red{Table \ref{tab:jcharming-results} shows the results of JCHARMING in terms of Bug
 \#ID, reproduction status, and execution time (in minutes) of
-directed model checking (DMC), lenght of the counter-example (statements in the JUnit test) and  execution time (in minutes) for Model Checking (MC).}
+directed model checking (DMC), length of the counter-example (statements in the JUnit test) and  execution time (in minutes) for Model Checking (MC).}
 The experiments have been conducted on a Linux machine (8
 GB of RAM and using Java 1.7.0\_51).
 
@@ -1187,7 +1187,7 @@ The fix (commit \#f13833) involved creating an iterator to combine the frequenci
 
 \red{JCHARMING's preprocessing step
 removed the lines between lines 1 to 14 because they
-belong to the second thrown exception since {\tt java.lang.NullPointerException} occured when writing in a {\tt ByteArrayOutputStream}.
+belong to the second thrown exception since {\tt java.lang.NullPointerException} occurred when writing in a {\tt ByteArrayOutputStream}.
 JCHARMING aims to reproduce the root exceptions and not the exceptions that derive from other exceptions.}
 This said, the {\tt java.io.IOException: Spill failed} was ignored and our directed model checking engine focused, with success, on reproducing the {\tt java.lang.NullPointerException}.
 
