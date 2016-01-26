@@ -144,10 +144,10 @@ software engineering, which hinders their adoption  \cite{Visser2004}.
 
 It is worth mentioning that both categories share a common limitation.
 It is possible for the required condition to reproduce a crash to be purely
-external, i.e., the reading of a file that is only present on the hard
+external such as the reading of a file that is only present on the hard
 drive of the customer or the reception of a faulty network packet
 \cite{Chen2013a, Nayrolles2015}.
-Without this input, it may be challenging to reproduce the bug.
+It is almost impossible to reproduce the bug without this input.
 
 
 
@@ -168,12 +168,11 @@ for bug reproduction systems.
 
 Narayanasamy {\it et al.} \cite{Narayanasamy2005} proposed BugNet, a tool that continuously records program execution for deterministic replay debugging. According to the authors, the size of the recorded data needed to reproduce a bug with high accuracy is around 10MB. This recording is then sent to the developers and allows the deterministic replay of a bug. The authors argued that with nowadays Internet bandwidth the size of the recording is not an issue during the transmission of the recorded data.
 
-Another approach in this category was  proposed by Clause {\it et al.} \cite{Clause2007}. The approach records the execution of the program on the client side and compresses the generated data. Moreover, the approach keeps traces of all accessed documents in the operating system and also compresses.
-Overall, the approach is able to reproduce on-field bugs using a file that are 70kb in average.
-The minimal execution paths triggering the failure are then sent to the developer who can replay the execution on a sandbox simulating the client's environment.
+\red{Another approach in this category was  proposed by Clause {\it et al.} \cite{Clause2007}. The approach records the execution of the program on the client side and compresses the generated data. Moreover, the approach keeps compressed traces of all accessed documents in the operating system.
+This data is sent to the developers to replay the execution on a sandbox simulating the client's environment.}
 This special feature of the approach proposed by Clause {\it et al.} addresses the limitation where crashes are caused by external causes. While the authors broaden the scope of reproducible bugs, their approach records a lot of data that may be deemed private such as files used for the proper operation of the operating system.
 
-Timelapse \cite{Burg2013} also addresses the problem of reproducing bugs using external data. The tool focuses on web applications and allows developers to browse and visualize the execution traces recorded by Dolos. Dolos captures and reuses user inputs and network responses to deterministically replay a field crash. Also, both Timelapse and Dolos allow developers to use conventional tools such as breakpoints and classical debuggers. Similarly, private data are recorded without obfuscation of any sort.
+Timelapse \cite{Burg2013} also addresses the problem of reproducing bugs using external data. The tool focuses on web applications and allows developers to browse and visualize the execution traces recorded by Dolos. Dolos captures and reuses user inputs and network responses to deterministically replay a field crash. Also, both Timelapse and Dolos allow developers to use conventional tools such as breakpoints and classical debuggers. \red{Similar to the approach of Clause {\it et al.} \cite{Clause2007}}, private data are recorded without obfuscation of any sort.
 
 Another approach was proposed by Artzi {\it et al.} and named ReCrash. ReCrash records the object states of the targeted programs \cite{Artzi2008}. The authors use an in-memory stack, which contains every argument and object clone of the real execution in order to reproduce a crash via the automatic generation of unit test cases.
 Unit test cases are used to provide hints to the developers about the buggy code.
@@ -225,7 +224,7 @@ The approach seems to have a low overhead on the instrumented application, aroun
 Likewise, Zamfir {\it et al.} proposed ESD \cite{Zamfir2010}, an execution synthesis approach that automatically synthesizes failure execution using only the stack trace information. However, this stack trace is extracted from the core dump and may not always contain the components that caused the crash.
 
 To the best of our knowledge, the most complete work in this category is the one of Chen in his Ph.D thesis \cite{Chen2013a}. Chen proposed an approach named STAR (Stack Trace based Automatic crash Reproduction). Using only the crash stack, STAR starts from the crash line and goes backward towards the entry point of the program. During the backward process, STAR computes the required condition using an SMT solver named Yices \cite{Dutertre2006}. The objects that satisfy the required conditions are generated and orchestrated inside a JUnit test case. The test is run and the resulting crash stack is compared to the original one. If both match, the bug is said to be reproduced. STAR aims to tackle the state explosion problem of reproducing a bug by reconstructing the events in a backward fashion and therefore saving numerous states to explore. \red{STAR was able to reproduce 64\% of the submitted bug (38/64).}
-Also, STAR is relatively easy to implement as it uses Yices \cite{Dutertre2006} and potentially Z3 \cite{de2008z3} (stated in their future work) that are well-known and well-supported SMT solvers.
+Also, STAR is relatively easy to implement as it uses Yices \cite{Dutertre2006} and potentially Z3 \cite{de2008z3} (stated in their future work) that are well-supported SMT solvers.
 
 Except for STAR, existing approaches that target the reproduction of
 field crashes require the instrumentation of the code or the running
@@ -385,8 +384,8 @@ retrieved using a simple regular expression.
 Figure \ref{fig:jcarming-traces} shows an example of a crash trace that contains the
 exception thrown when executing the program depicted in
 Figures \ref{fig:testing-toy} to \ref{fig:dchecking-toy}.
-\red{More formally, we define a Java crash trace $T$ of size $N$ as an ordered sequence of frames $T={f_0, f_1, f_2, ..., f_N}$. A frame represents either a method call preceded with its location in the source code, an exception, or a wrapped exception.
-In Figure \ref{fig:jcarming-traces}, the frame $f_0$ represents an exception, the frame  $f_7$ a method call (\texttt{jsep.Foo.buggy}) in a file (\texttt{Foo.java} line 17) leading to the exception, and $f_6$ represents a wrapped exception.}
+\red{More formally, we define a Java crash trace $T$ of size $N$ as an ordered sequence of frames $T={f_0, f_1, f_2, ..., f_N}$. A frame represents either a method call (with the location of the called method in the source code), an exception, or a wrapped exception.
+In Figure \ref{fig:jcarming-traces}, the frame $f_0$ represents an exception, the frame  $f_7$ represents a method call to the method \texttt{jsep.Foo.buggy}, declared in file \texttt{Foo.java} at  line 17, causing the exception. $F_6$ represents a wrapped exception.}
 
 It is common in Java to have crash
 traces \red{that contain wrapped exceptions.
@@ -654,18 +653,6 @@ specific point to another.
 We did not need to extend WALA to perform our
 analysis.
 
-At first sight, it may appear that static slicing alone can be
-used to reproduce the bug since it contains all the functions
-that lead to the first user-defined method of the crash trace.
-The problem is that a static slice may also contain many other
-parts of the program that are not relevant to the failure. A
-quick solution to this is to prune out the content of the
-resulting static slice by eliminating the unwanted statements.
-This can be achieved by defining specific inputs. The result
-will be a dynamic slice. This assumes that we know in
-advance which input we need to provide to the program in
-order to reach the crash, which defeats the purpose of bug
-reproduction in the first place. \\
 
 
 Using backward slicing, the search space of the model checker
@@ -712,8 +699,8 @@ checker based on binary decision diagrams \cite{mcmillan1993symbolic}.
 JPF designers have opted for a depth-first traversal with backtracking  because of its ability to check for temporal liveness properties.}
 
 \red{More specifically, JPF's core checks for defects that can be checked without defining any property.
-These defects are called \textit{non functional properties} in JPF and cover deadlock, unhandled exceptions and \texttt{assert} expression.
-In JCHARMING, we leverage the \textit{non functional properties} of JPF as we want to compare the crash trace produced by unhandled exceptions in order to compare them to the bug at hand.
+These defects are called \textit{non-functional properties} in JPF and cover deadlock, unhandled exceptions and \texttt{assert} expression.
+In JCHARMING, we leverage the \textit{non-functional properties} of JPF as we want to compare the crash trace produced by unhandled exceptions in order to compare them to the bug at hand.
 Consequently, we do not need to define any property ourselves.
 However, in JPF, one can define its own properties by implementing \texttt{listerners} --- very much like what we did for Section~\ref{sec:unit-tests} --- that can monitor all actions taken by JPF. which enables the verification of temporal properties for sequential and concurrency Java programs.
 One of the popular \texttt{listener} of JPF is \texttt{jpf-ltl}.
@@ -774,7 +761,7 @@ by software developers, and speed up the deployment of a fix.
 Therefore, in this paper, we consider a defect to be partially
 reproduced if the crash trace generated from the model
 checker matches the original crash trace by a factor of $t$, where
-$t$ is a threshold specified by the user. \red{Thus, $t$ is the percentage of
+$t$ is a threshold specified by the user. \red{The threshold, $t$, represents the percentage of
 identical frames between both crash traces.}
 
 For our experiments (see Section \ref{sec:results}), we set the value of $t$ to 80\%.
@@ -831,7 +818,7 @@ to (1) create a new object {\tt jsme.Bar} ({\tt new jsme.Bar},
 variable named {\tt bar} ({\tt astore\_1 [bar]}), (3) invoke the method
 {\tt jsme.Bar.foo(int)} of the {\tt bar} object with {\tt 3} as value
 ({\tt aload\_1 [bar]}, {\tt iconst\_3}, {\tt invokevirtual jsme.Bar.foo(int)}).
-Then, the {\tt jsme.Bar.foo(int)} method will execute a $for-loop$ from $i=0$ until $i=3$ and
+Then, the {\tt jsme.Bar.foo(int)} method will execute the $for-loop$ from $i=0$ until $i=3$ and
 throw an exception at {\tt i = 3}~({\tt const\_0}, {\tt istore\_2 [i]}, {\tt goto},
 {\tt iload\_2 [i]}, {\tt iconst\_2}, {\tt if\_icmple iinc 2 1}, {\tt new java.lang.Exception}).
 
@@ -1042,11 +1029,11 @@ provided.
 As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
 out of 30 bugs either completely or partially (80\% success ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which was the time
 required for JCHARMING to fill all the available memory and stop and a ``-'' denotes that JCHARMING reached a sixty-minute timeout.
-\red{Finally, we report the number of statements in the produced JUnit test, i.e. the counter example.
-While reproducing a bug is the first step in understanding the cause of a field crash, the step to reproduced should be as few as possible.
-Indeed, it is crucial for counter-examples to be short to effectively help the developer craft a fix.
-In average, JCHARMING counter-example were composed of 5.04 Java statements.
-While it is difficult to estimate if the generated counter-example are the shortest possible without a deep understanding of the system at hand, we are confident that five steps is short enough for the developer to understand the problem.}
+\red{Finally, we report the number of statements in the produced JUnit test, i.e., the counter example.
+While reproducing a bug is the first step in understanding the cause of a field crash, the steps to reproduce the bug should be as few as possible.
+It is important for counter-examples to be short to effectively help the developers provide a fix.
+In average, JCHARMING counter-examples were composed of 5.04 Java statements, which, in our view, is considered reasonable for our approach to be adopted by the developers.
+}
 This result demonstrates the effectiveness of our approach,
 more particularly, the use of backward slicing to create a
 manageable search space that guides adequately the model
