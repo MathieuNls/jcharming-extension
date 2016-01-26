@@ -7,6 +7,8 @@
 \usepackage{cite}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{caption}
+\usepackage{float}
 \usepackage[linesnumbered]{algorithm2e}
 
 \usepackage[colorlinks,bookmarksopen,bookmarksnumbered,citecolor=red,urlcolor=red]{hyperref}
@@ -29,7 +31,7 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \author{Mathieu Nayrolles \corrauth $^,$ \footnotemark[2] $^,$ $^1$, Abdelwahab Hamou-Lhadj$^1$, Sofi\`ene Tahar$^2$ and Alf Larsson$^3$}
 
 \address{\begin{center}$^1$ SBA Research Lab, ECE, Concordia University, Montr\'eal, Canada \\
-$^2$ HVG Research Lab,ECE Department, Concordia University, Montr\'eal, Canada \\
+$^2$ HVG Research Lab, ECE Department, Concordia University, Montr\'eal, Canada \\
 $^3$ PLF System Management, Ericsson, R \& D, Stockholm, Sweden\end{center}}
 
 \corraddr{Mathieu Nayrolles. SBA Research Lab, ECE, Concordia University. Sir George Williams Campus
@@ -147,7 +149,7 @@ It is possible for the required condition to reproduce a crash to be purely
 external such as the reading of a file that is only present on the hard
 drive of the customer or the reception of a faulty network packet
 \cite{Chen2013a, Nayrolles2015}.
-It is almost impossible to reproduce the bug without this input.
+\red{It is almost impossible to reproduce the bug without this input.}
 
 
 
@@ -344,7 +346,7 @@ location of the fault. The challenge, however, is to design techniques that
 can guide the model checking engine. As we will describe in the next section,
 we use crash traces and program slicing to overcome this challenge.
 
-\red{Unlike model checking, directed model checking is not complete. In this work, our objective is not to ensure absolute correctness of the program, but to use directed model checking to "hunt" for a bug within the program.}
+\red{Unlike model checking, directed model checking is not complete. In this work, our objective is not to ensure absolute correctness of the program, but to use directed model checking to ``hunt'' for a bug within the program.}
 
 \section{The JCHARMING Approach\label{sec:jcharming}}
 
@@ -861,7 +863,7 @@ the crash traces from the induced and the original crash are at least {\tt thres
 In this section, we show the effectiveness of JCHARMING to
 reproduce bugs in ten open source systems
 \footnote{\red{The bug reports used in this study and the result of JCHARMING are
-made available for download from https://research.mathieu\-nayrolles.com/jcharming/}}. The aim of the
+made available for download from https://research.mathieu-nayrolles.com/jcharming/}}. The aim of the
 case studies is to answer the following question: {\it Can we use
 crash traces and directed model checking to reproduce on-
 field bugs in a reasonable amount of time?}
@@ -949,9 +951,9 @@ Mahout supports various machine learning algorithms with a focus on collaborativ
 Finally, ActiveMQ \cite{snyder2011activemq} is an open source messaging server that allows applications written in Java, C, C++, C\#, Ruby, Perl or PHP to exchange messages using various protocols. ActiveMQ has  been actively maintained since it became an Apache Software Foundation project in 2005.
 
 
-\begin{table}
+\begin{table}[H]
 \centering
-\caption{Effectiveness of JCHARMING using directed model checking (DMC) and model checking (MC) in minutes}
+\caption{Effectiveness of JCHARMING using directed model checking (DMC) in minutes, \red{length of the generated JUNIT test (CE length)} and model checking (MC) in minutes}
 \begin{tabular}{c|c|c|c|c|c}
 SUT                         & Bug \#ID & Reprod. & Time DMC & \red{CE length} & Time MC \\ \hline \hline
 \multirow{2}{*}{Ant}        & 38622    & Yes     & 25.4   & 3  & -       \\
@@ -1056,14 +1058,9 @@ class by clicking on its name. I add an instance variable to the
 class. The attribute name appears in the left browser panel. I
 can't select the attribute by clicking on its name. Exception
 occurred during event dispatching:''}
+The reporter also attached the crash trace presented in Figure~\ref{fig:argo} that we used as input for JCHARMING:
 
-
-
-The reporter also attached the following crash trace that we
-used as input for JCHARMING:
-
-\vspace*{0.3cm}
-
+\begin{figure}[H]
 \noindent\fbox{%
     \parbox{\textwidth}{%
 1. java.lang.NullPointerException:\\
@@ -1115,8 +1112,9 @@ at java.awt.EventDispatchThread.run(EventDispatch
 Thread.java:82)
     }%
 }
+\caption{Crash trace reported for bug ArgoUML \#311\label{fig:argo}}
+\end{figure}
 
-\vspace*{0.3cm}
 
 The cause of this bug is that the reference to the attribute of
 the class was lost after being displayed on the left panel of
@@ -1135,9 +1133,9 @@ specifically, the model checker identifies that the method
 {\tt setTargetInternal(Object o)} could receive a null object that
 will result in a {\tt Null} pointer exception. \\
 
-The second reproduced bug we describe in this section is Bug \#486 belonging to MAHOUT. The submitter (Robin Anil) named the bug entry as {\it Null Pointer Exception running DictionaryVectorizer with ngram=2 on Reuters dataset}. He simply copied the following crash stack without further explanation:
+The second reproduced bug we describe in this section is Bug \#486 belonging to MAHOUT. The submitter (Robin Anil) named the bug entry as {\it Null Pointer Exception running DictionaryVectorizer with ngram=2 on Reuters dataset}. He simply copied the crash stack presented in Figure~\ref{fig:mahout} without further explanation.
 
-\vspace*{0.3cm}
+\begin{figure}[H]
 
 \noindent\fbox{%
     \parbox{\textwidth}{%
@@ -1164,7 +1162,8 @@ The second reproduced bug we describe in this section is Bug \#486 belonging to 
 }%
 }
 
-\vspace*{0.3cm}
+\caption{Crash trace reported for bug Mahout \#486\label{fig:mahout}}
+\end{figure}
 
 \red{Drew Farris, who was assigned to fix this bug, commented {\it "Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class, and the current version of Mahout is 0.11} refactoring work.}"}
 While this quick comment, made only two and a half hours after the bug submission, was insightful as shown in our generated test case\footnote{As a reminder, the generated test cases are made available at research.mathieu-nayrolles.com/jcharming}, the fix happened in the {\tt CollocCombiner} class that is one of the {\tt Reducer}\footnote{As in Map/Reduce} available in Mahout.}
@@ -1195,13 +1194,13 @@ suppressed and stayed in the crash trace. That is,
 JCHARMING produced only the 6 (out of 7) first lines and
 reached 83\% similarity, and thus a partial reproduction.
 
-\vspace*{0.3cm}
+\begin{figure}[H]
 
 \noindent\fbox{%
     \parbox{\textwidth}{%
 
 1. java.lang.IllegalArgumentException: null source\\
-2. at java.util.EventObject.<init>(
+2. at java.util.EventObject.\<init\>(
 EventObject.java:38)\\
 3. at\\
 4 org.jfree.chart.ChartMouseEvent.<init>
@@ -1213,7 +1212,8 @@ EventObject.java:38)\\
     }%
 }
 
-\vspace*{0.3cm}
+\caption{Crash trace reported for bug JFreeChart \#664\label{fig:jfree}}
+\end{figure}
 
 The second partially reproduced bug we present here is Bug \#2893 belonging to Hadoop.
 This bug, reported in February 2008 by Lohit Vijayarenu,
@@ -1223,7 +1223,7 @@ task failures with ChecksumException.
 Re-running the tasks on different nodes succeeds.
 Here is the stack}
 
-\vspace*{0.3cm}
+\begin{figure}[H]
 
 \noindent\fbox{%
     \parbox{\textwidth}{%
@@ -1242,7 +1242,8 @@ Here is the stack}
     }%
 }
 
-\vspace*{0.3cm}
+\caption{Crash trace reported for bug Hadoop \#2893\label{fig:jfree}}
+\end{figure}
 
 Similarly to the first partially reproduced bug, the crash traces produced by our
 directed model checking engine and the related test case did not match 100\% of
@@ -1266,7 +1267,7 @@ For the bug \#47957, belonging to LOG4J and reported in late
 exist; it throws a NullPointerException. Following is the
 exception trace:}'' and attached the following crash trace:}
 
-\vspace*{0.3cm}
+\begin{figure}[H]
 
 \noindent\fbox{%
     \parbox{\textwidth}{%
@@ -1294,7 +1295,8 @@ RID[(null;25KbxlK0voima4h00ZLBQFC;236Al8E60000045C3A
     }%
 }
 
-\vspace*{0.3cm}
+\caption{Crash trace reported for bug Log4J \#47957\label{fig:log4j}}
+\end{figure}
 
 
 The first three lines are not produced by the standard
@@ -1318,7 +1320,7 @@ and reads {\it It seems that factorize-movielens-1M.sh does not use HDFS at all.
 All paths look local paths, not HDFS. So the example crashes
 immeidately because it cannot find input data from HDFS: }
 
-\vspace*{0.3cm}
+\begin{figure}[H]
 
 \noindent\fbox{%
     \parbox{\textwidth}{%
@@ -1332,7 +1334,8 @@ immeidately because it cannot find input data from HDFS: }
  }%
 }
 
-\vspace*{0.3cm}
+\caption{Crash trace reported for bug Mahout \#1594\label{fig:mahout2}}
+\end{figure}
 
 This entry was marked as ``Not A Problem'' / ``WONT\_FIX'' meaning that
 the reported bug was not a bug in the first place.
