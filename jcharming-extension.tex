@@ -344,9 +344,7 @@ location of the fault. The challenge, however, is to design techniques that
 can guide the model checking engine. As we will describe in the next section,
 we use crash traces and program slicing to overcome this challenge.
 
-\red{As powerful as directed model checking is, it loses the advantage of model checking over testing: completeness.
-Indeed, model checking ensures that a system is absolutely correct.
-With directed model checking, we are not ensuring the absolute correctness of the program, but hunting for a bug inside a subset of the said program.}
+\red{Unlike model checking, directed model checking is not complete. Model checking ensures that a system is absolutely correct. In this work, our objective is to not to ensure absolute correctness of the program, but to use directed model checking to "hunt" for a bug within the program.}
 
 \section{The JCHARMING Approach\label{sec:jcharming}}
 
