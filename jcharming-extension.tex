@@ -85,7 +85,7 @@ failures.} Unlike existing techniques, JCHARMING does not
 require instrumentation of the code. It does not need access to
 the content of the heap either. \red{Instead, JCHARMING uses the list of functions, i.e., the crash trace, that are output when an uncaught exception in Java
 occurs  to guide a model checking engine
-to uncover the statements that caused the crash. Note that a crash trace is sometimes referred to as a stack track. In this paper, we use these two terms interchangeably. }
+to uncover the statements that caused the crash. Note that a crash trace is sometimes referred to as a stack trace. In this paper, we use these two terms interchangeably.}
 
 Model checking (also known as property checking) is a formal
 technique for automatically verifying a set of properties of
@@ -225,7 +225,7 @@ The approach seems to have a low overhead on the instrumented application, aroun
 
 Likewise, Zamfir {\it et al.} proposed ESD \cite{Zamfir2010}, an execution synthesis approach that automatically synthesizes failure execution using only the stack trace information. However, this stack trace is extracted from the core dump and may not always contain the components that caused the crash.
 
-To the best of our knowledge, the most complete work in this category is the one of Chen in his Ph.D thesis \cite{Chen2013a}. Chen proposed an approach named STAR (Stack Trace based Automatic crash Reproduction). Using only the crash stack, STAR starts from the crash line and goes backward towards the entry point of the program. During the backward process, STAR computes the required condition using an SMT solver named Yices \cite{Dutertre2006}. The objects that satisfy the required conditions are generated and orchestrated inside a JUnit test case. The test is run and the resulting crash stack is compared to the original one. If both match, the bug is said to be reproduced. STAR aims to tackle the state explosion problem of reproducing a bug by reconstructing the events in a backward fashion and therefore saving numerous states to explore. \red{STAR was able to reproduce 38 bugs out of 64 (54.6%).}
+To the best of our knowledge, the most complete work in this category is the one of Chen in his Ph.D thesis \cite{Chen2013a}. Chen proposed an approach named STAR (Stack Trace based Automatic crash Reproduction). Using only the crash stack, STAR starts from the crash line and goes backward towards the entry point of the program. During the backward process, STAR computes the required condition using an SMT solver named Yices \cite{Dutertre2006}. The objects that satisfy the required conditions are generated and orchestrated inside a JUnit test case. The test is run and the resulting crash stack is compared to the original one. If both match, the bug is said to be reproduced. STAR aims to tackle the state explosion problem of reproducing a bug by reconstructing the events in a backward fashion and therefore saving numerous states to explore. \red{STAR was able to reproduce 38 bugs out of 64 (54.6\%).}
 Also, STAR is relatively easy to implement as it uses Yices \cite{Dutertre2006} and potentially Z3 \cite{de2008z3} (stated in their future work) that are well-supported SMT solvers.
 
 Except for STAR, existing approaches that target the reproduction of
@@ -243,7 +243,7 @@ JCHARMING is also easy to deploy. It does not require instrumentation,
 and hence does not require access to data that may potentially
 be considered confidential.
 \red{Moreover, JCHARMING offers better results than approaches that only use bug report data.
-Our approach was able to reproduce 80\% (24/30) of bugs and outperforms STAR (54.6%) and BugRedux (37.5\%).}
+Our approach was able to reproduce 80\% (24/30) of bugs and outperforms STAR (54.6\%) and BugRedux (37.5\%).}
 
 
 \section{Preliminaries\label{sec:prelimenaries}}
@@ -1397,13 +1397,13 @@ Reproduction by directed Model checking), an automatic bug
 reproduction technique that combines crash traces and
 directed model checking. JCHARMING relies on crash traces and backward program slices to direct a model checker. This way, we do not need to visit all the states of the subject program, which would be computationally taxing.  When applied to thirty bugs from ten open source systems, JCHARMING was able to successfully reproduce 80\% of the bugs. The average time to reproduce a bug was 19 minutes, which is quite reasonable, given the complexity of reproducing bugs that cause field crashes.
 
-\red {This said, JCHARMING suffers from three main limitations. The first one is that JCHARMING cannot reproduce bugs caused by multi-threading. We can overcome this limitation by using advanced features of the JPF model checker such as the \texttt{jpf-ltl} listener. The \texttt{jpf-ltl} listener was designed to check temporal properties of concurrent Java programs. The second limitation is that JCHARMING cannot be used if the bug is caused by external inputs. We can always build a monitoring system to retrieve this data, but this may lead to privacy concerns. Finally, the third limitation is that the performance of JCHARMING relies on the quality of the crash traces. This limitation can be addressed by investigating techniques that can improve the reporting of crash traces. For the time being, the bug reporters simply copy and paste (and modify) the crash traces into the bug description. A better practice would be to automatically append the crash trace to the bug report, for example, in a different field than the bug description.} 
+\red {This said, JCHARMING suffers from three main limitations. The first one is that JCHARMING cannot reproduce bugs caused by multi-threading. We can overcome this limitation by using advanced features of the JPF model checker such as the \texttt{jpf-ltl} listener. The \texttt{jpf-ltl} listener was designed to check temporal properties of concurrent Java programs. The second limitation is that JCHARMING cannot be used if the bug is caused by external inputs. We can always build a monitoring system to retrieve this data, but this may lead to privacy concerns. Finally, the third limitation is that the performance of JCHARMING relies on the quality of the crash traces. This limitation can be addressed by investigating techniques that can improve the reporting of crash traces. For the time being, the bug reporters simply copy and paste (and modify) the crash traces into the bug description. A better practice would be to automatically append the crash trace to the bug report, for example, in a different field than the bug description.}
 
-For future work, in addition to addressing JCHARMING's limitations, we need to experiment with 
+For future work, in addition to addressing JCHARMING's limitations, we need to experiment with
 more (and complex) bugs with the dual aim to (a) improve and
 fine tune the approach, and (b) assess the scalability of our
 approach when applied to even larger (and proprietary)
-systems.  Finally, we need to compare our approach to STAR \cite{Chen2013a}, which is the closet approach to ours by running both methods on the same set of systems and bugs. This comparative study can provide insights into the differences in the use of symbolic analysis as it is in STAR and directed model checking, the core mechanism of JCHARMING. 
+systems.  \red{Finally, we need to compare our approach to STAR \cite{Chen2013a}, which is the closest approach to ours by running both methods on the same set of systems and bugs. This comparative study can provide insights into the differences in the use of symbolic analysis as it is in STAR and directed model checking, the core mechanism of JCHARMING.}
 
 \bibliographystyle{wileyj}
 \bibliography{library}
