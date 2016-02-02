@@ -28,11 +28,10 @@ T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \title{A Bug Reproduction Approach Based on Directed Model Checking and Crash Traces}
 
-\author{Mathieu Nayrolles \corrauth $^,$ \footnotemark[2] $^,$ $^1$, Abdelwahab Hamou-Lhadj$^1$, Sofi\`ene Tahar$^2$ and Alf Larsson$^3$}
+\author{Mathieu Nayrolles \corrauth $^,$ \footnotemark[2] $^,$ $^1$, Abdelwahab Hamou-Lhadj$^1$, Sofi\`ene Tahar$^1$ and Alf Larsson$^2$}
 
-\address{\begin{center}$^1$ SBA Research Lab, ECE, Concordia University, Montr\'eal, Canada \\
-$^2$ HVG Research Lab, ECE Department, Concordia University, Montr\'eal, Canada \\
-$^3$ PLF System Management, Ericsson, R \& D, Stockholm, Sweden\end{center}}
+\address{\begin{center}$^1$ ECE, Concordia University, Montr\'eal, Canada \\
+$^2$ PLF System Management, Ericsson, R \& D, Stockholm, Sweden\end{center}}
 
 \corraddr{Mathieu Nayrolles. SBA Research Lab, ECE, Concordia University. Sir George Williams Campus
 1455 De Maisonneuve Blvd. W.
@@ -114,7 +113,7 @@ This is explained by the fact that the new systems used in
 this study are relatively larger compared to those in \cite{Nayrolles2015}.
 Another important contribution of this paper is a completely redesigned
 JUnit test case generation process.
-This extended version of the paper also includes a detailed
+This paper also includes a detailed
 analysis of additional bugs, an elaborate discussion of the
 results, and an updated related work section.
 
@@ -126,7 +125,7 @@ We conclude the paper and sketch future directions in Section
 \ref{sec:conclusion}.
 
 
-\section{Related Works\label{sec:rel-work}}
+\section{Related Work\label{sec:rel-work}}
 
 In this section, we put the emphasis on how crash traces are used in crash reproduction tasks.
 Existing studies can be divided into two distinct categories: (A) on-field record and in-house replay techniques \cite{Steven2000,Narayanasamy2005,Artzi2008,Roehm2015}, and (B) on-house crash understanding \cite{Jin2012,Jin2013,Zuddas2014,Chen2013a,Nayrolles2015}.
@@ -182,7 +181,7 @@ This approach particularly suffers from the limitation related to slowing down t
 The overhead for full monitoring is considerably high (between 13\% and 64\% in some cases).
 The authors  propose an alternative solution in which they record only the methods surrounding the crash. For this to work, the crash has to occur at least once so they could use the information causing the crash to identify the methods surrounding it. \red{ReCrash was able to reproduce 100\% (11/11) of the submitted bugs.}
 
-\red{Similar to ReCrash, JRapture \cite{Steven2000} is a capture/replay tool for observation-based testing. The tool captures execution of Java programs to replay it in-house. To capture the execution of a Java program, the creators of JRapture used their own version of the Java Virtual Machine (JVM) and a lightweight, transparent capture process.
+\red{Similar to ReCrash, JRapture \cite{Steven2000} is a capture/replay tool for observation-based testing. The tool captures the execution of Java programs to replay it in-house. To capture the execution of a Java program, the creators of JRapture used their own version of the Java Virtual Machine (JVM) and a lightweight, transparent capture process.
 Using a customized JVM allows capturing any interactions between a Java program and the system including GUI, files, and console inputs.
 These interactions can be replayed later  with exactly the same input sequence as seen during the capture phase.
 However, using a custom JVM is not a practical solution. This is because, the authors' approach requires from users to install a JVM that might have some discrepancies with the original one and yield bugs if used with other software applications.
@@ -258,7 +257,7 @@ which can be represented by a Kripke \cite{Kripke1963} structure:}
 \red{SUT = <S, S_0, T, L>}
 \end{equation}
 
-\red{\noindent where $S$ is a set of states, $S_0$ the set of initial states, $T$ the transitions relations between states and $L$ the labeling function, which labels a state with a set of atomic properties.
+\noindent \red{where $S$ is a set of states, $S_0$ the set of initial states, $T$ the transitions relations between states and $L$ the labeling function, which labels a state with a set of atomic properties.
 Figure~\ref{fig:mc-def} presents a system with four steps $S_0$ to $S_3$, which have five atomic properties $p_1$ to $p_5$.
 The labeling function $L$ gives us the properties that are true in a state: $L(S_0) = \{p_1\}, L(S_1) = \{p_1, p_2\}, L(S_2) = \{p_3\}, L(S_3) = \{p_4, p_5\}$.}
 
@@ -308,7 +307,7 @@ model checking suffers from the state explosion problem, which hinders
 its applicability to large software systems.}
 
 
-To show the contrast between testing and model checking, we use the hypothetical example of Figures \ref{fig:testing-toy}, \ref{fig:checking-toy} and \ref{fig:dchecking-toy} and sketch the possible results of each approach. These figures depict a toy program where from the entry point, unknown calls are made (dotted points) and, at some points, two methods are called. These methods, called \texttt{Foo.Bar} and \texttt{Bar.Foo}, implement a for \texttt{loop} from 0 to \texttt{loopCount}. The only difference between these two methods is that the \texttt{Bar.Foo} method throws an exception if $i$ becomes larger than two. Hereafter, we denote this property as $p_{i > 2}$.
+To show the contrast between testing and model checking, we use the hypothetical example of Figures \ref{fig:testing-toy}, \ref{fig:checking-toy} and \ref{fig:dchecking-toy} and sketch the possible results of each approach. These figures depict a toy program where from the entry point, unknown calls are made (dotted points) and, at some points, two methods are called. These methods, called \texttt{Foo.Bar} and \texttt{Bar.Foo}, implement a \texttt{for loop} from 0 to \texttt{loopCount}. The only difference between these two methods is that the \texttt{Bar.Foo} method throws an exception if $i$ becomes larger than two. Hereafter, we denote this property as $p_{i > 2}$.
 
 
 \begin{figure}
@@ -1024,8 +1023,7 @@ provided.
 \end{itemize}
 
 
-As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24 bugs
-out of 30 bugs either completely or partially (80\% success ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which was the time
+As we can see in Table \ref{tab:jcharming-results}, we were able to reproduce 24  out of 30 bugs either completely or partially (80\% success ratio). The average time to reproduce a bug was 19 minutes. The average time in cases where JCHARMING failed to reproduce the bug  was 11 minutes. The maximum fail time was 42.3 minutes, which was the time
 required for JCHARMING to fill all the available memory and stop and a ``-'' denotes that JCHARMING reached a sixty-minute timeout.
 \red{Finally, we report the number of statements in the produced JUnit test, which represents the length of the counter-example.
 While reproducing a bug is the first step in understanding the cause of a field crash, the steps to reproduce the bug should be as few as possible.
@@ -1163,7 +1161,7 @@ The second reproduced bug we describe in this section is Bug \#486 belonging to 
 \caption{Crash trace reported for bug Mahout \#486\label{fig:mahout}}
 \end{figure}
 
-\red{Drew Farris, who was assigned to fix this bug, commented {\it "Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class, and the current version of Mahout is 0.11} refactoring work.}"}
+\red{Drew Farris\footnote{https://issues.apache.org/jira/browse/MAHOUT-486}, who was assigned to fix this bug, commented {\it ``Looks like this was due to an improper use of the Gram default constructor that happened as a part of the 0.20.2\footnote{Farris certainly meant 0.10.2 which was the last refactor of the incriminated class, and the current version of Mahout is 0.11} refactoring work.}''}
 While this quick comment, made only two and a half hours after the bug submission, was insightful as shown in our generated test case\footnote{As a reminder, the generated test cases are made available at research.mathieu-nayrolles.com/jcharming}, the fix happened in the {\tt CollocCombiner} class that is one of the {\tt Reducer}\footnote{As in Map/Reduce} available in Mahout.}
 The fix (commit \#f13833) involved creating an iterator to combine the frequencies of the {\tt Gram} and a null check of the final frequency.
 
@@ -1261,7 +1259,7 @@ consists of a few lines only.}
 \red{To conclude the discussion on the case study, we present a
 case where JCHARMING was unable to reproduce the failure.
 For the bug \#47957, belonging to LOG4J and reported in late
-2009 the reporter wrote: ``{\it Configure SyslogAppender with a Layout class that does not
+2009 the author wrote: ``{\it Configure SyslogAppender with a Layout class that does not
 exist; it throws a NullPointerException. Following is the
 exception trace:}'' and attached the following crash trace:}
 
@@ -1404,6 +1402,8 @@ more (and complex) bugs with the dual aim to (a) improve and
 fine tune the approach, and (b) assess the scalability of our
 approach when applied to even larger (and proprietary)
 systems.  \red{Finally, we need to compare our approach to STAR \cite{Chen2013a}, which is the closest approach to ours by running both methods on the same set of systems and bugs. This comparative study can provide insights into the differences in the use of symbolic analysis as it is in STAR and directed model checking, the core mechanism of JCHARMING.}
+
+\newpage
 
 \bibliographystyle{wileyj}
 \bibliography{library}
