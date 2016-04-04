@@ -16,7 +16,7 @@
 \newcommand\BibTeX{{\rmfamily B\kern-.05em \textsc{i\kern-.025em b}\kern-.08em
 T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
-\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\red}[1]{\textcolor{black}{#1}}
 
 \def\mymathhyphen{{\hbox{-}}}
 
@@ -105,8 +105,7 @@ An extensive validation of JCHARMING by conducting experiments with three
 additional systems: Mahout, Hadoop, and ActiveMQ,
 bringing the total number of subject systems used to
 validate our approach to 10 and the number of bugs to 30.
-It should be noted that the new systems are larger compared to
-Those used in \cite{Nayrolles2015}.
+It should be noted that the new systems are larger compared to those used in \cite{Nayrolles2015}.
 The accuracy of JCHARMING when applied to the 30 bugs is 80\%,
 which is a slight decrease compared to the previous study.
 This is explained by the fact that the new systems used in
@@ -575,7 +574,7 @@ At the end of the algorithm, we compute the slice between the
 last frame and the entry point of the program, and update the
 final slice.
 
-\red{Figure \label{fig:jcharming-algo} presents a step by step graphical representation of Algorithm \ref{alg:jcharming-slice}.
+\red{Figure \ref{fig:jcharming-algo} presents a step by step graphical representation of Algorithm \ref{alg:jcharming-slice}.
 In this figure, an hypothetical program, composed of eleven states ($a...k$), crashes at point $k$.
 The produced crash trace is composed of six frames $T={f_0, f_1, f_2, f_3, f_4, f_5}$.
 The frames represent $k$, $i$, $h$, $d$, $b$ and $a$, respectively.
@@ -623,7 +622,7 @@ The final backward static slice is $k$, $i$, $h$, $d$, $b$ and $a$.}
     \label{fig:jcharming-algo}}
 \end{figure}
 
-\red{Our algorithm, given an uncorrupted stack trace will be able to compute an optimum backward static slice based on the frames (Figure~\ref{fig:jcharming-slice}) and compensate for frames corruption if needs be by \texttt{offsetting} the corrupted frame (Figure~\ref{fig:jcharming-algo}).
+\red{Our algorithm, given an uncorrupted stack trace will be able to compute an optimum backward static slice based on the frames (Figure~\ref{fig:jcharming-slice}) and compensate for frames corruption if needs be by \textit{offsetting} the corrupted frame (Figure~\ref{fig:jcharming-algo}).
 The compensation of corrupted frames, obviously, comes at the cost of a sub-optimum backward static slice.
 In our previous example, the transition between $b$ and $h$ could have been omitted if $f_3$ was not corrupted.
 }
@@ -828,7 +827,7 @@ test cases. In this figure, each {\tt \{\% \%\}} will be dynamically replaced by
 the corresponding value when the JUnit test is generated. For example, {\tt \{\% SUT \%\}}
 will be replaced by {\tt Ant} if the SUT is Ant.
 First, we declare four variables that contain the {\tt failure},
-the {\tt threshold} above, which a given bug is said to be partially reproduced,
+the {\tt threshold} above which a given bug is said to be partially reproduced,
 the {\tt differences}, which count how many lines differ between the original
 failure, the failure produced by JCHARMING, and a {\tt StringTokenizer}.
 The {\tt StringTokenizer} allows to break the original {\tt failure} into
